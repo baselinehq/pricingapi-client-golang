@@ -23,13 +23,6 @@ func main() {
 	ramGb := float32(2)
 	instance.SetVm(openapiclient.GithubComBaselinehqGolangSharedTypesVM{CpuCores: &cpuCores, RamGb: &ramGb})
 
-	// Override instance values using JSON
-	jsonStr := `{"id":"","region":"nyc1","instance_type":"s-2vcpu-2gb","usage_type":"ONDEMAND","provider":"DigitalOcean","operating_system":"linux","service":"Droplet","availability_zone":"","vm":{"cpu_cores":4,"ram_gb":8}}`
-	if err := json.Unmarshal([]byte(jsonStr), instance); err != nil {
-		fmt.Fprintf(os.Stderr, "Failed to unmarshal instance JSON: %v\n", err)
-		os.Exit(1)
-	}
-
 	token := os.Getenv("BASELINEHQ_CLOUD_API_KEY")
 	if token == "" {
 		fmt.Fprintf(os.Stderr, "Missing BASELINEHQ_CLOUD_API_KEY environment variable")
