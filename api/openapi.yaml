@@ -1,0 +1,669 @@
+openapi: 3.0.1
+info:
+  contact:
+    email: contact@baselinehq.cloud
+    name: Customer Support
+    url: https://costgraph.baselinehq.cloud/support
+  description: Provides API level access to the Costgraph Services.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: https://costgraph.baselinehq.cloud/terms-of-use
+  title: Pricing API
+  version: "1.0"
+servers:
+- url: /
+paths:
+  /healthz:
+    get:
+      description: Health check endpoint
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                type: object
+          description: Health check response
+      summary: Health check endpoint
+  /marketplace/providers/compute:
+    delete:
+      description: Delete a custom provider instance
+      parameters:
+      - description: Instance ID
+        in: query
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/types.CustomPricingResponse"
+          description: Pricing response for a custom provider
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Delete a custom provider instance
+    get:
+      description: Get your custom pricing entries
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/types.MarketplaceProvidersResponse"
+          description: Pricing response for custom pricing
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Get your custom pricing entries
+    post:
+      description: Register a custom provider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/types.CustomPriceRequest"
+        description: Pricing RecommendationRequest
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/types.CustomPricingResponse"
+          description: Pricing response for a custom provider
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Register a custom provider
+      x-codegen-request-body-name: instance
+  /pricing/compute:
+    post:
+      description: Get pricing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Instance"
+        description: Instance
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/schema.ComputePricingsRow"
+          description: Pricing for a given instance
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Get  pricing for an instance
+      x-codegen-request-body-name: instance
+  /pricing/disks:
+    post:
+      description: Get pricing for disks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/types.Disk"
+        description: Disks
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/schema.DiskPricingsRow"
+          description: Pricing for a given disk
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Get  pricing for a disk
+      x-codegen-request-body-name: instance
+  /providers:
+    get:
+      description: Get details for the providers
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/provider.Configs"
+          description: List of providers
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Get details for the providers
+  /recommendations/compute:
+    post:
+      description: |-
+        Get recommendations for compute instances
+        Recommendations, InstancePricing, VM, and Savings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/types.ComputeRequest"
+        description: Instance
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/types.ComputeResults"
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Get recommendations for compute instances
+      x-codegen-request-body-name: instance
+  /recommendations/disks:
+    post:
+      description: |-
+        Get recommendations for disks used in the server
+        Recommendations, DiskPricing, and Savings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/types.DiskRequest"
+        description: Instance
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/types.DiskResults"
+          description: OK
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Get recommendations for disks
+      x-codegen-request-body-name: instance
+components:
+  schemas:
+    github_com_baselinehq_golang-shared_types.Instance:
+      properties:
+        availability_zone:
+          type: string
+        id:
+          type: string
+        instance_type:
+          type: string
+        operating_system:
+          type: string
+        provider:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Provider"
+        region:
+          type: string
+        service:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Service"
+        usage_type:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.UsageType"
+        vm:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.VM"
+      type: object
+    github_com_baselinehq_golang-shared_types.Provider:
+      enum:
+      - GCP
+      - AWS
+      - DigitalOcean
+      - Azure
+      - Hetzner
+      - OVHCloud
+      - Base
+      type: string
+      x-enum-comments:
+        Base: "Base provider for default pricing, no specific cloud provider"
+      x-enum-descriptions:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "Base provider for default pricing, no specific cloud provider"
+      x-enum-varnames:
+      - GCP
+      - AWS
+      - DigitalOcean
+      - Azure
+      - Hetzner
+      - OVHCloud
+      - Base
+    github_com_baselinehq_golang-shared_types.Service:
+      enum:
+      - ComputeEngine
+      - AmazonEC2
+      - Droplet
+      - AzureCompute
+      - AzureManagedDisks
+      - HetznerCompute
+      - OVHPublicCloud
+      - BaseCompute
+      type: string
+      x-enum-varnames:
+      - ComputeEngine
+      - AmazonEC2
+      - Droplet
+      - AzureCompute
+      - AzureManagedDisks
+      - HetznerCompute
+      - OVHPublicCloud
+      - BaseCompute
+    github_com_baselinehq_golang-shared_types.UsageType:
+      enum:
+      - SPOT_PREEMPTIBLE
+      - ONDEMAND
+      - RESERVED
+      - ONDEMAND_CUSTOM
+      - SPOT_PREEMPTIBLE_CUSTOM
+      - RESERVED_CUSTOM
+      - SOLE_TENANCY
+      - CUSTOM
+      - EXTENDED
+      type: string
+      x-enum-varnames:
+      - SPOT_PREEMPTIBLE
+      - ONDEMAND
+      - RESERVED
+      - ONDEMAND_CUSTOM
+      - SPOT_PREEMPTIBLE_CUSTOM
+      - RESERVED_CUSTOM
+      - SOLE_TENANCY
+      - CUSTOM
+      - EXTENDED
+    github_com_baselinehq_golang-shared_types.VM:
+      properties:
+        cpu_cores:
+          type: number
+        ram_gb:
+          type: number
+      type: object
+    github_com_baselinehq_pricingapi_pkg_types.Status:
+      enum:
+      - Registered
+      - Deleted
+      type: string
+      x-enum-varnames:
+      - Registered
+      - Deleted
+    provider.Config:
+      properties:
+        predicates:
+          $ref: "#/components/schemas/types.Predicates"
+        provider:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Provider"
+      type: object
+    provider.Configs:
+      additionalProperties:
+        $ref: "#/components/schemas/provider.Config"
+      type: object
+    schema.ComputePricingsRow:
+      example:
+        availability_zone: availability_zone
+        created_at: created_at
+        cpu_cores: 6.027456183070403
+        period_billing_hours: 5.962133916683182
+        ram_gb: 5.637376656633329
+        tags: "{}"
+        cost_per_hour: 0.8008281904610115
+        updated_at: updated_at
+        cpu_cores_cost_per_hour: 1.4658129805029452
+        provider: provider
+        usage_type: usage_type
+        raw_pricing_data: "{}"
+        service: service
+        operating_system: operating_system
+        ram_gb_cost_per_hour: 2.3021358869347655
+        id: id
+        region: region
+        instance_type: instance_type
+      properties:
+        availability_zone:
+          type: string
+        cost_per_hour:
+          type: number
+        cpu_cores:
+          type: number
+        cpu_cores_cost_per_hour:
+          type: number
+        created_at:
+          type: string
+        id:
+          type: string
+        instance_type:
+          type: string
+        operating_system:
+          type: string
+        period_billing_hours:
+          type: number
+        provider:
+          type: string
+        ram_gb:
+          type: number
+        ram_gb_cost_per_hour:
+          type: number
+        raw_pricing_data:
+          properties: {}
+          type: object
+        region:
+          type: string
+        service:
+          type: string
+        tags:
+          properties: {}
+          type: object
+        updated_at:
+          type: string
+        usage_type:
+          type: string
+      type: object
+    schema.DiskPricingsRow:
+      example:
+        max_capacity_gb: 5.962133916683182
+        availability_zone: availability_zone
+        min_throughput_mbps: 3.616076749251911
+        cost_per_gb_hour: 0.8008281904610115
+        min_capacity_gb: 7.061401241503109
+        max_throughput_mbps: 2.3021358869347655
+        created_at: created_at
+        max_iops: 5.637376656633329
+        period_billing_hours: 2.027123023002322
+        cost_per_iops_hour: 6.027456183070403
+        type: type
+        tags: "{}"
+        cost_per_throughput_mbps_hour: 1.4658129805029452
+        updated_at: updated_at
+        provider: provider
+        usage_type: usage_type
+        raw_pricing_data: "{}"
+        service: service
+        min_iops: 9.301444243932576
+        id: id
+        region: region
+      properties:
+        availability_zone:
+          type: string
+        cost_per_gb_hour:
+          type: number
+        cost_per_iops_hour:
+          type: number
+        cost_per_throughput_mbps_hour:
+          type: number
+        created_at:
+          type: string
+        id:
+          type: string
+        max_capacity_gb:
+          type: number
+        max_iops:
+          type: number
+        max_throughput_mbps:
+          type: number
+        min_capacity_gb:
+          type: number
+        min_iops:
+          type: number
+        min_throughput_mbps:
+          type: number
+        period_billing_hours:
+          type: number
+        provider:
+          type: string
+        raw_pricing_data:
+          properties: {}
+          type: object
+        region:
+          type: string
+        service:
+          type: string
+        tags:
+          properties: {}
+          type: object
+        type:
+          type: string
+        updated_at:
+          type: string
+        usage_type:
+          type: string
+      type: object
+    types.ComputeRequest:
+      properties:
+        include_metadata:
+          type: boolean
+        instance:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Instance"
+        predicates:
+          $ref: "#/components/schemas/types.Predicates"
+        usage:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.VM"
+      type: object
+    types.ComputeResults:
+      additionalProperties:
+        items:
+          $ref: "#/components/schemas/types_ComputeResults_value_inner"
+        type: array
+      type: object
+    types.CustomPriceRequest:
+      properties:
+        entries:
+          items:
+            $ref: "#/components/schemas/schema.ComputePricingsRow"
+          minItems: 1
+          type: array
+      required:
+      - entries
+      type: object
+    types.CustomPricingResponse:
+      example:
+        entries:
+        - availability_zone: availability_zone
+          created_at: created_at
+          cpu_cores: 6.027456183070403
+          period_billing_hours: 5.962133916683182
+          ram_gb: 5.637376656633329
+          tags: "{}"
+          cost_per_hour: 0.8008281904610115
+          updated_at: updated_at
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          provider: provider
+          usage_type: usage_type
+          raw_pricing_data: "{}"
+          service: service
+          operating_system: operating_system
+          ram_gb_cost_per_hour: 2.3021358869347655
+          id: id
+          region: region
+          instance_type: instance_type
+        - availability_zone: availability_zone
+          created_at: created_at
+          cpu_cores: 6.027456183070403
+          period_billing_hours: 5.962133916683182
+          ram_gb: 5.637376656633329
+          tags: "{}"
+          cost_per_hour: 0.8008281904610115
+          updated_at: updated_at
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          provider: provider
+          usage_type: usage_type
+          raw_pricing_data: "{}"
+          service: service
+          operating_system: operating_system
+          ram_gb_cost_per_hour: 2.3021358869347655
+          id: id
+          region: region
+          instance_type: instance_type
+        status: Registered
+      properties:
+        entries:
+          items:
+            $ref: "#/components/schemas/schema.ComputePricingsRow"
+          type: array
+        status:
+          $ref: "#/components/schemas/github_com_baselinehq_pricingapi_pkg_types.Status"
+      type: object
+    types.Disk:
+      properties:
+        availability_zone:
+          type: string
+        capacity_gb:
+          type: number
+        id:
+          type: string
+        iops:
+          type: number
+        provider:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Provider"
+        region:
+          type: string
+        service:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Service"
+        throughput_mbps:
+          type: number
+        type:
+          type: string
+        usage_type:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.UsageType"
+      type: object
+    types.DiskRequest:
+      properties:
+        include_metadata:
+          type: boolean
+        instance:
+          $ref: "#/components/schemas/types.Disk"
+        predicates:
+          $ref: "#/components/schemas/types.Predicates"
+        usage:
+          $ref: "#/components/schemas/types.Disk"
+      type: object
+    types.DiskResults:
+      additionalProperties:
+        items:
+          $ref: "#/components/schemas/types_DiskResults_value_inner"
+        type: array
+      type: object
+    types.MarketplaceProvidersResponse:
+      example:
+        providers:
+        - availability_zone: availability_zone
+          created_at: created_at
+          cpu_cores: 6.027456183070403
+          period_billing_hours: 5.962133916683182
+          ram_gb: 5.637376656633329
+          tags: "{}"
+          cost_per_hour: 0.8008281904610115
+          updated_at: updated_at
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          provider: provider
+          usage_type: usage_type
+          raw_pricing_data: "{}"
+          service: service
+          operating_system: operating_system
+          ram_gb_cost_per_hour: 2.3021358869347655
+          id: id
+          region: region
+          instance_type: instance_type
+        - availability_zone: availability_zone
+          created_at: created_at
+          cpu_cores: 6.027456183070403
+          period_billing_hours: 5.962133916683182
+          ram_gb: 5.637376656633329
+          tags: "{}"
+          cost_per_hour: 0.8008281904610115
+          updated_at: updated_at
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          provider: provider
+          usage_type: usage_type
+          raw_pricing_data: "{}"
+          service: service
+          operating_system: operating_system
+          ram_gb_cost_per_hour: 2.3021358869347655
+          id: id
+          region: region
+          instance_type: instance_type
+      properties:
+        providers:
+          items:
+            $ref: "#/components/schemas/schema.ComputePricingsRow"
+          type: array
+      type: object
+    types.Predicates:
+      properties:
+        availability_zones:
+          items:
+            type: string
+          type: array
+        disk_types:
+          items:
+            type: string
+          type: array
+        instance_types:
+          items:
+            type: string
+          type: array
+        operating_systems:
+          items:
+            type: string
+          type: array
+        providers:
+          items:
+            type: string
+          type: array
+        regions:
+          items:
+            type: string
+          type: array
+        services:
+          items:
+            type: string
+          type: array
+        usage_types:
+          items:
+            type: string
+          type: array
+      type: object
+    types.Savings:
+      properties:
+        amount_per_hour:
+          type: number
+        amount_per_month:
+          type: number
+        amount_per_year:
+          type: number
+        percentage:
+          type: number
+      type: object
+    types_ComputeResults_value_inner:
+      properties:
+        instance_pricing:
+          $ref: "#/components/schemas/schema.ComputePricingsRow"
+        savings:
+          $ref: "#/components/schemas/types.Savings"
+        vm:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.VM"
+      type: object
+    types_DiskResults_value_inner:
+      properties:
+        disk:
+          $ref: "#/components/schemas/schema.DiskPricingsRow"
+        disk_pricing:
+          $ref: "#/components/schemas/schema.DiskPricingsRow"
+        savings:
+          $ref: "#/components/schemas/types.Savings"
+      type: object
+  securitySchemes:
+    ApiKeyAuth:
+      description: Bearer token for authentication
+      in: header
+      name: Authorization
+      type: apiKey
+x-original-swagger-version: "2.0"
