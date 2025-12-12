@@ -739,7 +739,7 @@ type ApiProvidersGetRequest struct {
 	ApiService *DefaultAPIService
 }
 
-func (r ApiProvidersGetRequest) Execute() (*map[string]ProviderConfig, *http.Response, error) {
+func (r ApiProvidersGetRequest) Execute() (*ProviderConfigs, *http.Response, error) {
 	return r.ApiService.ProvidersGetExecute(r)
 }
 
@@ -759,13 +759,13 @@ func (a *DefaultAPIService) ProvidersGet(ctx context.Context) ApiProvidersGetReq
 }
 
 // Execute executes the request
-//  @return map[string]ProviderConfig
-func (a *DefaultAPIService) ProvidersGetExecute(r ApiProvidersGetRequest) (*map[string]ProviderConfig, *http.Response, error) {
+//  @return ProviderConfigs
+func (a *DefaultAPIService) ProvidersGetExecute(r ApiProvidersGetRequest) (*ProviderConfigs, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodGet
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *map[string]ProviderConfig
+		localVarReturnValue  *ProviderConfigs
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.ProvidersGet")
@@ -859,7 +859,7 @@ func (r ApiRecommendationsComputePostRequest) Instance(instance TypesComputeRequ
 	return r
 }
 
-func (r ApiRecommendationsComputePostRequest) Execute() (*map[string][]TypesComputeResultsValueInner, *http.Response, error) {
+func (r ApiRecommendationsComputePostRequest) Execute() (*TypesComputeResults, *http.Response, error) {
 	return r.ApiService.RecommendationsComputePostExecute(r)
 }
 
@@ -880,13 +880,13 @@ func (a *DefaultAPIService) RecommendationsComputePost(ctx context.Context) ApiR
 }
 
 // Execute executes the request
-//  @return map[string][]TypesComputeResultsValueInner
-func (a *DefaultAPIService) RecommendationsComputePostExecute(r ApiRecommendationsComputePostRequest) (*map[string][]TypesComputeResultsValueInner, *http.Response, error) {
+//  @return TypesComputeResults
+func (a *DefaultAPIService) RecommendationsComputePostExecute(r ApiRecommendationsComputePostRequest) (*TypesComputeResults, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *map[string][]TypesComputeResultsValueInner
+		localVarReturnValue  *TypesComputeResults
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.RecommendationsComputePost")
@@ -985,7 +985,7 @@ func (r ApiRecommendationsDisksPostRequest) Instance(instance TypesDiskRequest) 
 	return r
 }
 
-func (r ApiRecommendationsDisksPostRequest) Execute() (*map[string][]TypesDiskResultsValueInner, *http.Response, error) {
+func (r ApiRecommendationsDisksPostRequest) Execute() (*TypesDiskResults, *http.Response, error) {
 	return r.ApiService.RecommendationsDisksPostExecute(r)
 }
 
@@ -1006,13 +1006,13 @@ func (a *DefaultAPIService) RecommendationsDisksPost(ctx context.Context) ApiRec
 }
 
 // Execute executes the request
-//  @return map[string][]TypesDiskResultsValueInner
-func (a *DefaultAPIService) RecommendationsDisksPostExecute(r ApiRecommendationsDisksPostRequest) (*map[string][]TypesDiskResultsValueInner, *http.Response, error) {
+//  @return TypesDiskResults
+func (a *DefaultAPIService) RecommendationsDisksPostExecute(r ApiRecommendationsDisksPostRequest) (*TypesDiskResults, *http.Response, error) {
 	var (
 		localVarHTTPMethod   = http.MethodPost
 		localVarPostBody     interface{}
 		formFiles            []formFile
-		localVarReturnValue  *map[string][]TypesDiskResultsValueInner
+		localVarReturnValue  *TypesDiskResults
 	)
 
 	localBasePath, err := a.client.cfg.ServerURLWithContext(r.ctx, "DefaultAPIService.RecommendationsDisksPost")

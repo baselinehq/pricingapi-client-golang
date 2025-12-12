@@ -404,7 +404,7 @@ Name | Type | Description  | Notes
 
 ## ProvidersGet
 
-> map[string]ProviderConfig ProvidersGet(ctx).Execute()
+> ProviderConfigs ProvidersGet(ctx).Execute()
 
 Get details for the providers
 
@@ -431,7 +431,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.ProvidersGet``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `ProvidersGet`: map[string]ProviderConfig
+	// response from `ProvidersGet`: ProviderConfigs
 	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.ProvidersGet`: %v\n", resp)
 }
 ```
@@ -447,7 +447,7 @@ Other parameters are passed through a pointer to a apiProvidersGetRequest struct
 
 ### Return type
 
-[**map[string]ProviderConfig**](ProviderConfig.md)
+[**ProviderConfigs**](ProviderConfigs.md)
 
 ### Authorization
 
@@ -465,7 +465,7 @@ Other parameters are passed through a pointer to a apiProvidersGetRequest struct
 
 ## RecommendationsComputePost
 
-> map[string][]TypesComputeResultsValueInner RecommendationsComputePost(ctx).Instance(instance).Execute()
+> TypesComputeResults RecommendationsComputePost(ctx).Instance(instance).Execute()
 
 Get recommendations for compute instances
 
@@ -493,7 +493,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.RecommendationsComputePost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RecommendationsComputePost`: map[string][]TypesComputeResultsValueInner
+	// response from `RecommendationsComputePost`: TypesComputeResults
 	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.RecommendationsComputePost`: %v\n", resp)
 }
 ```
@@ -513,7 +513,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**map[string][]TypesComputeResultsValueInner**](array.md)
+[**TypesComputeResults**](TypesComputeResults.md)
 
 ### Authorization
 
@@ -531,7 +531,7 @@ Name | Type | Description  | Notes
 
 ## RecommendationsDisksPost
 
-> map[string][]TypesDiskResultsValueInner RecommendationsDisksPost(ctx).Instance(instance).Execute()
+> TypesDiskResults RecommendationsDisksPost(ctx).Instance(instance).Execute()
 
 Get recommendations for disks
 
@@ -559,7 +559,7 @@ func main() {
 		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.RecommendationsDisksPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `RecommendationsDisksPost`: map[string][]TypesDiskResultsValueInner
+	// response from `RecommendationsDisksPost`: TypesDiskResults
 	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.RecommendationsDisksPost`: %v\n", resp)
 }
 ```
@@ -579,7 +579,7 @@ Name | Type | Description  | Notes
 
 ### Return type
 
-[**map[string][]TypesDiskResultsValueInner**](array.md)
+[**TypesDiskResults**](TypesDiskResults.md)
 
 ### Authorization
 
