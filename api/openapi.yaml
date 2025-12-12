@@ -12,7 +12,8 @@ info:
   title: Pricing API
   version: "1.0"
 servers:
-- url: /
+- url: https://pricing.baselinehq.cloud/
+- url: http://pricing.baselinehq.cloud/
 paths:
   /healthz:
     get:

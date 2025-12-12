@@ -94,7 +94,11 @@ func NewConfiguration() *Configuration {
 		Debug:            false,
 		Servers:          ServerConfigurations{
 			{
-				URL: "",
+				URL: "https://pricing.baselinehq.cloud",
+				Description: "No description provided",
+			},
+			{
+				URL: "http://pricing.baselinehq.cloud",
 				Description: "No description provided",
 			},
 		},

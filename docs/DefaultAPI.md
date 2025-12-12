@@ -1,6 +1,6 @@
 # \DefaultAPI
 
-All URIs are relative to *http://localhost*
+All URIs are relative to *https://pricing.baselinehq.cloud*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
