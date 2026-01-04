@@ -28,6 +28,7 @@ type GithubComBaselinehqGolangSharedTypesInstance struct {
 	Region *string `json:"region,omitempty"`
 	Service *GithubComBaselinehqGolangSharedTypesService `json:"service,omitempty"`
 	UsageType *GithubComBaselinehqGolangSharedTypesUsageType `json:"usage_type,omitempty"`
+	UseBasePricing *bool `json:"use_base_pricing,omitempty"`
 	Vm *GithubComBaselinehqGolangSharedTypesVM `json:"vm,omitempty"`
 }
 
@@ -304,6 +305,38 @@ func (o *GithubComBaselinehqGolangSharedTypesInstance) SetUsageType(v GithubComB
 	o.UsageType = &v
 }
 
+// GetUseBasePricing returns the UseBasePricing field value if set, zero value otherwise.
+func (o *GithubComBaselinehqGolangSharedTypesInstance) GetUseBasePricing() bool {
+	if o == nil || IsNil(o.UseBasePricing) {
+		var ret bool
+		return ret
+	}
+	return *o.UseBasePricing
+}
+
+// GetUseBasePricingOk returns a tuple with the UseBasePricing field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GithubComBaselinehqGolangSharedTypesInstance) GetUseBasePricingOk() (*bool, bool) {
+	if o == nil || IsNil(o.UseBasePricing) {
+		return nil, false
+	}
+	return o.UseBasePricing, true
+}
+
+// HasUseBasePricing returns a boolean if a field has been set.
+func (o *GithubComBaselinehqGolangSharedTypesInstance) HasUseBasePricing() bool {
+	if o != nil && !IsNil(o.UseBasePricing) {
+		return true
+	}
+
+	return false
+}
+
+// SetUseBasePricing gets a reference to the given bool and assigns it to the UseBasePricing field.
+func (o *GithubComBaselinehqGolangSharedTypesInstance) SetUseBasePricing(v bool) {
+	o.UseBasePricing = &v
+}
+
 // GetVm returns the Vm field value if set, zero value otherwise.
 func (o *GithubComBaselinehqGolangSharedTypesInstance) GetVm() GithubComBaselinehqGolangSharedTypesVM {
 	if o == nil || IsNil(o.Vm) {
@@ -369,6 +402,9 @@ func (o GithubComBaselinehqGolangSharedTypesInstance) ToMap() (map[string]interf
 	}
 	if !IsNil(o.UsageType) {
 		toSerialize["usage_type"] = o.UsageType
+	}
+	if !IsNil(o.UseBasePricing) {
+		toSerialize["use_base_pricing"] = o.UseBasePricing
 	}
 	if !IsNil(o.Vm) {
 		toSerialize["vm"] = o.Vm

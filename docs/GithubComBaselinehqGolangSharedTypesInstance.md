@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **Region** | Pointer to **string** |  | [optional] 
 **Service** | Pointer to [**GithubComBaselinehqGolangSharedTypesService**](GithubComBaselinehqGolangSharedTypesService.md) |  | [optional] 
 **UsageType** | Pointer to [**GithubComBaselinehqGolangSharedTypesUsageType**](GithubComBaselinehqGolangSharedTypesUsageType.md) |  | [optional] 
+**UseBasePricing** | Pointer to **bool** |  | [optional] 
 **Vm** | Pointer to [**GithubComBaselinehqGolangSharedTypesVM**](GithubComBaselinehqGolangSharedTypesVM.md) |  | [optional] 
 
 ## Methods
@@ -232,6 +233,31 @@ SetUsageType sets UsageType field to given value.
 `func (o *GithubComBaselinehqGolangSharedTypesInstance) HasUsageType() bool`
 
 HasUsageType returns a boolean if a field has been set.
+
+### GetUseBasePricing
+
+`func (o *GithubComBaselinehqGolangSharedTypesInstance) GetUseBasePricing() bool`
+
+GetUseBasePricing returns the UseBasePricing field if non-nil, zero value otherwise.
+
+### GetUseBasePricingOk
+
+`func (o *GithubComBaselinehqGolangSharedTypesInstance) GetUseBasePricingOk() (*bool, bool)`
+
+GetUseBasePricingOk returns a tuple with the UseBasePricing field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetUseBasePricing
+
+`func (o *GithubComBaselinehqGolangSharedTypesInstance) SetUseBasePricing(v bool)`
+
+SetUseBasePricing sets UseBasePricing field to given value.
+
+### HasUseBasePricing
+
+`func (o *GithubComBaselinehqGolangSharedTypesInstance) HasUseBasePricing() bool`
+
+HasUseBasePricing returns a boolean if a field has been set.
 
 ### GetVm
 

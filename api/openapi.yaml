@@ -209,6 +209,8 @@ components:
           $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Service"
         usage_type:
           $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.UsageType"
+        use_base_pricing:
+          type: boolean
         vm:
           $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.VM"
       type: object
