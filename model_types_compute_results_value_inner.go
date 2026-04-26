@@ -20,9 +20,9 @@ var _ MappedNullable = &TypesComputeResultsValueInner{}
 
 // TypesComputeResultsValueInner struct for TypesComputeResultsValueInner
 type TypesComputeResultsValueInner struct {
-	InstancePricing *SchemaComputePricingsRow `json:"instance_pricing,omitempty"`
-	Savings *TypesSavings `json:"savings,omitempty"`
-	Vm *GithubComBaselinehqGolangSharedTypesVM `json:"vm,omitempty"`
+	InstancePricing *SchemaComputePricingsRow               `json:"instance_pricing,omitempty"`
+	Savings         *TypesSavings                           `json:"savings,omitempty"`
+	Vm              *GithubComBaselinehqGolangSharedTypesVM `json:"vm,omitempty"`
 }
 
 // NewTypesComputeResultsValueInner instantiates a new TypesComputeResultsValueInner object
@@ -139,7 +139,7 @@ func (o *TypesComputeResultsValueInner) SetVm(v GithubComBaselinehqGolangSharedT
 }
 
 func (o TypesComputeResultsValueInner) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -195,5 +195,3 @@ func (v *NullableTypesComputeResultsValueInner) UnmarshalJSON(src []byte) error 
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

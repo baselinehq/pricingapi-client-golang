@@ -21,13 +21,13 @@ type GithubComBaselinehqGolangSharedTypesProvider string
 
 // List of github_com_baselinehq_golang-shared_types.Provider
 const (
-	GCP GithubComBaselinehqGolangSharedTypesProvider = "GCP"
-	AWS GithubComBaselinehqGolangSharedTypesProvider = "AWS"
+	GCP          GithubComBaselinehqGolangSharedTypesProvider = "GCP"
+	AWS          GithubComBaselinehqGolangSharedTypesProvider = "AWS"
 	DigitalOcean GithubComBaselinehqGolangSharedTypesProvider = "DigitalOcean"
-	Azure GithubComBaselinehqGolangSharedTypesProvider = "Azure"
-	Hetzner GithubComBaselinehqGolangSharedTypesProvider = "Hetzner"
-	OVHCloud GithubComBaselinehqGolangSharedTypesProvider = "OVHCloud"
-	Base GithubComBaselinehqGolangSharedTypesProvider = "Base"
+	Azure        GithubComBaselinehqGolangSharedTypesProvider = "Azure"
+	Hetzner      GithubComBaselinehqGolangSharedTypesProvider = "Hetzner"
+	OVHCloud     GithubComBaselinehqGolangSharedTypesProvider = "OVHCloud"
+	Base         GithubComBaselinehqGolangSharedTypesProvider = "Base"
 )
 
 // All allowed values of GithubComBaselinehqGolangSharedTypesProvider enum
@@ -119,4 +119,3 @@ func (v *NullableGithubComBaselinehqGolangSharedTypesProvider) UnmarshalJSON(src
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

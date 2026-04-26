@@ -20,10 +20,10 @@ var _ MappedNullable = &TypesSavings{}
 
 // TypesSavings struct for TypesSavings
 type TypesSavings struct {
-	AmountPerHour *float32 `json:"amount_per_hour,omitempty"`
+	AmountPerHour  *float32 `json:"amount_per_hour,omitempty"`
 	AmountPerMonth *float32 `json:"amount_per_month,omitempty"`
-	AmountPerYear *float32 `json:"amount_per_year,omitempty"`
-	Percentage *float32 `json:"percentage,omitempty"`
+	AmountPerYear  *float32 `json:"amount_per_year,omitempty"`
+	Percentage     *float32 `json:"percentage,omitempty"`
 }
 
 // NewTypesSavings instantiates a new TypesSavings object
@@ -172,7 +172,7 @@ func (o *TypesSavings) SetPercentage(v float32) {
 }
 
 func (o TypesSavings) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -231,5 +231,3 @@ func (v *NullableTypesSavings) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -21,13 +21,13 @@ var _ MappedNullable = &TypesPredicates{}
 // TypesPredicates struct for TypesPredicates
 type TypesPredicates struct {
 	AvailabilityZones []string `json:"availability_zones,omitempty"`
-	DiskTypes []string `json:"disk_types,omitempty"`
-	InstanceTypes []string `json:"instance_types,omitempty"`
-	OperatingSystems []string `json:"operating_systems,omitempty"`
-	Providers []string `json:"providers,omitempty"`
-	Regions []string `json:"regions,omitempty"`
-	Services []string `json:"services,omitempty"`
-	UsageTypes []string `json:"usage_types,omitempty"`
+	DiskTypes         []string `json:"disk_types,omitempty"`
+	InstanceTypes     []string `json:"instance_types,omitempty"`
+	OperatingSystems  []string `json:"operating_systems,omitempty"`
+	Providers         []string `json:"providers,omitempty"`
+	Regions           []string `json:"regions,omitempty"`
+	Services          []string `json:"services,omitempty"`
+	UsageTypes        []string `json:"usage_types,omitempty"`
 }
 
 // NewTypesPredicates instantiates a new TypesPredicates object
@@ -304,7 +304,7 @@ func (o *TypesPredicates) SetUsageTypes(v []string) {
 }
 
 func (o TypesPredicates) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -375,5 +375,3 @@ func (v *NullableTypesPredicates) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

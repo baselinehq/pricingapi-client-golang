@@ -20,16 +20,16 @@ var _ MappedNullable = &GithubComBaselinehqGolangSharedTypesInstance{}
 
 // GithubComBaselinehqGolangSharedTypesInstance struct for GithubComBaselinehqGolangSharedTypesInstance
 type GithubComBaselinehqGolangSharedTypesInstance struct {
-	AvailabilityZone *string `json:"availability_zone,omitempty"`
-	Id *string `json:"id,omitempty"`
-	InstanceType *string `json:"instance_type,omitempty"`
-	OperatingSystem *string `json:"operating_system,omitempty"`
-	Provider *GithubComBaselinehqGolangSharedTypesProvider `json:"provider,omitempty"`
-	Region *string `json:"region,omitempty"`
-	Service *GithubComBaselinehqGolangSharedTypesService `json:"service,omitempty"`
-	UsageType *GithubComBaselinehqGolangSharedTypesUsageType `json:"usage_type,omitempty"`
-	UseBasePricing *bool `json:"use_base_pricing,omitempty"`
-	Vm *GithubComBaselinehqGolangSharedTypesVM `json:"vm,omitempty"`
+	AvailabilityZone *string                                        `json:"availability_zone,omitempty"`
+	Id               *string                                        `json:"id,omitempty"`
+	InstanceType     *string                                        `json:"instance_type,omitempty"`
+	OperatingSystem  *string                                        `json:"operating_system,omitempty"`
+	Provider         *GithubComBaselinehqGolangSharedTypesProvider  `json:"provider,omitempty"`
+	Region           *string                                        `json:"region,omitempty"`
+	Service          *GithubComBaselinehqGolangSharedTypesService   `json:"service,omitempty"`
+	UsageType        *GithubComBaselinehqGolangSharedTypesUsageType `json:"usage_type,omitempty"`
+	UseBasePricing   *bool                                          `json:"use_base_pricing,omitempty"`
+	Vm               *GithubComBaselinehqGolangSharedTypesVM        `json:"vm,omitempty"`
 }
 
 // NewGithubComBaselinehqGolangSharedTypesInstance instantiates a new GithubComBaselinehqGolangSharedTypesInstance object
@@ -370,7 +370,7 @@ func (o *GithubComBaselinehqGolangSharedTypesInstance) SetVm(v GithubComBaseline
 }
 
 func (o GithubComBaselinehqGolangSharedTypesInstance) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -447,5 +447,3 @@ func (v *NullableGithubComBaselinehqGolangSharedTypesInstance) UnmarshalJSON(src
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

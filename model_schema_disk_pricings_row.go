@@ -20,27 +20,27 @@ var _ MappedNullable = &SchemaDiskPricingsRow{}
 
 // SchemaDiskPricingsRow struct for SchemaDiskPricingsRow
 type SchemaDiskPricingsRow struct {
-	AvailabilityZone *string `json:"availability_zone,omitempty"`
-	CostPerGbHour *float32 `json:"cost_per_gb_hour,omitempty"`
-	CostPerIopsHour *float32 `json:"cost_per_iops_hour,omitempty"`
-	CostPerThroughputMbpsHour *float32 `json:"cost_per_throughput_mbps_hour,omitempty"`
-	CreatedAt *string `json:"created_at,omitempty"`
-	Id *string `json:"id,omitempty"`
-	MaxCapacityGb *float32 `json:"max_capacity_gb,omitempty"`
-	MaxIops *float32 `json:"max_iops,omitempty"`
-	MaxThroughputMbps *float32 `json:"max_throughput_mbps,omitempty"`
-	MinCapacityGb *float32 `json:"min_capacity_gb,omitempty"`
-	MinIops *float32 `json:"min_iops,omitempty"`
-	MinThroughputMbps *float32 `json:"min_throughput_mbps,omitempty"`
-	PeriodBillingHours *float32 `json:"period_billing_hours,omitempty"`
-	Provider *string `json:"provider,omitempty"`
-	RawPricingData map[string]interface{} `json:"raw_pricing_data,omitempty"`
-	Region *string `json:"region,omitempty"`
-	Service *string `json:"service,omitempty"`
-	Tags map[string]interface{} `json:"tags,omitempty"`
-	Type *string `json:"type,omitempty"`
-	UpdatedAt *string `json:"updated_at,omitempty"`
-	UsageType *string `json:"usage_type,omitempty"`
+	AvailabilityZone          *string                `json:"availability_zone,omitempty"`
+	CostPerGbHour             *float32               `json:"cost_per_gb_hour,omitempty"`
+	CostPerIopsHour           *float32               `json:"cost_per_iops_hour,omitempty"`
+	CostPerThroughputMbpsHour *float32               `json:"cost_per_throughput_mbps_hour,omitempty"`
+	CreatedAt                 *string                `json:"created_at,omitempty"`
+	Id                        *string                `json:"id,omitempty"`
+	MaxCapacityGb             *float32               `json:"max_capacity_gb,omitempty"`
+	MaxIops                   *float32               `json:"max_iops,omitempty"`
+	MaxThroughputMbps         *float32               `json:"max_throughput_mbps,omitempty"`
+	MinCapacityGb             *float32               `json:"min_capacity_gb,omitempty"`
+	MinIops                   *float32               `json:"min_iops,omitempty"`
+	MinThroughputMbps         *float32               `json:"min_throughput_mbps,omitempty"`
+	PeriodBillingHours        *float32               `json:"period_billing_hours,omitempty"`
+	Provider                  *string                `json:"provider,omitempty"`
+	RawPricingData            map[string]interface{} `json:"raw_pricing_data,omitempty"`
+	Region                    *string                `json:"region,omitempty"`
+	Service                   *string                `json:"service,omitempty"`
+	Tags                      map[string]interface{} `json:"tags,omitempty"`
+	Type                      *string                `json:"type,omitempty"`
+	UpdatedAt                 *string                `json:"updated_at,omitempty"`
+	UsageType                 *string                `json:"usage_type,omitempty"`
 }
 
 // NewSchemaDiskPricingsRow instantiates a new SchemaDiskPricingsRow object
@@ -733,7 +733,7 @@ func (o *SchemaDiskPricingsRow) SetUsageType(v string) {
 }
 
 func (o SchemaDiskPricingsRow) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -843,5 +843,3 @@ func (v *NullableSchemaDiskPricingsRow) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-
