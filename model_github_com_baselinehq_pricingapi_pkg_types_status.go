@@ -22,7 +22,7 @@ type GithubComBaselinehqPricingapiPkgTypesStatus string
 // List of github_com_baselinehq_pricingapi_pkg_types.Status
 const (
 	Registered GithubComBaselinehqPricingapiPkgTypesStatus = "Registered"
-	Deleted GithubComBaselinehqPricingapiPkgTypesStatus = "Deleted"
+	Deleted    GithubComBaselinehqPricingapiPkgTypesStatus = "Deleted"
 )
 
 // All allowed values of GithubComBaselinehqPricingapiPkgTypesStatus enum
@@ -109,4 +109,3 @@ func (v *NullableGithubComBaselinehqPricingapiPkgTypesStatus) UnmarshalJSON(src 
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

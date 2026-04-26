@@ -21,14 +21,14 @@ type GithubComBaselinehqGolangSharedTypesService string
 
 // List of github_com_baselinehq_golang-shared_types.Service
 const (
-	ComputeEngine GithubComBaselinehqGolangSharedTypesService = "ComputeEngine"
-	AmazonEC2 GithubComBaselinehqGolangSharedTypesService = "AmazonEC2"
-	Droplet GithubComBaselinehqGolangSharedTypesService = "Droplet"
-	AzureCompute GithubComBaselinehqGolangSharedTypesService = "AzureCompute"
+	ComputeEngine     GithubComBaselinehqGolangSharedTypesService = "ComputeEngine"
+	AmazonEC2         GithubComBaselinehqGolangSharedTypesService = "AmazonEC2"
+	Droplet           GithubComBaselinehqGolangSharedTypesService = "Droplet"
+	AzureCompute      GithubComBaselinehqGolangSharedTypesService = "AzureCompute"
 	AzureManagedDisks GithubComBaselinehqGolangSharedTypesService = "AzureManagedDisks"
-	HetznerCompute GithubComBaselinehqGolangSharedTypesService = "HetznerCompute"
-	OVHPublicCloud GithubComBaselinehqGolangSharedTypesService = "OVHPublicCloud"
-	BaseCompute GithubComBaselinehqGolangSharedTypesService = "BaseCompute"
+	HetznerCompute    GithubComBaselinehqGolangSharedTypesService = "HetznerCompute"
+	OVHPublicCloud    GithubComBaselinehqGolangSharedTypesService = "OVHPublicCloud"
+	BaseCompute       GithubComBaselinehqGolangSharedTypesService = "BaseCompute"
 )
 
 // All allowed values of GithubComBaselinehqGolangSharedTypesService enum
@@ -121,4 +121,3 @@ func (v *NullableGithubComBaselinehqGolangSharedTypesService) UnmarshalJSON(src 
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-

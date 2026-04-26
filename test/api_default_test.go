@@ -11,10 +11,10 @@ package pricing_api_client
 
 import (
 	"context"
+	openapiclient "github.com/baselinehq/pricingapi-client-golang"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
-	openapiclient "github.com/baselinehq/pricingapi-client-golang"
 )
 
 func Test_pricing_api_client_DefaultAPIService(t *testing.T) {
@@ -24,7 +24,7 @@ func Test_pricing_api_client_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService HealthzGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.HealthzGet(context.Background()).Execute()
 
@@ -36,7 +36,7 @@ func Test_pricing_api_client_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService MarketplaceProvidersComputeDelete", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.MarketplaceProvidersComputeDelete(context.Background()).Execute()
 
@@ -48,7 +48,7 @@ func Test_pricing_api_client_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService MarketplaceProvidersComputeGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.MarketplaceProvidersComputeGet(context.Background()).Execute()
 
@@ -60,7 +60,7 @@ func Test_pricing_api_client_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService MarketplaceProvidersComputePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.MarketplaceProvidersComputePost(context.Background()).Execute()
 
@@ -72,7 +72,7 @@ func Test_pricing_api_client_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService PricingComputePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.PricingComputePost(context.Background()).Execute()
 
@@ -84,7 +84,7 @@ func Test_pricing_api_client_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService PricingDisksPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.PricingDisksPost(context.Background()).Execute()
 
@@ -94,9 +94,21 @@ func Test_pricing_api_client_DefaultAPIService(t *testing.T) {
 
 	})
 
+	t.Run("Test DefaultAPIService PricingPost", func(t *testing.T) {
+
+		t.Skip("skip test") // remove to run test
+
+		resp, httpRes, err := apiClient.DefaultAPI.PricingPost(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
 	t.Run("Test DefaultAPIService ProvidersGet", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.ProvidersGet(context.Background()).Execute()
 
@@ -108,7 +120,7 @@ func Test_pricing_api_client_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService RecommendationsComputePost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.RecommendationsComputePost(context.Background()).Execute()
 
@@ -120,9 +132,21 @@ func Test_pricing_api_client_DefaultAPIService(t *testing.T) {
 
 	t.Run("Test DefaultAPIService RecommendationsDisksPost", func(t *testing.T) {
 
-		t.Skip("skip test")  // remove to run test
+		t.Skip("skip test") // remove to run test
 
 		resp, httpRes, err := apiClient.DefaultAPI.RecommendationsDisksPost(context.Background()).Execute()
+
+		require.Nil(t, err)
+		require.NotNil(t, resp)
+		assert.Equal(t, 200, httpRes.StatusCode)
+
+	})
+
+	t.Run("Test DefaultAPIService RecommendationsPost", func(t *testing.T) {
+
+		t.Skip("skip test") // remove to run test
+
+		resp, httpRes, err := apiClient.DefaultAPI.RecommendationsPost(context.Background()).Execute()
 
 		require.Nil(t, err)
 		require.NotNil(t, resp)

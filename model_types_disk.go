@@ -20,16 +20,16 @@ var _ MappedNullable = &TypesDisk{}
 
 // TypesDisk struct for TypesDisk
 type TypesDisk struct {
-	AvailabilityZone *string `json:"availability_zone,omitempty"`
-	CapacityGb *float32 `json:"capacity_gb,omitempty"`
-	Id *string `json:"id,omitempty"`
-	Iops *float32 `json:"iops,omitempty"`
-	Provider *GithubComBaselinehqGolangSharedTypesProvider `json:"provider,omitempty"`
-	Region *string `json:"region,omitempty"`
-	Service *GithubComBaselinehqGolangSharedTypesService `json:"service,omitempty"`
-	ThroughputMbps *float32 `json:"throughput_mbps,omitempty"`
-	Type *string `json:"type,omitempty"`
-	UsageType *GithubComBaselinehqGolangSharedTypesUsageType `json:"usage_type,omitempty"`
+	AvailabilityZone *string                                        `json:"availability_zone,omitempty"`
+	CapacityGb       *float32                                       `json:"capacity_gb,omitempty"`
+	Id               *string                                        `json:"id,omitempty"`
+	Iops             *float32                                       `json:"iops,omitempty"`
+	Provider         *GithubComBaselinehqGolangSharedTypesProvider  `json:"provider,omitempty"`
+	Region           *string                                        `json:"region,omitempty"`
+	Service          *GithubComBaselinehqGolangSharedTypesService   `json:"service,omitempty"`
+	ThroughputMbps   *float32                                       `json:"throughput_mbps,omitempty"`
+	Type             *string                                        `json:"type,omitempty"`
+	UsageType        *GithubComBaselinehqGolangSharedTypesUsageType `json:"usage_type,omitempty"`
 }
 
 // NewTypesDisk instantiates a new TypesDisk object
@@ -370,7 +370,7 @@ func (o *TypesDisk) SetUsageType(v GithubComBaselinehqGolangSharedTypesUsageType
 }
 
 func (o TypesDisk) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -447,5 +447,3 @@ func (v *NullableTypesDisk) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

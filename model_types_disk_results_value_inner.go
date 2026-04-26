@@ -20,9 +20,9 @@ var _ MappedNullable = &TypesDiskResultsValueInner{}
 
 // TypesDiskResultsValueInner struct for TypesDiskResultsValueInner
 type TypesDiskResultsValueInner struct {
-	Disk *SchemaDiskPricingsRow `json:"disk,omitempty"`
+	Disk        *SchemaDiskPricingsRow `json:"disk,omitempty"`
 	DiskPricing *SchemaDiskPricingsRow `json:"disk_pricing,omitempty"`
-	Savings *TypesSavings `json:"savings,omitempty"`
+	Savings     *TypesSavings          `json:"savings,omitempty"`
 }
 
 // NewTypesDiskResultsValueInner instantiates a new TypesDiskResultsValueInner object
@@ -139,7 +139,7 @@ func (o *TypesDiskResultsValueInner) SetSavings(v TypesSavings) {
 }
 
 func (o TypesDiskResultsValueInner) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -195,5 +195,3 @@ func (v *NullableTypesDiskResultsValueInner) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

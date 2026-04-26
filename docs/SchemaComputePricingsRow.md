@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Architecture** | Pointer to **string** |  | [optional] 
 **AvailabilityZone** | Pointer to **string** |  | [optional] 
 **CostPerHour** | Pointer to **float32** |  | [optional] 
 **CpuCores** | Pointer to **float32** |  | [optional] 
@@ -41,6 +42,31 @@ will change when the set of required properties is changed
 NewSchemaComputePricingsRowWithDefaults instantiates a new SchemaComputePricingsRow object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetArchitecture
+
+`func (o *SchemaComputePricingsRow) GetArchitecture() string`
+
+GetArchitecture returns the Architecture field if non-nil, zero value otherwise.
+
+### GetArchitectureOk
+
+`func (o *SchemaComputePricingsRow) GetArchitectureOk() (*string, bool)`
+
+GetArchitectureOk returns a tuple with the Architecture field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetArchitecture
+
+`func (o *SchemaComputePricingsRow) SetArchitecture(v string)`
+
+SetArchitecture sets Architecture field to given value.
+
+### HasArchitecture
+
+`func (o *SchemaComputePricingsRow) HasArchitecture() bool`
+
+HasArchitecture returns a boolean if a field has been set.
 
 ### GetAvailabilityZone
 

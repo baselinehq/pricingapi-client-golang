@@ -21,7 +21,7 @@ var _ MappedNullable = &GithubComBaselinehqGolangSharedTypesVM{}
 // GithubComBaselinehqGolangSharedTypesVM struct for GithubComBaselinehqGolangSharedTypesVM
 type GithubComBaselinehqGolangSharedTypesVM struct {
 	CpuCores *float32 `json:"cpu_cores,omitempty"`
-	RamGb *float32 `json:"ram_gb,omitempty"`
+	RamGb    *float32 `json:"ram_gb,omitempty"`
 }
 
 // NewGithubComBaselinehqGolangSharedTypesVM instantiates a new GithubComBaselinehqGolangSharedTypesVM object
@@ -106,7 +106,7 @@ func (o *GithubComBaselinehqGolangSharedTypesVM) SetRamGb(v float32) {
 }
 
 func (o GithubComBaselinehqGolangSharedTypesVM) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -159,5 +159,3 @@ func (v *NullableGithubComBaselinehqGolangSharedTypesVM) UnmarshalJSON(src []byt
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

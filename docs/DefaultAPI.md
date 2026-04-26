@@ -8,11 +8,13 @@ Method | HTTP request | Description
 [**MarketplaceProvidersComputeDelete**](DefaultAPI.md#MarketplaceProvidersComputeDelete) | **Delete** /marketplace/providers/compute | Delete a custom provider instance
 [**MarketplaceProvidersComputeGet**](DefaultAPI.md#MarketplaceProvidersComputeGet) | **Get** /marketplace/providers/compute | Get your custom pricing entries
 [**MarketplaceProvidersComputePost**](DefaultAPI.md#MarketplaceProvidersComputePost) | **Post** /marketplace/providers/compute | Register a custom provider
-[**PricingComputePost**](DefaultAPI.md#PricingComputePost) | **Post** /pricing/compute | Get  pricing for an instance
-[**PricingDisksPost**](DefaultAPI.md#PricingDisksPost) | **Post** /pricing/disks | Get  pricing for a disk
+[**PricingComputePost**](DefaultAPI.md#PricingComputePost) | **Post** /pricing/compute | Get pricing for an instance
+[**PricingDisksPost**](DefaultAPI.md#PricingDisksPost) | **Post** /pricing/disks | Get pricing for a disk
+[**PricingPost**](DefaultAPI.md#PricingPost) | **Post** /pricing | Get pricing for an instance
 [**ProvidersGet**](DefaultAPI.md#ProvidersGet) | **Get** /providers | Get details for the providers
 [**RecommendationsComputePost**](DefaultAPI.md#RecommendationsComputePost) | **Post** /recommendations/compute | Get recommendations for compute instances
 [**RecommendationsDisksPost**](DefaultAPI.md#RecommendationsDisksPost) | **Post** /recommendations/disks | Get recommendations for disks
+[**RecommendationsPost**](DefaultAPI.md#RecommendationsPost) | **Post** /recommendations | Get recommendations for compute instances
 
 
 
@@ -131,7 +133,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[ApiKeyAuth](../README.md#ApiKeyAuth)
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -192,7 +194,7 @@ Other parameters are passed through a pointer to a apiMarketplaceProvidersComput
 
 ### Authorization
 
-[ApiKeyAuth](../README.md#ApiKeyAuth)
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -225,7 +227,7 @@ import (
 )
 
 func main() {
-	instance := *openapiclient.NewTypesCustomPriceRequest([]openapiclient.SchemaComputePricingsRow{*openapiclient.NewSchemaComputePricingsRow()}) // TypesCustomPriceRequest | Pricing RecommendationRequest
+	instance := *openapiclient.NewTypesCustomPriceRequest([]openapiclient.SchemaComputePricingsRow{*openapiclient.NewSchemaComputePricingsRow()}) // TypesCustomPriceRequest | Custom pricing request
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -250,7 +252,7 @@ Other parameters are passed through a pointer to a apiMarketplaceProvidersComput
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **instance** | [**TypesCustomPriceRequest**](TypesCustomPriceRequest.md) | Pricing RecommendationRequest | 
+ **instance** | [**TypesCustomPriceRequest**](TypesCustomPriceRequest.md) | Custom pricing request | 
 
 ### Return type
 
@@ -258,7 +260,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[ApiKeyAuth](../README.md#ApiKeyAuth)
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -274,7 +276,7 @@ Name | Type | Description  | Notes
 
 > SchemaComputePricingsRow PricingComputePost(ctx).Instance(instance).Execute()
 
-Get  pricing for an instance
+Get pricing for an instance
 
 
 
@@ -324,7 +326,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[ApiKeyAuth](../README.md#ApiKeyAuth)
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -340,7 +342,7 @@ Name | Type | Description  | Notes
 
 > SchemaDiskPricingsRow PricingDisksPost(ctx).Instance(instance).Execute()
 
-Get  pricing for a disk
+Get pricing for a disk
 
 
 
@@ -357,7 +359,7 @@ import (
 )
 
 func main() {
-	instance := *openapiclient.NewTypesDisk() // TypesDisk | Disks
+	instance := *openapiclient.NewTypesDisk() // TypesDisk | Disk
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -382,7 +384,7 @@ Other parameters are passed through a pointer to a apiPricingDisksPostRequest st
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **instance** | [**TypesDisk**](TypesDisk.md) | Disks | 
+ **instance** | [**TypesDisk**](TypesDisk.md) | Disk | 
 
 ### Return type
 
@@ -390,7 +392,73 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[ApiKeyAuth](../README.md#ApiKeyAuth)
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## PricingPost
+
+> SchemaComputePricingsRow PricingPost(ctx).Instance(instance).Execute()
+
+Get pricing for an instance
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/baselinehq/pricingapi-client-golang"
+)
+
+func main() {
+	instance := *openapiclient.NewGithubComBaselinehqGolangSharedTypesInstance() // GithubComBaselinehqGolangSharedTypesInstance | Instance
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.PricingPost(context.Background()).Instance(instance).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.PricingPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `PricingPost`: SchemaComputePricingsRow
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.PricingPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiPricingPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **instance** | [**GithubComBaselinehqGolangSharedTypesInstance**](GithubComBaselinehqGolangSharedTypesInstance.md) | Instance | 
+
+### Return type
+
+[**SchemaComputePricingsRow**](SchemaComputePricingsRow.md)
+
+### Authorization
+
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -451,7 +519,7 @@ Other parameters are passed through a pointer to a apiProvidersGetRequest struct
 
 ### Authorization
 
-[ApiKeyAuth](../README.md#ApiKeyAuth)
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -517,7 +585,7 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[ApiKeyAuth](../README.md#ApiKeyAuth)
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 
@@ -583,7 +651,73 @@ Name | Type | Description  | Notes
 
 ### Authorization
 
-[ApiKeyAuth](../README.md#ApiKeyAuth)
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## RecommendationsPost
+
+> TypesComputeResults RecommendationsPost(ctx).Instance(instance).Execute()
+
+Get recommendations for compute instances
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/baselinehq/pricingapi-client-golang"
+)
+
+func main() {
+	instance := *openapiclient.NewTypesComputeRequest() // TypesComputeRequest | Instance
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.RecommendationsPost(context.Background()).Instance(instance).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.RecommendationsPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `RecommendationsPost`: TypesComputeResults
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.RecommendationsPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiRecommendationsPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **instance** | [**TypesComputeRequest**](TypesComputeRequest.md) | Instance | 
+
+### Return type
+
+[**TypesComputeResults**](TypesComputeResults.md)
+
+### Authorization
+
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
 
 ### HTTP request headers
 

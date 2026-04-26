@@ -20,10 +20,10 @@ var _ MappedNullable = &TypesComputeRequest{}
 
 // TypesComputeRequest struct for TypesComputeRequest
 type TypesComputeRequest struct {
-	IncludeMetadata *bool `json:"include_metadata,omitempty"`
-	Instance *GithubComBaselinehqGolangSharedTypesInstance `json:"instance,omitempty"`
-	Predicates *TypesPredicates `json:"predicates,omitempty"`
-	Usage *GithubComBaselinehqGolangSharedTypesVM `json:"usage,omitempty"`
+	IncludeMetadata *bool                                         `json:"include_metadata,omitempty"`
+	Instance        *GithubComBaselinehqGolangSharedTypesInstance `json:"instance,omitempty"`
+	Predicates      *TypesPredicates                              `json:"predicates,omitempty"`
+	Usage           *GithubComBaselinehqGolangSharedTypesVM       `json:"usage,omitempty"`
 }
 
 // NewTypesComputeRequest instantiates a new TypesComputeRequest object
@@ -172,7 +172,7 @@ func (o *TypesComputeRequest) SetUsage(v GithubComBaselinehqGolangSharedTypesVM)
 }
 
 func (o TypesComputeRequest) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -231,5 +231,3 @@ func (v *NullableTypesComputeRequest) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

@@ -20,8 +20,8 @@ var _ MappedNullable = &TypesCustomPricingResponse{}
 
 // TypesCustomPricingResponse struct for TypesCustomPricingResponse
 type TypesCustomPricingResponse struct {
-	Entries []SchemaComputePricingsRow `json:"entries,omitempty"`
-	Status *GithubComBaselinehqPricingapiPkgTypesStatus `json:"status,omitempty"`
+	Entries []SchemaComputePricingsRow                   `json:"entries,omitempty"`
+	Status  *GithubComBaselinehqPricingapiPkgTypesStatus `json:"status,omitempty"`
 }
 
 // NewTypesCustomPricingResponse instantiates a new TypesCustomPricingResponse object
@@ -106,7 +106,7 @@ func (o *TypesCustomPricingResponse) SetStatus(v GithubComBaselinehqPricingapiPk
 }
 
 func (o TypesCustomPricingResponse) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -159,5 +159,3 @@ func (v *NullableTypesCustomPricingResponse) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

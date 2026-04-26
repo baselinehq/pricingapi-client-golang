@@ -13,7 +13,6 @@ info:
   version: "1.0"
 servers:
 - url: https://pricing.baselinehq.cloud/
-- url: http://pricing.baselinehq.cloud/
 paths:
   /healthz:
     get:
@@ -45,6 +44,30 @@ paths:
               schema:
                 $ref: "#/components/schemas/types.CustomPricingResponse"
           description: Pricing response for a custom provider
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Invalid id
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Provider and organization do not match
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Instance not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
@@ -58,6 +81,18 @@ paths:
               schema:
                 $ref: "#/components/schemas/types.MarketplaceProvidersResponse"
           description: Pricing response for custom pricing
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Unauthorized
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
@@ -69,7 +104,7 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/types.CustomPriceRequest"
-        description: Pricing RecommendationRequest
+        description: Custom pricing request
         required: true
       responses:
         "200":
@@ -78,14 +113,32 @@ paths:
               schema:
                 $ref: "#/components/schemas/types.CustomPricingResponse"
           description: Pricing response for a custom provider
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Provider and organization do not match
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
       summary: Register a custom provider
       x-codegen-request-body-name: instance
-  /pricing/compute:
+  /pricing:
     post:
-      description: Get pricing
+      description: Get pricing for compute instances
       requestBody:
         content:
           application/json:
@@ -100,20 +153,90 @@ paths:
               schema:
                 $ref: "#/components/schemas/schema.ComputePricingsRow"
           description: Pricing for a given instance
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Pricing not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
-      summary: Get  pricing for an instance
+      summary: Get pricing for an instance
+      x-codegen-request-body-name: instance
+  /pricing/compute:
+    post:
+      description: Get pricing for compute instances
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Instance"
+        description: Instance
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/schema.ComputePricingsRow"
+          description: Pricing for a given instance
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Pricing not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Get pricing for an instance
       x-codegen-request-body-name: instance
   /pricing/disks:
     post:
-      description: Get pricing for disks
+      description: Get pricing for a disk
       requestBody:
         content:
           application/json:
             schema:
               $ref: "#/components/schemas/types.Disk"
-        description: Disks
+        description: Disk
         required: true
       responses:
         "200":
@@ -122,10 +245,34 @@ paths:
               schema:
                 $ref: "#/components/schemas/schema.DiskPricingsRow"
           description: Pricing for a given disk
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Pricing not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
-      summary: Get  pricing for a disk
+      summary: Get pricing for a disk
       x-codegen-request-body-name: instance
   /providers:
     get:
@@ -137,15 +284,20 @@ paths:
               schema:
                 $ref: "#/components/schemas/provider.Configs"
           description: List of providers
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Unauthorized
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
       summary: Get details for the providers
-  /recommendations/compute:
+  /recommendations:
     post:
-      description: |-
-        Get recommendations for compute instances
-        Recommendations, InstancePricing, VM, and Savings
+      description: "Get recommendations for compute instances (Recommendations, InstancePricing,\
+        \ VM, Savings)"
       requestBody:
         content:
           application/json:
@@ -160,6 +312,77 @@ paths:
               schema:
                 $ref: "#/components/schemas/types.ComputeResults"
           description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Get recommendations for compute instances
+      x-codegen-request-body-name: instance
+  /recommendations/compute:
+    post:
+      description: "Get recommendations for compute instances (Recommendations, InstancePricing,\
+        \ VM, Savings)"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/types.ComputeRequest"
+        description: Instance
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/types.ComputeResults"
+          description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
@@ -167,9 +390,8 @@ paths:
       x-codegen-request-body-name: instance
   /recommendations/disks:
     post:
-      description: |-
-        Get recommendations for disks used in the server
-        Recommendations, DiskPricing, and Savings
+      description: "Get recommendations for disks used in the server (Recommendations,\
+        \ DiskPricing, Savings)"
       requestBody:
         content:
           application/json:
@@ -184,6 +406,30 @@ paths:
               schema:
                 $ref: "#/components/schemas/types.DiskResults"
           description: OK
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
@@ -299,6 +545,13 @@ components:
       x-enum-varnames:
       - Registered
       - Deleted
+    handler.ErrorResponse:
+      example:
+        error: error
+      properties:
+        error:
+          type: string
+      type: object
     provider.Config:
       properties:
         predicates:
@@ -330,7 +583,10 @@ components:
         id: id
         region: region
         instance_type: instance_type
+        architecture: architecture
       properties:
+        architecture:
+          type: string
         availability_zone:
           type: string
         cost_per_hour:
@@ -487,6 +743,7 @@ components:
           id: id
           region: region
           instance_type: instance_type
+          architecture: architecture
         - availability_zone: availability_zone
           created_at: created_at
           cpu_cores: 6.027456183070403
@@ -505,6 +762,7 @@ components:
           id: id
           region: region
           instance_type: instance_type
+          architecture: architecture
         status: Registered
       properties:
         entries:
@@ -575,6 +833,7 @@ components:
           id: id
           region: region
           instance_type: instance_type
+          architecture: architecture
         - availability_zone: availability_zone
           created_at: created_at
           cpu_cores: 6.027456183070403
@@ -593,6 +852,7 @@ components:
           id: id
           region: region
           instance_type: instance_type
+          architecture: architecture
       properties:
         providers:
           items:
@@ -665,7 +925,12 @@ components:
       type: object
   securitySchemes:
     ApiKeyAuth:
-      description: Bearer token for authentication
+      description: API key with "bl_" prefix (e.g. "bl_<api_key>")
+      in: header
+      name: X-API-Key
+      type: apiKey
+    BearerAuth:
+      description: Bearer token for authentication (e.g. "Bearer <token>")
       in: header
       name: Authorization
       type: apiKey

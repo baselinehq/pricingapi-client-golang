@@ -20,24 +20,25 @@ var _ MappedNullable = &SchemaComputePricingsRow{}
 
 // SchemaComputePricingsRow struct for SchemaComputePricingsRow
 type SchemaComputePricingsRow struct {
-	AvailabilityZone *string `json:"availability_zone,omitempty"`
-	CostPerHour *float32 `json:"cost_per_hour,omitempty"`
-	CpuCores *float32 `json:"cpu_cores,omitempty"`
-	CpuCoresCostPerHour *float32 `json:"cpu_cores_cost_per_hour,omitempty"`
-	CreatedAt *string `json:"created_at,omitempty"`
-	Id *string `json:"id,omitempty"`
-	InstanceType *string `json:"instance_type,omitempty"`
-	OperatingSystem *string `json:"operating_system,omitempty"`
-	PeriodBillingHours *float32 `json:"period_billing_hours,omitempty"`
-	Provider *string `json:"provider,omitempty"`
-	RamGb *float32 `json:"ram_gb,omitempty"`
-	RamGbCostPerHour *float32 `json:"ram_gb_cost_per_hour,omitempty"`
-	RawPricingData map[string]interface{} `json:"raw_pricing_data,omitempty"`
-	Region *string `json:"region,omitempty"`
-	Service *string `json:"service,omitempty"`
-	Tags map[string]interface{} `json:"tags,omitempty"`
-	UpdatedAt *string `json:"updated_at,omitempty"`
-	UsageType *string `json:"usage_type,omitempty"`
+	Architecture        *string                `json:"architecture,omitempty"`
+	AvailabilityZone    *string                `json:"availability_zone,omitempty"`
+	CostPerHour         *float32               `json:"cost_per_hour,omitempty"`
+	CpuCores            *float32               `json:"cpu_cores,omitempty"`
+	CpuCoresCostPerHour *float32               `json:"cpu_cores_cost_per_hour,omitempty"`
+	CreatedAt           *string                `json:"created_at,omitempty"`
+	Id                  *string                `json:"id,omitempty"`
+	InstanceType        *string                `json:"instance_type,omitempty"`
+	OperatingSystem     *string                `json:"operating_system,omitempty"`
+	PeriodBillingHours  *float32               `json:"period_billing_hours,omitempty"`
+	Provider            *string                `json:"provider,omitempty"`
+	RamGb               *float32               `json:"ram_gb,omitempty"`
+	RamGbCostPerHour    *float32               `json:"ram_gb_cost_per_hour,omitempty"`
+	RawPricingData      map[string]interface{} `json:"raw_pricing_data,omitempty"`
+	Region              *string                `json:"region,omitempty"`
+	Service             *string                `json:"service,omitempty"`
+	Tags                map[string]interface{} `json:"tags,omitempty"`
+	UpdatedAt           *string                `json:"updated_at,omitempty"`
+	UsageType           *string                `json:"usage_type,omitempty"`
 }
 
 // NewSchemaComputePricingsRow instantiates a new SchemaComputePricingsRow object
@@ -55,6 +56,38 @@ func NewSchemaComputePricingsRow() *SchemaComputePricingsRow {
 func NewSchemaComputePricingsRowWithDefaults() *SchemaComputePricingsRow {
 	this := SchemaComputePricingsRow{}
 	return &this
+}
+
+// GetArchitecture returns the Architecture field value if set, zero value otherwise.
+func (o *SchemaComputePricingsRow) GetArchitecture() string {
+	if o == nil || IsNil(o.Architecture) {
+		var ret string
+		return ret
+	}
+	return *o.Architecture
+}
+
+// GetArchitectureOk returns a tuple with the Architecture field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *SchemaComputePricingsRow) GetArchitectureOk() (*string, bool) {
+	if o == nil || IsNil(o.Architecture) {
+		return nil, false
+	}
+	return o.Architecture, true
+}
+
+// HasArchitecture returns a boolean if a field has been set.
+func (o *SchemaComputePricingsRow) HasArchitecture() bool {
+	if o != nil && !IsNil(o.Architecture) {
+		return true
+	}
+
+	return false
+}
+
+// SetArchitecture gets a reference to the given string and assigns it to the Architecture field.
+func (o *SchemaComputePricingsRow) SetArchitecture(v string) {
+	o.Architecture = &v
 }
 
 // GetAvailabilityZone returns the AvailabilityZone field value if set, zero value otherwise.
@@ -634,7 +667,7 @@ func (o *SchemaComputePricingsRow) SetUsageType(v string) {
 }
 
 func (o SchemaComputePricingsRow) MarshalJSON() ([]byte, error) {
-	toSerialize,err := o.ToMap()
+	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
 	}
@@ -643,6 +676,9 @@ func (o SchemaComputePricingsRow) MarshalJSON() ([]byte, error) {
 
 func (o SchemaComputePricingsRow) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Architecture) {
+		toSerialize["architecture"] = o.Architecture
+	}
 	if !IsNil(o.AvailabilityZone) {
 		toSerialize["availability_zone"] = o.AvailabilityZone
 	}
@@ -735,5 +771,3 @@ func (v *NullableSchemaComputePricingsRow) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
-

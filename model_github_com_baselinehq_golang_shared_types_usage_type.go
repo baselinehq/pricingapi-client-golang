@@ -21,15 +21,15 @@ type GithubComBaselinehqGolangSharedTypesUsageType string
 
 // List of github_com_baselinehq_golang-shared_types.UsageType
 const (
-	SPOT_PREEMPTIBLE GithubComBaselinehqGolangSharedTypesUsageType = "SPOT_PREEMPTIBLE"
-	ONDEMAND GithubComBaselinehqGolangSharedTypesUsageType = "ONDEMAND"
-	RESERVED GithubComBaselinehqGolangSharedTypesUsageType = "RESERVED"
-	ONDEMAND_CUSTOM GithubComBaselinehqGolangSharedTypesUsageType = "ONDEMAND_CUSTOM"
+	SPOT_PREEMPTIBLE        GithubComBaselinehqGolangSharedTypesUsageType = "SPOT_PREEMPTIBLE"
+	ONDEMAND                GithubComBaselinehqGolangSharedTypesUsageType = "ONDEMAND"
+	RESERVED                GithubComBaselinehqGolangSharedTypesUsageType = "RESERVED"
+	ONDEMAND_CUSTOM         GithubComBaselinehqGolangSharedTypesUsageType = "ONDEMAND_CUSTOM"
 	SPOT_PREEMPTIBLE_CUSTOM GithubComBaselinehqGolangSharedTypesUsageType = "SPOT_PREEMPTIBLE_CUSTOM"
-	RESERVED_CUSTOM GithubComBaselinehqGolangSharedTypesUsageType = "RESERVED_CUSTOM"
-	SOLE_TENANCY GithubComBaselinehqGolangSharedTypesUsageType = "SOLE_TENANCY"
-	CUSTOM GithubComBaselinehqGolangSharedTypesUsageType = "CUSTOM"
-	EXTENDED GithubComBaselinehqGolangSharedTypesUsageType = "EXTENDED"
+	RESERVED_CUSTOM         GithubComBaselinehqGolangSharedTypesUsageType = "RESERVED_CUSTOM"
+	SOLE_TENANCY            GithubComBaselinehqGolangSharedTypesUsageType = "SOLE_TENANCY"
+	CUSTOM                  GithubComBaselinehqGolangSharedTypesUsageType = "CUSTOM"
+	EXTENDED                GithubComBaselinehqGolangSharedTypesUsageType = "EXTENDED"
 )
 
 // All allowed values of GithubComBaselinehqGolangSharedTypesUsageType enum
@@ -123,4 +123,3 @@ func (v *NullableGithubComBaselinehqGolangSharedTypesUsageType) UnmarshalJSON(sr
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }
-
