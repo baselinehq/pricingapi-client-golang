@@ -20,16 +20,16 @@ var _ MappedNullable = &GithubComBaselinehqGolangSharedTypesInstance{}
 
 // GithubComBaselinehqGolangSharedTypesInstance struct for GithubComBaselinehqGolangSharedTypesInstance
 type GithubComBaselinehqGolangSharedTypesInstance struct {
-	AvailabilityZone *string                                        `json:"availability_zone,omitempty"`
-	Id               *string                                        `json:"id,omitempty"`
-	InstanceType     *string                                        `json:"instance_type,omitempty"`
-	OperatingSystem  *string                                        `json:"operating_system,omitempty"`
-	Provider         *GithubComBaselinehqGolangSharedTypesProvider  `json:"provider,omitempty"`
-	Region           *string                                        `json:"region,omitempty"`
-	Service          *GithubComBaselinehqGolangSharedTypesService   `json:"service,omitempty"`
-	UsageType        *GithubComBaselinehqGolangSharedTypesUsageType `json:"usage_type,omitempty"`
-	UseBasePricing   *bool                                          `json:"use_base_pricing,omitempty"`
-	Vm               *GithubComBaselinehqGolangSharedTypesVM        `json:"vm,omitempty"`
+	AvailabilityZone      *string                                        `json:"availability_zone,omitempty"`
+	FallbackToBasePricing *bool                                          `json:"fallback_to_base_pricing,omitempty"`
+	Id                    *string                                        `json:"id,omitempty"`
+	InstanceType          *string                                        `json:"instance_type,omitempty"`
+	OperatingSystem       *string                                        `json:"operating_system,omitempty"`
+	Provider              *GithubComBaselinehqGolangSharedTypesProvider  `json:"provider,omitempty"`
+	Region                *string                                        `json:"region,omitempty"`
+	Service               *GithubComBaselinehqGolangSharedTypesService   `json:"service,omitempty"`
+	UsageType             *GithubComBaselinehqGolangSharedTypesUsageType `json:"usage_type,omitempty"`
+	Vm                    *GithubComBaselinehqGolangSharedTypesVM        `json:"vm,omitempty"`
 }
 
 // NewGithubComBaselinehqGolangSharedTypesInstance instantiates a new GithubComBaselinehqGolangSharedTypesInstance object
@@ -79,6 +79,38 @@ func (o *GithubComBaselinehqGolangSharedTypesInstance) HasAvailabilityZone() boo
 // SetAvailabilityZone gets a reference to the given string and assigns it to the AvailabilityZone field.
 func (o *GithubComBaselinehqGolangSharedTypesInstance) SetAvailabilityZone(v string) {
 	o.AvailabilityZone = &v
+}
+
+// GetFallbackToBasePricing returns the FallbackToBasePricing field value if set, zero value otherwise.
+func (o *GithubComBaselinehqGolangSharedTypesInstance) GetFallbackToBasePricing() bool {
+	if o == nil || IsNil(o.FallbackToBasePricing) {
+		var ret bool
+		return ret
+	}
+	return *o.FallbackToBasePricing
+}
+
+// GetFallbackToBasePricingOk returns a tuple with the FallbackToBasePricing field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *GithubComBaselinehqGolangSharedTypesInstance) GetFallbackToBasePricingOk() (*bool, bool) {
+	if o == nil || IsNil(o.FallbackToBasePricing) {
+		return nil, false
+	}
+	return o.FallbackToBasePricing, true
+}
+
+// HasFallbackToBasePricing returns a boolean if a field has been set.
+func (o *GithubComBaselinehqGolangSharedTypesInstance) HasFallbackToBasePricing() bool {
+	if o != nil && !IsNil(o.FallbackToBasePricing) {
+		return true
+	}
+
+	return false
+}
+
+// SetFallbackToBasePricing gets a reference to the given bool and assigns it to the FallbackToBasePricing field.
+func (o *GithubComBaselinehqGolangSharedTypesInstance) SetFallbackToBasePricing(v bool) {
+	o.FallbackToBasePricing = &v
 }
 
 // GetId returns the Id field value if set, zero value otherwise.
@@ -305,38 +337,6 @@ func (o *GithubComBaselinehqGolangSharedTypesInstance) SetUsageType(v GithubComB
 	o.UsageType = &v
 }
 
-// GetUseBasePricing returns the UseBasePricing field value if set, zero value otherwise.
-func (o *GithubComBaselinehqGolangSharedTypesInstance) GetUseBasePricing() bool {
-	if o == nil || IsNil(o.UseBasePricing) {
-		var ret bool
-		return ret
-	}
-	return *o.UseBasePricing
-}
-
-// GetUseBasePricingOk returns a tuple with the UseBasePricing field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *GithubComBaselinehqGolangSharedTypesInstance) GetUseBasePricingOk() (*bool, bool) {
-	if o == nil || IsNil(o.UseBasePricing) {
-		return nil, false
-	}
-	return o.UseBasePricing, true
-}
-
-// HasUseBasePricing returns a boolean if a field has been set.
-func (o *GithubComBaselinehqGolangSharedTypesInstance) HasUseBasePricing() bool {
-	if o != nil && !IsNil(o.UseBasePricing) {
-		return true
-	}
-
-	return false
-}
-
-// SetUseBasePricing gets a reference to the given bool and assigns it to the UseBasePricing field.
-func (o *GithubComBaselinehqGolangSharedTypesInstance) SetUseBasePricing(v bool) {
-	o.UseBasePricing = &v
-}
-
 // GetVm returns the Vm field value if set, zero value otherwise.
 func (o *GithubComBaselinehqGolangSharedTypesInstance) GetVm() GithubComBaselinehqGolangSharedTypesVM {
 	if o == nil || IsNil(o.Vm) {
@@ -382,6 +382,9 @@ func (o GithubComBaselinehqGolangSharedTypesInstance) ToMap() (map[string]interf
 	if !IsNil(o.AvailabilityZone) {
 		toSerialize["availability_zone"] = o.AvailabilityZone
 	}
+	if !IsNil(o.FallbackToBasePricing) {
+		toSerialize["fallback_to_base_pricing"] = o.FallbackToBasePricing
+	}
 	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
 	}
@@ -402,9 +405,6 @@ func (o GithubComBaselinehqGolangSharedTypesInstance) ToMap() (map[string]interf
 	}
 	if !IsNil(o.UsageType) {
 		toSerialize["usage_type"] = o.UsageType
-	}
-	if !IsNil(o.UseBasePricing) {
-		toSerialize["use_base_pricing"] = o.UseBasePricing
 	}
 	if !IsNil(o.Vm) {
 		toSerialize["vm"] = o.Vm
