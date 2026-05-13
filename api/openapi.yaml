@@ -607,6 +607,9 @@ components:
       - HetznerCompute
       - OVHPublicCloud
       - BaseCompute
+      - BaseDisks
+      - AmazonEBS
+      - ComputeEnginePersistentDisk
       type: string
       x-enum-varnames:
       - ComputeEngine
@@ -617,6 +620,9 @@ components:
       - HetznerCompute
       - OVHPublicCloud
       - BaseCompute
+      - BaseDisks
+      - AmazonEBS
+      - ComputeEnginePersistentDisk
     github_com_baselinehq_golang-shared_types.UsageType:
       enum:
       - SPOT_PREEMPTIBLE
