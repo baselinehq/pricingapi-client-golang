@@ -5,6 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **AvailabilityZone** | Pointer to **string** |  | [optional] 
+**FallbackToBasePricing** | Pointer to **bool** |  | [optional] 
 **Id** | Pointer to **string** |  | [optional] 
 **InstanceType** | Pointer to **string** |  | [optional] 
 **OperatingSystem** | Pointer to **string** |  | [optional] 
@@ -12,7 +13,6 @@ Name | Type | Description | Notes
 **Region** | Pointer to **string** |  | [optional] 
 **Service** | Pointer to [**GithubComBaselinehqGolangSharedTypesService**](GithubComBaselinehqGolangSharedTypesService.md) |  | [optional] 
 **UsageType** | Pointer to [**GithubComBaselinehqGolangSharedTypesUsageType**](GithubComBaselinehqGolangSharedTypesUsageType.md) |  | [optional] 
-**UseBasePricing** | Pointer to **bool** |  | [optional] 
 **Vm** | Pointer to [**GithubComBaselinehqGolangSharedTypesVM**](GithubComBaselinehqGolangSharedTypesVM.md) |  | [optional] 
 
 ## Methods
@@ -58,6 +58,31 @@ SetAvailabilityZone sets AvailabilityZone field to given value.
 `func (o *GithubComBaselinehqGolangSharedTypesInstance) HasAvailabilityZone() bool`
 
 HasAvailabilityZone returns a boolean if a field has been set.
+
+### GetFallbackToBasePricing
+
+`func (o *GithubComBaselinehqGolangSharedTypesInstance) GetFallbackToBasePricing() bool`
+
+GetFallbackToBasePricing returns the FallbackToBasePricing field if non-nil, zero value otherwise.
+
+### GetFallbackToBasePricingOk
+
+`func (o *GithubComBaselinehqGolangSharedTypesInstance) GetFallbackToBasePricingOk() (*bool, bool)`
+
+GetFallbackToBasePricingOk returns a tuple with the FallbackToBasePricing field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFallbackToBasePricing
+
+`func (o *GithubComBaselinehqGolangSharedTypesInstance) SetFallbackToBasePricing(v bool)`
+
+SetFallbackToBasePricing sets FallbackToBasePricing field to given value.
+
+### HasFallbackToBasePricing
+
+`func (o *GithubComBaselinehqGolangSharedTypesInstance) HasFallbackToBasePricing() bool`
+
+HasFallbackToBasePricing returns a boolean if a field has been set.
 
 ### GetId
 
@@ -233,31 +258,6 @@ SetUsageType sets UsageType field to given value.
 `func (o *GithubComBaselinehqGolangSharedTypesInstance) HasUsageType() bool`
 
 HasUsageType returns a boolean if a field has been set.
-
-### GetUseBasePricing
-
-`func (o *GithubComBaselinehqGolangSharedTypesInstance) GetUseBasePricing() bool`
-
-GetUseBasePricing returns the UseBasePricing field if non-nil, zero value otherwise.
-
-### GetUseBasePricingOk
-
-`func (o *GithubComBaselinehqGolangSharedTypesInstance) GetUseBasePricingOk() (*bool, bool)`
-
-GetUseBasePricingOk returns a tuple with the UseBasePricing field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetUseBasePricing
-
-`func (o *GithubComBaselinehqGolangSharedTypesInstance) SetUseBasePricing(v bool)`
-
-SetUseBasePricing sets UseBasePricing field to given value.
-
-### HasUseBasePricing
-
-`func (o *GithubComBaselinehqGolangSharedTypesInstance) HasUseBasePricing() bool`
-
-HasUseBasePricing returns a boolean if a field has been set.
 
 ### GetVm
 

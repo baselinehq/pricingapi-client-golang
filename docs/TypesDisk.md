@@ -6,6 +6,7 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **AvailabilityZone** | Pointer to **string** |  | [optional] 
 **CapacityGb** | Pointer to **float32** |  | [optional] 
+**FallbackToBasePricing** | Pointer to **bool** |  | [optional] 
 **Id** | Pointer to **string** |  | [optional] 
 **Iops** | Pointer to **float32** |  | [optional] 
 **Provider** | Pointer to [**GithubComBaselinehqGolangSharedTypesProvider**](GithubComBaselinehqGolangSharedTypesProvider.md) |  | [optional] 
@@ -83,6 +84,31 @@ SetCapacityGb sets CapacityGb field to given value.
 `func (o *TypesDisk) HasCapacityGb() bool`
 
 HasCapacityGb returns a boolean if a field has been set.
+
+### GetFallbackToBasePricing
+
+`func (o *TypesDisk) GetFallbackToBasePricing() bool`
+
+GetFallbackToBasePricing returns the FallbackToBasePricing field if non-nil, zero value otherwise.
+
+### GetFallbackToBasePricingOk
+
+`func (o *TypesDisk) GetFallbackToBasePricingOk() (*bool, bool)`
+
+GetFallbackToBasePricingOk returns a tuple with the FallbackToBasePricing field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetFallbackToBasePricing
+
+`func (o *TypesDisk) SetFallbackToBasePricing(v bool)`
+
+SetFallbackToBasePricing sets FallbackToBasePricing field to given value.
+
+### HasFallbackToBasePricing
+
+`func (o *TypesDisk) HasFallbackToBasePricing() bool`
+
+HasFallbackToBasePricing returns a boolean if a field has been set.
 
 ### GetId
 

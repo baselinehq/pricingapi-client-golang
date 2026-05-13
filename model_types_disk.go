@@ -20,16 +20,17 @@ var _ MappedNullable = &TypesDisk{}
 
 // TypesDisk struct for TypesDisk
 type TypesDisk struct {
-	AvailabilityZone *string                                        `json:"availability_zone,omitempty"`
-	CapacityGb       *float32                                       `json:"capacity_gb,omitempty"`
-	Id               *string                                        `json:"id,omitempty"`
-	Iops             *float32                                       `json:"iops,omitempty"`
-	Provider         *GithubComBaselinehqGolangSharedTypesProvider  `json:"provider,omitempty"`
-	Region           *string                                        `json:"region,omitempty"`
-	Service          *GithubComBaselinehqGolangSharedTypesService   `json:"service,omitempty"`
-	ThroughputMbps   *float32                                       `json:"throughput_mbps,omitempty"`
-	Type             *string                                        `json:"type,omitempty"`
-	UsageType        *GithubComBaselinehqGolangSharedTypesUsageType `json:"usage_type,omitempty"`
+	AvailabilityZone      *string                                        `json:"availability_zone,omitempty"`
+	CapacityGb            *float32                                       `json:"capacity_gb,omitempty"`
+	FallbackToBasePricing *bool                                          `json:"fallback_to_base_pricing,omitempty"`
+	Id                    *string                                        `json:"id,omitempty"`
+	Iops                  *float32                                       `json:"iops,omitempty"`
+	Provider              *GithubComBaselinehqGolangSharedTypesProvider  `json:"provider,omitempty"`
+	Region                *string                                        `json:"region,omitempty"`
+	Service               *GithubComBaselinehqGolangSharedTypesService   `json:"service,omitempty"`
+	ThroughputMbps        *float32                                       `json:"throughput_mbps,omitempty"`
+	Type                  *string                                        `json:"type,omitempty"`
+	UsageType             *GithubComBaselinehqGolangSharedTypesUsageType `json:"usage_type,omitempty"`
 }
 
 // NewTypesDisk instantiates a new TypesDisk object
@@ -111,6 +112,38 @@ func (o *TypesDisk) HasCapacityGb() bool {
 // SetCapacityGb gets a reference to the given float32 and assigns it to the CapacityGb field.
 func (o *TypesDisk) SetCapacityGb(v float32) {
 	o.CapacityGb = &v
+}
+
+// GetFallbackToBasePricing returns the FallbackToBasePricing field value if set, zero value otherwise.
+func (o *TypesDisk) GetFallbackToBasePricing() bool {
+	if o == nil || IsNil(o.FallbackToBasePricing) {
+		var ret bool
+		return ret
+	}
+	return *o.FallbackToBasePricing
+}
+
+// GetFallbackToBasePricingOk returns a tuple with the FallbackToBasePricing field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TypesDisk) GetFallbackToBasePricingOk() (*bool, bool) {
+	if o == nil || IsNil(o.FallbackToBasePricing) {
+		return nil, false
+	}
+	return o.FallbackToBasePricing, true
+}
+
+// HasFallbackToBasePricing returns a boolean if a field has been set.
+func (o *TypesDisk) HasFallbackToBasePricing() bool {
+	if o != nil && !IsNil(o.FallbackToBasePricing) {
+		return true
+	}
+
+	return false
+}
+
+// SetFallbackToBasePricing gets a reference to the given bool and assigns it to the FallbackToBasePricing field.
+func (o *TypesDisk) SetFallbackToBasePricing(v bool) {
+	o.FallbackToBasePricing = &v
 }
 
 // GetId returns the Id field value if set, zero value otherwise.
@@ -384,6 +417,9 @@ func (o TypesDisk) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.CapacityGb) {
 		toSerialize["capacity_gb"] = o.CapacityGb
+	}
+	if !IsNil(o.FallbackToBasePricing) {
+		toSerialize["fallback_to_base_pricing"] = o.FallbackToBasePricing
 	}
 	if !IsNil(o.Id) {
 		toSerialize["id"] = o.Id
