@@ -76,6 +76,9 @@ Class | Method | HTTP request | Description
 *DefaultAPI* | [**MarketplaceProvidersComputeDelete**](docs/DefaultAPI.md#marketplaceproviderscomputedelete) | **Delete** /marketplace/providers/compute | Delete a custom provider instance
 *DefaultAPI* | [**MarketplaceProvidersComputeGet**](docs/DefaultAPI.md#marketplaceproviderscomputeget) | **Get** /marketplace/providers/compute | Get your custom pricing entries
 *DefaultAPI* | [**MarketplaceProvidersComputePost**](docs/DefaultAPI.md#marketplaceproviderscomputepost) | **Post** /marketplace/providers/compute | Register a custom provider
+*DefaultAPI* | [**MarketplaceProvidersDisksDelete**](docs/DefaultAPI.md#marketplaceprovidersdisksdelete) | **Delete** /marketplace/providers/disks | Delete a custom disk provider entry
+*DefaultAPI* | [**MarketplaceProvidersDisksGet**](docs/DefaultAPI.md#marketplaceprovidersdisksget) | **Get** /marketplace/providers/disks | Get your custom disk pricing entries
+*DefaultAPI* | [**MarketplaceProvidersDisksPost**](docs/DefaultAPI.md#marketplaceprovidersdiskspost) | **Post** /marketplace/providers/disks | Register a custom disk provider
 *DefaultAPI* | [**PricingComputePost**](docs/DefaultAPI.md#pricingcomputepost) | **Post** /pricing/compute | Get pricing for an instance
 *DefaultAPI* | [**PricingDisksPost**](docs/DefaultAPI.md#pricingdiskspost) | **Post** /pricing/disks | Get pricing for a disk
 *DefaultAPI* | [**PricingPost**](docs/DefaultAPI.md#pricingpost) | **Post** /pricing | Get pricing for an instance
@@ -101,12 +104,15 @@ Class | Method | HTTP request | Description
  - [TypesComputeRequest](docs/TypesComputeRequest.md)
  - [TypesComputeResults](docs/TypesComputeResults.md)
  - [TypesComputeResultsValueInner](docs/TypesComputeResultsValueInner.md)
+ - [TypesCustomDiskPriceRequest](docs/TypesCustomDiskPriceRequest.md)
+ - [TypesCustomDiskPricingResponse](docs/TypesCustomDiskPricingResponse.md)
  - [TypesCustomPriceRequest](docs/TypesCustomPriceRequest.md)
  - [TypesCustomPricingResponse](docs/TypesCustomPricingResponse.md)
  - [TypesDisk](docs/TypesDisk.md)
  - [TypesDiskRequest](docs/TypesDiskRequest.md)
  - [TypesDiskResults](docs/TypesDiskResults.md)
  - [TypesDiskResultsValueInner](docs/TypesDiskResultsValueInner.md)
+ - [TypesMarketplaceDiskProvidersResponse](docs/TypesMarketplaceDiskProvidersResponse.md)
  - [TypesMarketplaceProvidersResponse](docs/TypesMarketplaceProvidersResponse.md)
  - [TypesPredicates](docs/TypesPredicates.md)
  - [TypesSavings](docs/TypesSavings.md)

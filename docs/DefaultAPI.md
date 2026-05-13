@@ -8,6 +8,9 @@ Method | HTTP request | Description
 [**MarketplaceProvidersComputeDelete**](DefaultAPI.md#MarketplaceProvidersComputeDelete) | **Delete** /marketplace/providers/compute | Delete a custom provider instance
 [**MarketplaceProvidersComputeGet**](DefaultAPI.md#MarketplaceProvidersComputeGet) | **Get** /marketplace/providers/compute | Get your custom pricing entries
 [**MarketplaceProvidersComputePost**](DefaultAPI.md#MarketplaceProvidersComputePost) | **Post** /marketplace/providers/compute | Register a custom provider
+[**MarketplaceProvidersDisksDelete**](DefaultAPI.md#MarketplaceProvidersDisksDelete) | **Delete** /marketplace/providers/disks | Delete a custom disk provider entry
+[**MarketplaceProvidersDisksGet**](DefaultAPI.md#MarketplaceProvidersDisksGet) | **Get** /marketplace/providers/disks | Get your custom disk pricing entries
+[**MarketplaceProvidersDisksPost**](DefaultAPI.md#MarketplaceProvidersDisksPost) | **Post** /marketplace/providers/disks | Register a custom disk provider
 [**PricingComputePost**](DefaultAPI.md#PricingComputePost) | **Post** /pricing/compute | Get pricing for an instance
 [**PricingDisksPost**](DefaultAPI.md#PricingDisksPost) | **Post** /pricing/disks | Get pricing for a disk
 [**PricingPost**](DefaultAPI.md#PricingPost) | **Post** /pricing | Get pricing for an instance
@@ -257,6 +260,199 @@ Name | Type | Description  | Notes
 ### Return type
 
 [**TypesCustomPricingResponse**](TypesCustomPricingResponse.md)
+
+### Authorization
+
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: application/json
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## MarketplaceProvidersDisksDelete
+
+> TypesCustomDiskPricingResponse MarketplaceProvidersDisksDelete(ctx).Id(id).Execute()
+
+Delete a custom disk provider entry
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/baselinehq/pricingapi-client-golang"
+)
+
+func main() {
+	id := "id_example" // string | Disk pricing ID
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.MarketplaceProvidersDisksDelete(context.Background()).Id(id).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.MarketplaceProvidersDisksDelete``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `MarketplaceProvidersDisksDelete`: TypesCustomDiskPricingResponse
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.MarketplaceProvidersDisksDelete`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiMarketplaceProvidersDisksDeleteRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **id** | **string** | Disk pricing ID | 
+
+### Return type
+
+[**TypesCustomDiskPricingResponse**](TypesCustomDiskPricingResponse.md)
+
+### Authorization
+
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## MarketplaceProvidersDisksGet
+
+> TypesMarketplaceDiskProvidersResponse MarketplaceProvidersDisksGet(ctx).Execute()
+
+Get your custom disk pricing entries
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/baselinehq/pricingapi-client-golang"
+)
+
+func main() {
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.MarketplaceProvidersDisksGet(context.Background()).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.MarketplaceProvidersDisksGet``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `MarketplaceProvidersDisksGet`: TypesMarketplaceDiskProvidersResponse
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.MarketplaceProvidersDisksGet`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+This endpoint does not need any parameter.
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiMarketplaceProvidersDisksGetRequest struct via the builder pattern
+
+
+### Return type
+
+[**TypesMarketplaceDiskProvidersResponse**](TypesMarketplaceDiskProvidersResponse.md)
+
+### Authorization
+
+[ApiKeyAuth](../README.md#ApiKeyAuth), [BearerAuth](../README.md#BearerAuth)
+
+### HTTP request headers
+
+- **Content-Type**: Not defined
+- **Accept**: application/json
+
+[[Back to top]](#) [[Back to API list]](../README.md#documentation-for-api-endpoints)
+[[Back to Model list]](../README.md#documentation-for-models)
+[[Back to README]](../README.md)
+
+
+## MarketplaceProvidersDisksPost
+
+> TypesCustomDiskPricingResponse MarketplaceProvidersDisksPost(ctx).Instance(instance).Execute()
+
+Register a custom disk provider
+
+
+
+### Example
+
+```go
+package main
+
+import (
+	"context"
+	"fmt"
+	"os"
+	openapiclient "github.com/baselinehq/pricingapi-client-golang"
+)
+
+func main() {
+	instance := *openapiclient.NewTypesCustomDiskPriceRequest([]openapiclient.SchemaDiskPricingsRow{*openapiclient.NewSchemaDiskPricingsRow()}) // TypesCustomDiskPriceRequest | Custom disk pricing request
+
+	configuration := openapiclient.NewConfiguration()
+	apiClient := openapiclient.NewAPIClient(configuration)
+	resp, r, err := apiClient.DefaultAPI.MarketplaceProvidersDisksPost(context.Background()).Instance(instance).Execute()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.MarketplaceProvidersDisksPost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
+	}
+	// response from `MarketplaceProvidersDisksPost`: TypesCustomDiskPricingResponse
+	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.MarketplaceProvidersDisksPost`: %v\n", resp)
+}
+```
+
+### Path Parameters
+
+
+
+### Other Parameters
+
+Other parameters are passed through a pointer to a apiMarketplaceProvidersDisksPostRequest struct via the builder pattern
+
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **instance** | [**TypesCustomDiskPriceRequest**](TypesCustomDiskPriceRequest.md) | Custom disk pricing request | 
+
+### Return type
+
+[**TypesCustomDiskPricingResponse**](TypesCustomDiskPricingResponse.md)
 
 ### Authorization
 

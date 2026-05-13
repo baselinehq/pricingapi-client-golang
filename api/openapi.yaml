@@ -136,6 +136,115 @@ paths:
       - BearerAuth: []
       summary: Register a custom provider
       x-codegen-request-body-name: instance
+  /marketplace/providers/disks:
+    delete:
+      description: Delete a custom disk provider entry
+      parameters:
+      - description: Disk pricing ID
+        in: query
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/types.CustomDiskPricingResponse"
+          description: Pricing response for a custom disk provider
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Invalid id
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Provider and organization do not match
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Disk pricing entry not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Delete a custom disk provider entry
+    get:
+      description: Get your custom disk pricing entries
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/types.MarketplaceDiskProvidersResponse"
+          description: Pricing response for custom disk pricing
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Unauthorized
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Get your custom disk pricing entries
+    post:
+      description: Register a custom disk provider
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/types.CustomDiskPriceRequest"
+        description: Custom disk pricing request
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/types.CustomDiskPricingResponse"
+          description: Pricing response for a custom disk provider
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Provider and organization do not match
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/handler.ErrorResponse"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Register a custom disk provider
+      x-codegen-request-body-name: instance
   /pricing:
     post:
       description: Get pricing for compute instances
@@ -712,6 +821,70 @@ components:
           $ref: "#/components/schemas/types_ComputeResults_value_inner"
         type: array
       type: object
+    types.CustomDiskPriceRequest:
+      properties:
+        entries:
+          items:
+            $ref: "#/components/schemas/schema.DiskPricingsRow"
+          minItems: 1
+          type: array
+      required:
+      - entries
+      type: object
+    types.CustomDiskPricingResponse:
+      example:
+        entries:
+        - max_capacity_gb: 5.962133916683182
+          availability_zone: availability_zone
+          min_throughput_mbps: 3.616076749251911
+          cost_per_gb_hour: 0.8008281904610115
+          min_capacity_gb: 7.061401241503109
+          max_throughput_mbps: 2.3021358869347655
+          created_at: created_at
+          max_iops: 5.637376656633329
+          period_billing_hours: 2.027123023002322
+          cost_per_iops_hour: 6.027456183070403
+          type: type
+          tags: "{}"
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          updated_at: updated_at
+          provider: provider
+          usage_type: usage_type
+          raw_pricing_data: "{}"
+          service: service
+          min_iops: 9.301444243932576
+          id: id
+          region: region
+        - max_capacity_gb: 5.962133916683182
+          availability_zone: availability_zone
+          min_throughput_mbps: 3.616076749251911
+          cost_per_gb_hour: 0.8008281904610115
+          min_capacity_gb: 7.061401241503109
+          max_throughput_mbps: 2.3021358869347655
+          created_at: created_at
+          max_iops: 5.637376656633329
+          period_billing_hours: 2.027123023002322
+          cost_per_iops_hour: 6.027456183070403
+          type: type
+          tags: "{}"
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          updated_at: updated_at
+          provider: provider
+          usage_type: usage_type
+          raw_pricing_data: "{}"
+          service: service
+          min_iops: 9.301444243932576
+          id: id
+          region: region
+        status: Registered
+      properties:
+        entries:
+          items:
+            $ref: "#/components/schemas/schema.DiskPricingsRow"
+          type: array
+        status:
+          $ref: "#/components/schemas/github_com_baselinehq_pricingapi_pkg_types.Status"
+      type: object
     types.CustomPriceRequest:
       properties:
         entries:
@@ -813,6 +986,57 @@ components:
         items:
           $ref: "#/components/schemas/types_DiskResults_value_inner"
         type: array
+      type: object
+    types.MarketplaceDiskProvidersResponse:
+      example:
+        providers:
+        - max_capacity_gb: 5.962133916683182
+          availability_zone: availability_zone
+          min_throughput_mbps: 3.616076749251911
+          cost_per_gb_hour: 0.8008281904610115
+          min_capacity_gb: 7.061401241503109
+          max_throughput_mbps: 2.3021358869347655
+          created_at: created_at
+          max_iops: 5.637376656633329
+          period_billing_hours: 2.027123023002322
+          cost_per_iops_hour: 6.027456183070403
+          type: type
+          tags: "{}"
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          updated_at: updated_at
+          provider: provider
+          usage_type: usage_type
+          raw_pricing_data: "{}"
+          service: service
+          min_iops: 9.301444243932576
+          id: id
+          region: region
+        - max_capacity_gb: 5.962133916683182
+          availability_zone: availability_zone
+          min_throughput_mbps: 3.616076749251911
+          cost_per_gb_hour: 0.8008281904610115
+          min_capacity_gb: 7.061401241503109
+          max_throughput_mbps: 2.3021358869347655
+          created_at: created_at
+          max_iops: 5.637376656633329
+          period_billing_hours: 2.027123023002322
+          cost_per_iops_hour: 6.027456183070403
+          type: type
+          tags: "{}"
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          updated_at: updated_at
+          provider: provider
+          usage_type: usage_type
+          raw_pricing_data: "{}"
+          service: service
+          min_iops: 9.301444243932576
+          id: id
+          region: region
+      properties:
+        providers:
+          items:
+            $ref: "#/components/schemas/schema.DiskPricingsRow"
+          type: array
       type: object
     types.MarketplaceProvidersResponse:
       example:
