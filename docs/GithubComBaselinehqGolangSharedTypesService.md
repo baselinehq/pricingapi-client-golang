@@ -19,6 +19,12 @@
 
 * `BaseCompute` (value: `"BaseCompute"`)
 
+* `BaseDisks` (value: `"BaseDisks"`)
+
+* `AmazonEBS` (value: `"AmazonEBS"`)
+
+* `ComputeEnginePersistentDisk` (value: `"ComputeEnginePersistentDisk"`)
+
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)
 
