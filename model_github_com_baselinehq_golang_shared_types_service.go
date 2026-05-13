@@ -21,14 +21,17 @@ type GithubComBaselinehqGolangSharedTypesService string
 
 // List of github_com_baselinehq_golang-shared_types.Service
 const (
-	ComputeEngine     GithubComBaselinehqGolangSharedTypesService = "ComputeEngine"
-	AmazonEC2         GithubComBaselinehqGolangSharedTypesService = "AmazonEC2"
-	Droplet           GithubComBaselinehqGolangSharedTypesService = "Droplet"
-	AzureCompute      GithubComBaselinehqGolangSharedTypesService = "AzureCompute"
-	AzureManagedDisks GithubComBaselinehqGolangSharedTypesService = "AzureManagedDisks"
-	HetznerCompute    GithubComBaselinehqGolangSharedTypesService = "HetznerCompute"
-	OVHPublicCloud    GithubComBaselinehqGolangSharedTypesService = "OVHPublicCloud"
-	BaseCompute       GithubComBaselinehqGolangSharedTypesService = "BaseCompute"
+	ComputeEngine               GithubComBaselinehqGolangSharedTypesService = "ComputeEngine"
+	AmazonEC2                   GithubComBaselinehqGolangSharedTypesService = "AmazonEC2"
+	Droplet                     GithubComBaselinehqGolangSharedTypesService = "Droplet"
+	AzureCompute                GithubComBaselinehqGolangSharedTypesService = "AzureCompute"
+	AzureManagedDisks           GithubComBaselinehqGolangSharedTypesService = "AzureManagedDisks"
+	HetznerCompute              GithubComBaselinehqGolangSharedTypesService = "HetznerCompute"
+	OVHPublicCloud              GithubComBaselinehqGolangSharedTypesService = "OVHPublicCloud"
+	BaseCompute                 GithubComBaselinehqGolangSharedTypesService = "BaseCompute"
+	BaseDisks                   GithubComBaselinehqGolangSharedTypesService = "BaseDisks"
+	AmazonEBS                   GithubComBaselinehqGolangSharedTypesService = "AmazonEBS"
+	ComputeEnginePersistentDisk GithubComBaselinehqGolangSharedTypesService = "ComputeEnginePersistentDisk"
 )
 
 // All allowed values of GithubComBaselinehqGolangSharedTypesService enum
@@ -41,6 +44,9 @@ var AllowedGithubComBaselinehqGolangSharedTypesServiceEnumValues = []GithubComBa
 	"HetznerCompute",
 	"OVHPublicCloud",
 	"BaseCompute",
+	"BaseDisks",
+	"AmazonEBS",
+	"ComputeEnginePersistentDisk",
 }
 
 func (v *GithubComBaselinehqGolangSharedTypesService) UnmarshalJSON(src []byte) error {
