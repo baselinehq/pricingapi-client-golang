@@ -10,7 +10,7 @@ import (
 )
 
 func main() {
-	instance := openapiclient.NewGithubComBaselinehqGolangSharedTypesInstance() // *GithubComBaselinehqGolangSharedTypesInstance
+	instance := openapiclient.NewInstance() // *Instance
 
 	instance.SetInstanceType("s-2vcpu-2gb")
 	instance.SetUsageType("ONDEMAND")
@@ -32,12 +32,12 @@ func main() {
 	configuration := openapiclient.NewConfiguration()
 	configuration.DefaultHeader["Authorization"] = fmt.Sprintf("Bearer %s", token)
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DefaultAPI.PricingComputePost(context.Background()).Instance(*instance).Execute()
+	resp, r, err := apiClient.PricingAPI.V1PricingComputePost(context.Background()).Instance(*instance).Execute()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.PricingComputePost``: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error when calling `PricingAPI.V1PricingComputePost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
 	}
-	// response from `PricingComputePost`: SchemaComputePricingsRow
+	// response from `V1PricingComputePost`: ComputePrice
 	data, _ := json.MarshalIndent(resp, "", "  ")
-	fmt.Fprintf(os.Stdout, "Response from `DefaultAPI.PricingComputePost`: %v\n", string(data))
+	fmt.Fprintf(os.Stdout, "Response from `PricingAPI.V1PricingComputePost`: %v\n", string(data))
 }

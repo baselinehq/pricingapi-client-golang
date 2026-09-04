@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **OperatingSystem** | Pointer to **string** |  | [optional] 
 **Provider** | Pointer to [**GithubComBaselinehqGolangSharedTypesProvider**](GithubComBaselinehqGolangSharedTypesProvider.md) |  | [optional] 
 **Region** | Pointer to **string** |  | [optional] 
-**Service** | Pointer to [**GithubComBaselinehqGolangSharedTypesService**](GithubComBaselinehqGolangSharedTypesService.md) |  | [optional] 
+**Service** | Pointer to [**TypesService**](TypesService.md) |  | [optional] 
 **UsageType** | Pointer to [**GithubComBaselinehqGolangSharedTypesUsageType**](GithubComBaselinehqGolangSharedTypesUsageType.md) |  | [optional] 
 **Vm** | Pointer to [**GithubComBaselinehqGolangSharedTypesVM**](GithubComBaselinehqGolangSharedTypesVM.md) |  | [optional] 
 
@@ -211,20 +211,20 @@ HasRegion returns a boolean if a field has been set.
 
 ### GetService
 
-`func (o *GithubComBaselinehqGolangSharedTypesInstance) GetService() GithubComBaselinehqGolangSharedTypesService`
+`func (o *GithubComBaselinehqGolangSharedTypesInstance) GetService() TypesService`
 
 GetService returns the Service field if non-nil, zero value otherwise.
 
 ### GetServiceOk
 
-`func (o *GithubComBaselinehqGolangSharedTypesInstance) GetServiceOk() (*GithubComBaselinehqGolangSharedTypesService, bool)`
+`func (o *GithubComBaselinehqGolangSharedTypesInstance) GetServiceOk() (*TypesService, bool)`
 
 GetServiceOk returns a tuple with the Service field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetService
 
-`func (o *GithubComBaselinehqGolangSharedTypesInstance) SetService(v GithubComBaselinehqGolangSharedTypesService)`
+`func (o *GithubComBaselinehqGolangSharedTypesInstance) SetService(v TypesService)`
 
 SetService sets Service field to given value.
 
