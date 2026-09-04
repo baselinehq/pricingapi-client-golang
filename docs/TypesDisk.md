@@ -11,7 +11,7 @@ Name | Type | Description | Notes
 **Iops** | Pointer to **float32** |  | [optional] 
 **Provider** | Pointer to [**GithubComBaselinehqGolangSharedTypesProvider**](GithubComBaselinehqGolangSharedTypesProvider.md) |  | [optional] 
 **Region** | Pointer to **string** |  | [optional] 
-**Service** | Pointer to [**GithubComBaselinehqGolangSharedTypesService**](GithubComBaselinehqGolangSharedTypesService.md) |  | [optional] 
+**Service** | Pointer to [**TypesService**](TypesService.md) |  | [optional] 
 **ThroughputMbps** | Pointer to **float32** |  | [optional] 
 **Type** | Pointer to **string** |  | [optional] 
 **UsageType** | Pointer to [**GithubComBaselinehqGolangSharedTypesUsageType**](GithubComBaselinehqGolangSharedTypesUsageType.md) |  | [optional] 
@@ -212,20 +212,20 @@ HasRegion returns a boolean if a field has been set.
 
 ### GetService
 
-`func (o *TypesDisk) GetService() GithubComBaselinehqGolangSharedTypesService`
+`func (o *TypesDisk) GetService() TypesService`
 
 GetService returns the Service field if non-nil, zero value otherwise.
 
 ### GetServiceOk
 
-`func (o *TypesDisk) GetServiceOk() (*GithubComBaselinehqGolangSharedTypesService, bool)`
+`func (o *TypesDisk) GetServiceOk() (*TypesService, bool)`
 
 GetServiceOk returns a tuple with the Service field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetService
 
-`func (o *TypesDisk) SetService(v GithubComBaselinehqGolangSharedTypesService)`
+`func (o *TypesDisk) SetService(v TypesService)`
 
 SetService sets Service field to given value.
 

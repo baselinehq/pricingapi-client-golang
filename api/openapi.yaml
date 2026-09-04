@@ -1,14 +1,14 @@
 openapi: 3.0.1
 info:
   contact:
-    email: contact@baselinehq.cloud
+    email: support@costgraph.ai
     name: Customer Support
-    url: https://costgraph.baselinehq.cloud/support
+    url: https://costgraph.ai/support
   description: Provides API level access to the Costgraph Services.
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  termsOfService: https://costgraph.baselinehq.cloud/terms-of-use
+  termsOfService: https://costgraph.ai/terms-of-use
   title: Pricing API
   version: "1.0"
 servers:
@@ -16,7 +16,10 @@ servers:
 paths:
   /healthz:
     get:
-      description: Health check endpoint
+      deprecated: true
+      description: |-
+        Health check endpoint
+        Superseded by GET /v1/healthz.
       responses:
         "200":
           content:
@@ -29,7 +32,12 @@ paths:
       summary: Health check endpoint
   /marketplace/providers/compute:
     delete:
-      description: Delete a custom provider instance
+      deprecated: true
+      description: |-
+        Delete one of your compute rates by id.
+        A rate a resource is already priced against cannot be deleted; the request fails while that link exists, so re-pin those resources first.
+        Once it is gone, a resource still carrying its id stops resolving a price rather than falling back to attribute matching.
+        Superseded by DELETE /v1/marketplace/compute/{id}, which returns RFC 9457 problem responses on failure.
       parameters:
       - description: Instance ID
         in: query
@@ -42,68 +50,114 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/types.CustomPricingResponse"
+                $ref: "#/components/schemas/RegisteredComputePrices"
           description: Pricing response for a custom provider
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Invalid id
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Provider and organization do not match
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Instance not found
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
       summary: Delete a custom provider instance
     get:
-      description: Get your custom pricing entries
+      deprecated: true
+      description: |-
+        List the compute rates your organization has registered. Only your own rates are returned, never another organization's.
+        Filters combine, and paging is by limit and offset.
+        Superseded by GET /v1/marketplace/compute, which returns RFC 9457 problem responses on failure.
+      parameters:
+      - description: Maximum entries to return (default 500)
+        in: query
+        name: limit
+        schema:
+          type: integer
+      - description: Entries to skip
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: Filter by service
+        in: query
+        name: service
+        schema:
+          type: string
+      - description: Filter by region
+        in: query
+        name: region
+        schema:
+          type: string
+      - description: Filter by instance type
+        in: query
+        name: instance_type
+        schema:
+          type: string
+      - description: Filter by usage type
+        in: query
+        name: usage_type
+        schema:
+          type: string
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/types.MarketplaceProvidersResponse"
+                $ref: "#/components/schemas/ComputePriceList"
           description: Pricing response for custom pricing
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Invalid limit or offset
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
       summary: Get your custom pricing entries
     post:
-      description: Register a custom provider
+      deprecated: true
+      description: |-
+        Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud.
+        An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU.
+        The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag. Treat it as a secret you hand out deliberately: anyone holding it can pin to the rate, which is how a provider prices clusters it sells on.
+        Superseded by POST /v1/marketplace/compute, which returns RFC 9457 problem responses on failure.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/types.CustomPriceRequest"
+              $ref: "#/components/schemas/ComputePricesRequest"
         description: Custom pricing request
         required: true
       responses:
@@ -111,34 +165,209 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/types.CustomPricingResponse"
+                $ref: "#/components/schemas/RegisteredComputePrices"
           description: Pricing response for a custom provider
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Invalid request body
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Provider and organization do not match
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
       summary: Register a custom provider
       x-codegen-request-body-name: instance
+  /marketplace/providers/databases:
+    delete:
+      deprecated: true
+      description: |-
+        Delete one of your managed database rates by id.
+        A rate a database or one of its reports still references cannot be deleted; the request fails while that reference exists, so re-pin first.
+        Once it is gone, a database still carrying its id stops resolving a price.
+        Superseded by DELETE /v1/marketplace/databases/{id}, which returns RFC 9457 problem responses on failure.
+      parameters:
+      - description: Database pricing ID
+        in: query
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisteredDatabasePrices"
+          description: Pricing response for custom database pricing
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Invalid id
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Provider and organization do not match
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Database pricing entry not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Delete a custom database pricing entry
+    get:
+      deprecated: true
+      description: |-
+        List the managed database rates your organization has registered. Only your own rates are returned.
+        Filters combine, and paging is by limit and offset.
+        Superseded by GET /v1/marketplace/databases, which returns RFC 9457 problem responses on failure.
+      parameters:
+      - description: Maximum entries to return (default 500)
+        in: query
+        name: limit
+        schema:
+          type: integer
+      - description: Entries to skip
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: Filter by service
+        in: query
+        name: service
+        schema:
+          type: string
+      - description: Filter by region
+        in: query
+        name: region
+        schema:
+          type: string
+      - description: Filter by engine
+        in: query
+        name: engine
+        schema:
+          type: string
+      - description: Filter by edition
+        in: query
+        name: edition
+        schema:
+          type: string
+      - description: Filter by instance type
+        in: query
+        name: instance_type
+        schema:
+          type: string
+      - description: Filter by usage type
+        in: query
+        name: usage_type
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DatabasePriceList"
+          description: Pricing response for custom database pricing
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Invalid limit or offset
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Get your custom database pricing entries
+    post:
+      deprecated: true
+      description: |-
+        Register your own managed database rates, keyed by engine, edition, deployment option, storage type and instance type alongside the usual provider, service and region.
+        An entry is upserted on the full natural key (provider, service, region, availability zone, usage type, engine, edition, deployment option, billing config, storage type, instance type, architecture and period billing hours), so re-posting with a new cost keeps its id; changing any key field mints a new one.
+        The returned id is what you attach with the `costgraph.ai/pricing-id.database` label or tag.
+        Superseded by POST /v1/marketplace/databases, which returns RFC 9457 problem responses on failure.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DatabasePricesRequest"
+        description: Custom database pricing request
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisteredDatabasePrices"
+          description: Pricing response for custom database pricing
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Provider and organization do not match
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Register custom database pricing
+      x-codegen-request-body-name: instance
   /marketplace/providers/disks:
     delete:
-      description: Delete a custom disk provider entry
+      deprecated: true
+      description: |-
+        Delete one of your storage rates by id.
+        A rate a volume is already priced against cannot be deleted; the request fails while that link exists, so re-pin those volumes first.
+        Once it is gone, a volume still carrying its id stops resolving a price.
+        Superseded by DELETE /v1/marketplace/disks/{id}, which returns RFC 9457 problem responses on failure.
       parameters:
       - description: Disk pricing ID
         in: query
@@ -151,68 +380,115 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/types.CustomDiskPricingResponse"
+                $ref: "#/components/schemas/RegisteredDiskPrices"
           description: Pricing response for a custom disk provider
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Invalid id
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Provider and organization do not match
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Disk pricing entry not found
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
       summary: Delete a custom disk provider entry
     get:
-      description: Get your custom disk pricing entries
+      deprecated: true
+      description: |-
+        List the storage rates your organization has registered. Only your own rates are returned.
+        Filters combine, and paging is by limit and offset.
+        Superseded by GET /v1/marketplace/disks, which returns RFC 9457 problem responses on failure.
+      parameters:
+      - description: Maximum entries to return (default 500)
+        in: query
+        name: limit
+        schema:
+          type: integer
+      - description: Entries to skip
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: Filter by service
+        in: query
+        name: service
+        schema:
+          type: string
+      - description: Filter by region
+        in: query
+        name: region
+        schema:
+          type: string
+      - description: Filter by disk type
+        in: query
+        name: type
+        schema:
+          type: string
+      - description: Filter by usage type
+        in: query
+        name: usage_type
+        schema:
+          type: string
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/types.MarketplaceDiskProvidersResponse"
+                $ref: "#/components/schemas/DiskPriceList"
           description: Pricing response for custom disk pricing
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Invalid limit or offset
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
       summary: Get your custom disk pricing entries
     post:
-      description: Register a custom disk provider
+      deprecated: true
+      description: |-
+        Register your own storage rates, priced per GB hour with optional IOPS and throughput components and the capacity band they apply to.
+        An entry is upserted on its natural key (provider, service, region, availability zone, disk type, usage type and period billing hours), so re-posting with a new cost keeps its id; changing a key field mints a new one.
+        Capacity, IOPS and throughput bands are not part of that key, so a second band for the same disk type replaces the first: give each band its own usage type.
+        The returned id is what you attach with the `costgraph.ai/pricing-id.storage` label or tag.
+        Superseded by POST /v1/marketplace/disks, which returns RFC 9457 problem responses on failure.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/types.CustomDiskPriceRequest"
+              $ref: "#/components/schemas/DiskPricesRequest"
         description: Custom disk pricing request
         required: true
       responses:
@@ -220,39 +496,200 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/types.CustomDiskPricingResponse"
+                $ref: "#/components/schemas/RegisteredDiskPrices"
           description: Pricing response for a custom disk provider
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Invalid request body
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Provider and organization do not match
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
       summary: Register a custom disk provider
       x-codegen-request-body-name: instance
-  /pricing:
+  /marketplace/providers/models:
+    delete:
+      deprecated: true
+      description: |-
+        Delete one of your model rates by id. The row is closed rather than removed, so spend already priced against it keeps that rate.
+        Usage still pinned to it stops resolving a price, so re-pin before deleting.
+        Superseded by DELETE /v1/marketplace/models/{id}, which returns RFC 9457 problem responses on failure.
+      parameters:
+      - description: Model pricing ID
+        in: query
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisteredModelPrices"
+          description: Pricing response for custom model pricing
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Invalid id
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Host and organization do not match
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Model pricing entry not found
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Delete a custom model pricing entry
+    get:
+      deprecated: true
+      description: |-
+        List the live version of each model rate your organization has registered. Only your own rates are returned.
+        Filters combine, and paging is by limit and offset.
+        Superseded by GET /v1/marketplace/models, which returns RFC 9457 problem responses on failure.
+      parameters:
+      - description: Maximum entries to return (default 500)
+        in: query
+        name: limit
+        schema:
+          type: integer
+      - description: Entries to skip
+        in: query
+        name: offset
+        schema:
+          type: integer
+      - description: Filter by model
+        in: query
+        name: model
+        schema:
+          type: string
+      - description: Filter by model provider
+        in: query
+        name: provider
+        schema:
+          type: string
+      - description: Filter by region
+        in: query
+        name: region
+        schema:
+          type: string
+      - description: Filter by token bucket
+        in: query
+        name: token_bucket
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelPriceList"
+          description: Pricing response for custom model pricing
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Invalid limit or offset
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Unauthorized
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Get your custom model pricing entries
     post:
-      description: Get pricing for compute instances
+      deprecated: true
+      description: |-
+        Register custom token pricing for models you host. Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at.
+        The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change instead of holding on to an earlier one.
+        Superseded by POST /v1/marketplace/models, which returns RFC 9457 problem responses on failure.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Instance"
+              $ref: "#/components/schemas/ModelPricesRequest"
+        description: Custom model pricing request
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RegisteredModelPrices"
+          description: Pricing response for custom model pricing
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Host and organization do not match
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Register custom model pricing
+      x-codegen-request-body-name: instance
+  /pricing:
+    post:
+      deprecated: true
+      description: |-
+        Get pricing for compute instances
+        Superseded by POST /v1/pricing/compute, which returns RFC 9457 problem responses on failure.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Instance"
         description: Instance
         required: true
       responses:
@@ -260,31 +697,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/schema.ComputePricingsRow"
+                $ref: "#/components/schemas/ComputePrice"
           description: Pricing for a given instance
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Invalid request body
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Pricing not found
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Internal server error
       security:
       - ApiKeyAuth: []
@@ -293,12 +730,15 @@ paths:
       x-codegen-request-body-name: instance
   /pricing/compute:
     post:
-      description: Get pricing for compute instances
+      deprecated: true
+      description: |-
+        Get pricing for compute instances
+        Superseded by POST /v1/pricing/compute, which returns RFC 9457 problem responses on failure.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Instance"
+              $ref: "#/components/schemas/Instance"
         description: Instance
         required: true
       responses:
@@ -306,31 +746,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/schema.ComputePricingsRow"
+                $ref: "#/components/schemas/ComputePrice"
           description: Pricing for a given instance
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Invalid request body
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Pricing not found
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Internal server error
       security:
       - ApiKeyAuth: []
@@ -339,12 +779,15 @@ paths:
       x-codegen-request-body-name: instance
   /pricing/disks:
     post:
-      description: Get pricing for a disk
+      deprecated: true
+      description: |-
+        Get pricing for a disk
+        Superseded by POST /v1/pricing/disks, which returns RFC 9457 problem responses on failure.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/types.Disk"
+              $ref: "#/components/schemas/Disk"
         description: Disk
         required: true
       responses:
@@ -352,31 +795,31 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/schema.DiskPricingsRow"
+                $ref: "#/components/schemas/DiskPrice"
           description: Pricing for a given disk
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Invalid request body
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Pricing not found
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Internal server error
       security:
       - ApiKeyAuth: []
@@ -385,19 +828,22 @@ paths:
       x-codegen-request-body-name: instance
   /providers:
     get:
-      description: Get details for the providers
+      deprecated: true
+      description: |-
+        Get details for the providers
+        Superseded by GET /v1/providers, which returns RFC 9457 problem responses on failure.
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/provider.Configs"
+                $ref: "#/components/schemas/ProviderConfigs"
           description: List of providers
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
       security:
       - ApiKeyAuth: []
@@ -405,13 +851,15 @@ paths:
       summary: Get details for the providers
   /recommendations:
     post:
-      description: "Get recommendations for compute instances (Recommendations, InstancePricing,\
-        \ VM, Savings)"
+      deprecated: true
+      description: |-
+        Get the cheapest compute candidate per provider with savings versus the requested instance
+        Superseded by POST /v1/recommendations/compute, which returns RFC 9457 problem responses on failure.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/types.ComputeRequest"
+              $ref: "#/components/schemas/ComputeRecommendationRequest"
         description: Instance
         required: true
       responses:
@@ -419,31 +867,33 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/types.ComputeResults"
+                items:
+                  $ref: "#/components/schemas/ComputeRecommendation"
+                type: array
           description: OK
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Invalid request body
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Not found
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Internal server error
       security:
       - ApiKeyAuth: []
@@ -452,13 +902,15 @@ paths:
       x-codegen-request-body-name: instance
   /recommendations/compute:
     post:
-      description: "Get recommendations for compute instances (Recommendations, InstancePricing,\
-        \ VM, Savings)"
+      deprecated: true
+      description: |-
+        Get the cheapest compute candidate per provider with savings versus the requested instance
+        Superseded by POST /v1/recommendations/compute, which returns RFC 9457 problem responses on failure.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/types.ComputeRequest"
+              $ref: "#/components/schemas/ComputeRecommendationRequest"
         description: Instance
         required: true
       responses:
@@ -466,31 +918,33 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/types.ComputeResults"
+                items:
+                  $ref: "#/components/schemas/ComputeRecommendation"
+                type: array
           description: OK
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Invalid request body
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Not found
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Internal server error
       security:
       - ApiKeyAuth: []
@@ -499,13 +953,15 @@ paths:
       x-codegen-request-body-name: instance
   /recommendations/disks:
     post:
-      description: "Get recommendations for disks used in the server (Recommendations,\
-        \ DiskPricing, Savings)"
+      deprecated: true
+      description: |-
+        Get the cheapest disk candidate per provider with savings versus the requested disk
+        Superseded by POST /v1/recommendations/disks, which returns RFC 9457 problem responses on failure.
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/types.DiskRequest"
+              $ref: "#/components/schemas/DiskRecommendationRequest"
         description: Instance
         required: true
       responses:
@@ -513,192 +969,1607 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/types.DiskResults"
+                items:
+                  $ref: "#/components/schemas/DiskRecommendation"
+                type: array
           description: OK
         "400":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Invalid request body
         "401":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
         "404":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Not found
         "500":
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/handler.ErrorResponse"
+                $ref: "#/components/schemas/ErrorResponse"
           description: Internal server error
       security:
       - ApiKeyAuth: []
       - BearerAuth: []
       summary: Get recommendations for disks
       x-codegen-request-body-name: instance
+  /v1/healthz:
+    get:
+      description: Report that the pricing service is accepting requests. No credential
+        is required.
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  type: string
+                type: object
+          description: The service is live
+      summary: Check the service is live
+      tags:
+      - service
+  /v1/marketplace/compute:
+    get:
+      description: |-
+        List the compute rates your organization has published. Only your own rates are returned, never another organization's.
+        Filters combine, and paging is by limit and an opaque cursor carried in the page of the previous response.
+      parameters:
+      - description: Maximum prices to return (default 500)
+        in: query
+        name: limit
+        schema:
+          type: integer
+      - description: Cursor from the previous page
+        in: query
+        name: cursor
+        schema:
+          type: string
+      - description: Filter by service
+        in: query
+        name: service
+        schema:
+          type: string
+      - description: Filter by region
+        in: query
+        name: region
+        schema:
+          type: string
+      - description: Filter by instance type
+        in: query
+        name: instance_type
+        schema:
+          type: string
+      - description: Filter by usage type
+        in: query
+        name: usage_type
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComputePricePage"
+          description: A page of your prices
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: List your compute prices
+      tags:
+      - marketplace
+    post:
+      description: |-
+        Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud.
+        An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU.
+        The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ComputePricesRequest"
+        description: Prices to publish
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublishedComputePrices"
+          description: The published prices
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Publish compute prices
+      tags:
+      - marketplace
+      x-codegen-request-body-name: body
+  /v1/marketplace/compute/{id}:
+    delete:
+      description: |-
+        Delete a compute price you have published, by its id.
+        Usage still pinned to it stops resolving a price, so re-pin before deleting.
+      parameters:
+      - description: Price id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          content: {}
+          description: The price was deleted
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Delete one compute price
+      tags:
+      - marketplace
+    get:
+      description: |-
+        Read a single compute rate your organization has published, by its id.
+        A price belonging to another organization is not visible and reads as not found.
+      parameters:
+      - description: Price id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComputePrice"
+          description: The price
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Read one compute price
+      tags:
+      - marketplace
+    patch:
+      description: |-
+        Change the rate or the descriptive fields of a compute price you have published. Send only the fields you want to change.
+        The fields that identify the price cannot be changed, because they describe a different SKU; delete the price and register a new one instead.
+      parameters:
+      - description: Price id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: true
+              type: object
+        description: Fields to change
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComputePrice"
+          description: The changed price
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Change one compute price
+      tags:
+      - marketplace
+      x-codegen-request-body-name: body
+  /v1/marketplace/databases:
+    get:
+      description: |-
+        List the database rates your organization has published. Only your own rates are returned, never another organization's.
+        Filters combine, and paging is by limit and an opaque cursor carried in the page of the previous response.
+      parameters:
+      - description: Maximum prices to return (default 500)
+        in: query
+        name: limit
+        schema:
+          type: integer
+      - description: Cursor from the previous page
+        in: query
+        name: cursor
+        schema:
+          type: string
+      - description: Filter by service
+        in: query
+        name: service
+        schema:
+          type: string
+      - description: Filter by region
+        in: query
+        name: region
+        schema:
+          type: string
+      - description: Filter by engine
+        in: query
+        name: engine
+        schema:
+          type: string
+      - description: Filter by edition
+        in: query
+        name: edition
+        schema:
+          type: string
+      - description: Filter by instance type
+        in: query
+        name: instance_type
+        schema:
+          type: string
+      - description: Filter by usage type
+        in: query
+        name: usage_type
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DatabasePricePage"
+          description: A page of your prices
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: List your database prices
+      tags:
+      - marketplace
+    post:
+      description: |-
+        Register your own managed database rates so CostGraph can price clusters it has no public price for.
+        An entry is upserted on its natural key (provider, service, region, engine, edition, instance type and usage type), so re-posting the same entry with a new cost keeps its id and reprices everything already using it.
+        The returned id is what you attach to a database with the `costgraph.ai/pricing-id.database` label or tag.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DatabasePricesRequest"
+        description: Prices to publish
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublishedDatabasePrices"
+          description: The published prices
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Publish database prices
+      tags:
+      - marketplace
+      x-codegen-request-body-name: body
+  /v1/marketplace/databases/{id}:
+    delete:
+      description: |-
+        Delete a database price you have published, by its id.
+        Usage still pinned to it stops resolving a price, so re-pin before deleting.
+      parameters:
+      - description: Price id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          content: {}
+          description: The price was deleted
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Delete one database price
+      tags:
+      - marketplace
+    get:
+      description: |-
+        Read a single database rate your organization has published, by its id.
+        A price belonging to another organization is not visible and reads as not found.
+      parameters:
+      - description: Price id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DatabasePrice"
+          description: The price
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Read one database price
+      tags:
+      - marketplace
+    patch:
+      description: |-
+        Change the rate or the descriptive fields of a database price you have published. Send only the fields you want to change.
+        The fields that identify the price cannot be changed, because they describe a different SKU; delete the price and register a new one instead.
+      parameters:
+      - description: Price id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: true
+              type: object
+        description: Fields to change
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DatabasePrice"
+          description: The changed price
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Change one database price
+      tags:
+      - marketplace
+      x-codegen-request-body-name: body
+  /v1/marketplace/disks:
+    get:
+      description: |-
+        List the disk rates your organization has published. Only your own rates are returned, never another organization's.
+        Filters combine, and paging is by limit and an opaque cursor carried in the page of the previous response.
+      parameters:
+      - description: Maximum prices to return (default 500)
+        in: query
+        name: limit
+        schema:
+          type: integer
+      - description: Cursor from the previous page
+        in: query
+        name: cursor
+        schema:
+          type: string
+      - description: Filter by service
+        in: query
+        name: service
+        schema:
+          type: string
+      - description: Filter by region
+        in: query
+        name: region
+        schema:
+          type: string
+      - description: Filter by disk type
+        in: query
+        name: type
+        schema:
+          type: string
+      - description: Filter by usage type
+        in: query
+        name: usage_type
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiskPricePage"
+          description: A page of your prices
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: List your disk prices
+      tags:
+      - marketplace
+    post:
+      description: |-
+        Register your own block storage rates so CostGraph can price volumes it has no public price for.
+        An entry is upserted on its natural key (provider, service, region, availability zone, usage type, type and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it.
+        The returned id is what you attach to a volume with the `costgraph.ai/pricing-id.disk` label or tag.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiskPricesRequest"
+        description: Prices to publish
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublishedDiskPrices"
+          description: The published prices
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Publish disk prices
+      tags:
+      - marketplace
+      x-codegen-request-body-name: body
+  /v1/marketplace/disks/{id}:
+    delete:
+      description: |-
+        Delete a disk price you have published, by its id.
+        Usage still pinned to it stops resolving a price, so re-pin before deleting.
+      parameters:
+      - description: Price id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          content: {}
+          description: The price was deleted
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Delete one disk price
+      tags:
+      - marketplace
+    get:
+      description: |-
+        Read a single disk rate your organization has published, by its id.
+        A price belonging to another organization is not visible and reads as not found.
+      parameters:
+      - description: Price id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiskPrice"
+          description: The price
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Read one disk price
+      tags:
+      - marketplace
+    patch:
+      description: |-
+        Change the rate or the descriptive fields of a disk price you have published. Send only the fields you want to change.
+        The fields that identify the price cannot be changed, because they describe a different SKU; delete the price and register a new one instead.
+      parameters:
+      - description: Price id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: true
+              type: object
+        description: Fields to change
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiskPrice"
+          description: The changed price
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Change one disk price
+      tags:
+      - marketplace
+      x-codegen-request-body-name: body
+  /v1/marketplace/filters/{kind}:
+    get:
+      description: "The query parameters you can filter this kind of price by. They\
+        \ differ by kind because the fields that identify a price differ: compute\
+        \ prices carry an instance type, disk prices a disk type, database prices\
+        \ an engine."
+      parameters:
+      - description: Price kind
+        in: path
+        name: kind
+        required: true
+        schema:
+          enum:
+          - compute
+          - disks
+          - databases
+          - models
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FilterSet"
+          description: OK
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: List the filters a price kind accepts
+      tags:
+      - marketplace
+  /v1/marketplace/models:
+    get:
+      description: |-
+        List the model rates your organization has published. Only your own rates are returned, never another organization's.
+        Filters combine, and paging is by limit and an opaque cursor carried in the page of the previous response.
+      parameters:
+      - description: Maximum prices to return (default 500)
+        in: query
+        name: limit
+        schema:
+          type: integer
+      - description: Cursor from the previous page
+        in: query
+        name: cursor
+        schema:
+          type: string
+      - description: Filter by model
+        in: query
+        name: model
+        schema:
+          type: string
+      - description: Filter by model provider
+        in: query
+        name: provider
+        schema:
+          type: string
+      - description: Filter by region
+        in: query
+        name: region
+        schema:
+          type: string
+      - description: Filter by token bucket
+        in: query
+        name: token_bucket
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelPricePage"
+          description: A page of your prices
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: List your model prices
+      tags:
+      - marketplace
+    post:
+      description: |-
+        Register your own token rates for models you host, so CostGraph can price calls it has no public rate for.
+        Entries are versioned: a price change closes the current row and opens a new one, so spend already recorded keeps the rate it was billed at.
+        The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ModelPricesRequest"
+        description: Prices to publish
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PublishedModelPrices"
+          description: The published prices
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Publish model prices
+      tags:
+      - marketplace
+      x-codegen-request-body-name: body
+  /v1/marketplace/models/{id}:
+    delete:
+      description: |-
+        Delete a model price you have published, by its id.
+        Usage still pinned to it stops resolving a price, so re-pin before deleting.
+      parameters:
+      - description: Price id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "204":
+          content: {}
+          description: The price was deleted
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Delete one model price
+      tags:
+      - marketplace
+    get:
+      description: |-
+        Read a single model rate your organization has published, by its id.
+        A price belonging to another organization is not visible and reads as not found.
+      parameters:
+      - description: Price id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelPrice"
+          description: The price
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Read one model price
+      tags:
+      - marketplace
+    patch:
+      description: |-
+        Change the rate or the descriptive fields of a model price you have published. Send only the fields you want to change.
+        The fields that identify the price cannot be changed, because they describe a different SKU; delete the price and register a new one instead.
+      parameters:
+      - description: Price id
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              additionalProperties: true
+              type: object
+        description: Fields to change
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelPrice"
+          description: The changed price
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Bad Request
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Forbidden
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Not Found
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unprocessable Entity
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal Server Error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Change one model price
+      tags:
+      - marketplace
+      x-codegen-request-body-name: body
+  /v1/pricing/compute:
+    post:
+      description: |-
+        Resolve the hourly rate CostGraph would bill for a machine with the given shape, in the given region and usage type.
+        Prices you have published for the machine's provider are preferred over the public catalogue.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Instance"
+        description: Machine to price
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ComputePrice"
+          description: The resolved price
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthenticated
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: No price matches the machine
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Validation failed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Price a machine
+      tags:
+      - pricing
+      x-codegen-request-body-name: instance
+  /v1/pricing/disks:
+    post:
+      description: |-
+        Resolve the rate CostGraph would bill for a block volume of the given type and capacity, in the given region.
+        Prices you have published for the volume's provider are preferred over the public catalogue.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Disk"
+        description: Volume to price
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiskPrice"
+          description: The resolved price
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthenticated
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: No price matches the volume
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Validation failed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Price a volume
+      tags:
+      - pricing
+      x-codegen-request-body-name: instance
+  /v1/providers:
+    get:
+      description: "Return every provider the pricing catalogue covers, with the filter\
+        \ values each one accepts."
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProviderConfigs"
+          description: The providers CostGraph prices
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthenticated
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: List the providers CostGraph prices
+      tags:
+      - providers
+  /v1/recommendations/compute:
+    post:
+      description: "Return the cheapest machine per provider that still meets the\
+        \ requested shape, with the saving against the machine you asked about."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ComputeRecommendationRequest"
+        description: Machine to improve on
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/ComputeRecommendation"
+                type: array
+          description: The cheapest candidate per provider
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthenticated
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: No candidate matches the machine
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Validation failed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Find cheaper machines
+      tags:
+      - recommendations
+      x-codegen-request-body-name: instance
+  /v1/recommendations/disks:
+    post:
+      description: "Return the cheapest volume per provider that still meets the requested\
+        \ capacity and performance, with the saving against the volume you asked about."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DiskRecommendationRequest"
+        description: Volume to improve on
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/DiskRecommendation"
+                type: array
+          description: The cheapest candidate per provider
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Unauthenticated
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: No candidate matches the volume
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Validation failed
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal server error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Find cheaper volumes
+      tags:
+      - recommendations
+      x-codegen-request-body-name: instance
 components:
   schemas:
-    github_com_baselinehq_golang-shared_types.Instance:
-      properties:
-        availability_zone:
-          type: string
-        fallback_to_base_pricing:
-          type: boolean
-        id:
-          type: string
-        instance_type:
-          type: string
-        operating_system:
-          type: string
-        provider:
-          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Provider"
-        region:
-          type: string
-        service:
-          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Service"
-        usage_type:
-          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.UsageType"
-        vm:
-          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.VM"
-      type: object
-    github_com_baselinehq_golang-shared_types.Provider:
-      enum:
-      - GCP
-      - AWS
-      - DigitalOcean
-      - Azure
-      - Hetzner
-      - OVHCloud
-      - Base
-      type: string
-      x-enum-comments:
-        Base: "Base provider for default pricing, no specific cloud provider"
-      x-enum-descriptions:
-      - ""
-      - ""
-      - ""
-      - ""
-      - ""
-      - ""
-      - "Base provider for default pricing, no specific cloud provider"
-      x-enum-varnames:
-      - GCP
-      - AWS
-      - DigitalOcean
-      - Azure
-      - Hetzner
-      - OVHCloud
-      - Base
-    github_com_baselinehq_golang-shared_types.Service:
-      enum:
-      - ComputeEngine
-      - AmazonEC2
-      - Droplet
-      - AzureCompute
-      - AzureManagedDisks
-      - HetznerCompute
-      - OVHPublicCloud
-      - BaseCompute
-      - BaseDisks
-      - AmazonEBS
-      - ComputeEnginePersistentDisk
-      type: string
-      x-enum-varnames:
-      - ComputeEngine
-      - AmazonEC2
-      - Droplet
-      - AzureCompute
-      - AzureManagedDisks
-      - HetznerCompute
-      - OVHPublicCloud
-      - BaseCompute
-      - BaseDisks
-      - AmazonEBS
-      - ComputeEnginePersistentDisk
-    github_com_baselinehq_golang-shared_types.UsageType:
-      enum:
-      - SPOT_PREEMPTIBLE
-      - ONDEMAND
-      - RESERVED
-      - ONDEMAND_CUSTOM
-      - SPOT_PREEMPTIBLE_CUSTOM
-      - RESERVED_CUSTOM
-      - SOLE_TENANCY
-      - CUSTOM
-      - EXTENDED
-      type: string
-      x-enum-varnames:
-      - SPOT_PREEMPTIBLE
-      - ONDEMAND
-      - RESERVED
-      - ONDEMAND_CUSTOM
-      - SPOT_PREEMPTIBLE_CUSTOM
-      - RESERVED_CUSTOM
-      - SOLE_TENANCY
-      - CUSTOM
-      - EXTENDED
-    github_com_baselinehq_golang-shared_types.VM:
-      properties:
-        cpu_cores:
-          type: number
-        ram_gb:
-          type: number
-      type: object
-    github_com_baselinehq_pricingapi_pkg_types.Status:
-      enum:
-      - Registered
-      - Deleted
-      type: string
-      x-enum-varnames:
-      - Registered
-      - Deleted
-    handler.ErrorResponse:
+    ComputePrice:
       example:
-        error: error
-      properties:
-        error:
-          type: string
-      type: object
-    provider.Config:
-      properties:
-        predicates:
-          $ref: "#/components/schemas/types.Predicates"
-        provider:
-          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Provider"
-      type: object
-    provider.Configs:
-      additionalProperties:
-        $ref: "#/components/schemas/provider.Config"
-      type: object
-    schema.ComputePricingsRow:
-      example:
-        availability_zone: availability_zone
-        created_at: created_at
-        cpu_cores: 6.027456183070403
-        period_billing_hours: 5.962133916683182
-        ram_gb: 5.637376656633329
-        tags: "{}"
-        cost_per_hour: 0.8008281904610115
-        updated_at: updated_at
-        cpu_cores_cost_per_hour: 1.4658129805029452
-        provider: provider
-        usage_type: usage_type
-        raw_pricing_data: "{}"
-        service: service
-        operating_system: operating_system
-        ram_gb_cost_per_hour: 2.3021358869347655
-        id: id
-        region: region
-        instance_type: instance_type
         architecture: architecture
+        availability_zone: availability_zone
+        cost_per_hour: 0.8008281904610115
+        cpu_cores: 6.027456183070403
+        cpu_cores_cost_per_hour: 1.4658129805029452
+        created_at: created_at
+        currency: currency
+        gpu_cost_per_hour: 5.962133916683182
+        gpu_count: 5.637376656633329
+        gpu_type: gpu_type
+        id: id
+        instance_type: instance_type
+        native_cost_per_hour: 2.3021358869347655
+        operating_system: operating_system
+        period_billing_hours: 7.061401241503109
+        provider: provider
+        ram_gb: 9.301444243932576
+        ram_gb_cost_per_hour: 3.616076749251911
+        raw_pricing_data: "{}"
+        region: region
+        service: service
+        tags: "{}"
+        updated_at: updated_at
+        usage_type: usage_type
       properties:
         architecture:
           type: string
@@ -712,10 +2583,20 @@ components:
           type: number
         created_at:
           type: string
+        currency:
+          type: string
+        gpu_cost_per_hour:
+          type: number
+        gpu_count:
+          type: number
+        gpu_type:
+          type: string
         id:
           type: string
         instance_type:
           type: string
+        native_cost_per_hour:
+          type: number
         operating_system:
           type: string
         period_billing_hours:
@@ -741,29 +2622,733 @@ components:
         usage_type:
           type: string
       type: object
-    schema.DiskPricingsRow:
+    ComputePriceList:
       example:
-        max_capacity_gb: 5.962133916683182
+        providers:
+        - architecture: architecture
+          availability_zone: availability_zone
+          cost_per_hour: 0.8008281904610115
+          cpu_cores: 6.027456183070403
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          gpu_cost_per_hour: 5.962133916683182
+          gpu_count: 5.637376656633329
+          gpu_type: gpu_type
+          id: id
+          instance_type: instance_type
+          native_cost_per_hour: 2.3021358869347655
+          operating_system: operating_system
+          period_billing_hours: 7.061401241503109
+          provider: provider
+          ram_gb: 9.301444243932576
+          ram_gb_cost_per_hour: 3.616076749251911
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        - architecture: architecture
+          availability_zone: availability_zone
+          cost_per_hour: 0.8008281904610115
+          cpu_cores: 6.027456183070403
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          gpu_cost_per_hour: 5.962133916683182
+          gpu_count: 5.637376656633329
+          gpu_type: gpu_type
+          id: id
+          instance_type: instance_type
+          native_cost_per_hour: 2.3021358869347655
+          operating_system: operating_system
+          period_billing_hours: 7.061401241503109
+          provider: provider
+          ram_gb: 9.301444243932576
+          ram_gb_cost_per_hour: 3.616076749251911
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+      properties:
+        providers:
+          items:
+            $ref: "#/components/schemas/ComputePrice"
+          type: array
+      type: object
+    ComputePricePage:
+      example:
+        data:
+        - architecture: architecture
+          availability_zone: availability_zone
+          cost_per_hour: 0.8008281904610115
+          cpu_cores: 6.027456183070403
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          gpu_cost_per_hour: 5.962133916683182
+          gpu_count: 5.637376656633329
+          gpu_type: gpu_type
+          id: id
+          instance_type: instance_type
+          native_cost_per_hour: 2.3021358869347655
+          operating_system: operating_system
+          period_billing_hours: 7.061401241503109
+          provider: provider
+          ram_gb: 9.301444243932576
+          ram_gb_cost_per_hour: 3.616076749251911
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        - architecture: architecture
+          availability_zone: availability_zone
+          cost_per_hour: 0.8008281904610115
+          cpu_cores: 6.027456183070403
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          gpu_cost_per_hour: 5.962133916683182
+          gpu_count: 5.637376656633329
+          gpu_type: gpu_type
+          id: id
+          instance_type: instance_type
+          native_cost_per_hour: 2.3021358869347655
+          operating_system: operating_system
+          period_billing_hours: 7.061401241503109
+          provider: provider
+          ram_gb: 9.301444243932576
+          ram_gb_cost_per_hour: 3.616076749251911
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        page:
+          has_more: true
+          next_cursor: next_cursor
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/ComputePrice"
+          type: array
+        page:
+          $ref: "#/components/schemas/Page"
+      type: object
+    ComputePricesRequest:
+      example:
+        entries:
+        - architecture: architecture
+          availability_zone: availability_zone
+          cost_per_hour: 0.8008281904610115
+          cpu_cores: 6.027456183070403
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          gpu_cost_per_hour: 5.962133916683182
+          gpu_count: 5.637376656633329
+          gpu_type: gpu_type
+          id: id
+          instance_type: instance_type
+          native_cost_per_hour: 2.3021358869347655
+          operating_system: operating_system
+          period_billing_hours: 7.061401241503109
+          provider: provider
+          ram_gb: 9.301444243932576
+          ram_gb_cost_per_hour: 3.616076749251911
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        - architecture: architecture
+          availability_zone: availability_zone
+          cost_per_hour: 0.8008281904610115
+          cpu_cores: 6.027456183070403
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          gpu_cost_per_hour: 5.962133916683182
+          gpu_count: 5.637376656633329
+          gpu_type: gpu_type
+          id: id
+          instance_type: instance_type
+          native_cost_per_hour: 2.3021358869347655
+          operating_system: operating_system
+          period_billing_hours: 7.061401241503109
+          provider: provider
+          ram_gb: 9.301444243932576
+          ram_gb_cost_per_hour: 3.616076749251911
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+      properties:
+        entries:
+          items:
+            $ref: "#/components/schemas/ComputePrice"
+          minItems: 1
+          type: array
+      required:
+      - entries
+      type: object
+    ComputeRecommendation:
+      example:
+        pricing:
+          architecture: architecture
+          availability_zone: availability_zone
+          cost_per_hour: 0.8008281904610115
+          cpu_cores: 6.027456183070403
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          gpu_cost_per_hour: 5.962133916683182
+          gpu_count: 5.637376656633329
+          gpu_type: gpu_type
+          id: id
+          instance_type: instance_type
+          native_cost_per_hour: 2.3021358869347655
+          operating_system: operating_system
+          period_billing_hours: 7.061401241503109
+          provider: provider
+          ram_gb: 9.301444243932576
+          ram_gb_cost_per_hour: 3.616076749251911
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        savings:
+          amount_per_hour: 0.8008281904610115
+          amount_per_month: 6.027456183070403
+          amount_per_year: 1.4658129805029452
+          percentage: 5.962133916683182
+      properties:
+        pricing:
+          $ref: "#/components/schemas/ComputePrice"
+        savings:
+          $ref: "#/components/schemas/types.Savings"
+      type: object
+    ComputeRecommendationRequest:
+      example:
+        include_metadata: true
+        instance:
+          availability_zone: availability_zone
+          fallback_to_base_pricing: true
+          id: id
+          instance_type: instance_type
+          operating_system: operating_system
+          provider: GCP
+          region: region
+          service: ComputeEngine
+          usage_type: SPOT_PREEMPTIBLE
+          vm:
+            cpu_cores: 0.8008281904610115
+            ram_gb: 6.027456183070403
+        predicates:
+          availability_zones:
+          - availability_zones
+          - availability_zones
+          disk_types:
+          - disk_types
+          - disk_types
+          instance_types:
+          - instance_types
+          - instance_types
+          operating_systems:
+          - operating_systems
+          - operating_systems
+          providers:
+          - providers
+          - providers
+          regions:
+          - regions
+          - regions
+          services:
+          - services
+          - services
+          usage_types:
+          - usage_types
+          - usage_types
+        usage:
+          cpu_cores: 0.8008281904610115
+          ram_gb: 6.027456183070403
+      properties:
+        include_metadata:
+          type: boolean
+        instance:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Instance"
+        predicates:
+          $ref: "#/components/schemas/types.Predicates"
+        usage:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.VM"
+      type: object
+    DatabasePrice:
+      example:
+        architecture: architecture
         availability_zone: availability_zone
-        min_throughput_mbps: 3.616076749251911
-        cost_per_gb_hour: 0.8008281904610115
-        min_capacity_gb: 7.061401241503109
-        max_throughput_mbps: 2.3021358869347655
+        billing_config: billing_config
+        capacity_unit: capacity_unit
+        cost_per_capacity_unit: 0.8008281904610115
+        cost_per_hour: 6.027456183070403
+        cost_per_io_request: 1.4658129805029452
+        cost_per_iops_hour: 5.962133916683182
+        cost_per_storage_gb_hour: 5.637376656633329
+        cost_per_throughput_mbps_hour: 2.3021358869347655
+        cost_per_vcpu_license_hour: 7.061401241503109
+        cpu_cores: 9.301444243932576
+        cpu_cores_cost_per_hour: 3.616076749251911
         created_at: created_at
-        max_iops: 5.637376656633329
-        period_billing_hours: 2.027123023002322
-        cost_per_iops_hour: 6.027456183070403
-        type: type
-        tags: "{}"
-        cost_per_throughput_mbps_hour: 1.4658129805029452
-        updated_at: updated_at
-        provider: provider
-        usage_type: usage_type
-        raw_pricing_data: "{}"
-        service: service
-        min_iops: 9.301444243932576
+        currency: currency
+        deployment_option: deployment_option
+        edition: edition
+        engine: engine
         id: id
+        instance_type: instance_type
+        max_iops: 2.027123023002322
+        max_storage_gb: 4.145608029883936
+        max_throughput_mbps: 7.386281948385884
+        min_iops: 1.2315135367772556
+        min_storage_gb: 1.0246457001441578
+        min_throughput_mbps: 1.4894159098541704
+        native_cost_per_hour: 6.84685269835264
+        native_cost_per_storage_gb_hour: 7.457744773683766
+        period_billing_hours: 1.1730742509559433
+        provider: provider
+        ram_gb: 4.965218492984954
+        ram_gb_cost_per_hour: 5.025004791520295
+        raw_pricing_data: "{}"
         region: region
+        service: service
+        storage_type: storage_type
+        tags: "{}"
+        updated_at: updated_at
+        usage_type: usage_type
+      properties:
+        architecture:
+          type: string
+        availability_zone:
+          type: string
+        billing_config:
+          type: string
+        capacity_unit:
+          type: string
+        cost_per_capacity_unit:
+          type: number
+        cost_per_hour:
+          type: number
+        cost_per_io_request:
+          type: number
+        cost_per_iops_hour:
+          type: number
+        cost_per_storage_gb_hour:
+          type: number
+        cost_per_throughput_mbps_hour:
+          type: number
+        cost_per_vcpu_license_hour:
+          type: number
+        cpu_cores:
+          type: number
+        cpu_cores_cost_per_hour:
+          type: number
+        created_at:
+          type: string
+        currency:
+          type: string
+        deployment_option:
+          type: string
+        edition:
+          type: string
+        engine:
+          type: string
+        id:
+          type: string
+        instance_type:
+          type: string
+        max_iops:
+          type: number
+        max_storage_gb:
+          type: number
+        max_throughput_mbps:
+          type: number
+        min_iops:
+          type: number
+        min_storage_gb:
+          type: number
+        min_throughput_mbps:
+          type: number
+        native_cost_per_hour:
+          type: number
+        native_cost_per_storage_gb_hour:
+          type: number
+        period_billing_hours:
+          type: number
+        provider:
+          type: string
+        ram_gb:
+          type: number
+        ram_gb_cost_per_hour:
+          type: number
+        raw_pricing_data:
+          properties: {}
+          type: object
+        region:
+          type: string
+        service:
+          type: string
+        storage_type:
+          type: string
+        tags:
+          properties: {}
+          type: object
+        updated_at:
+          type: string
+        usage_type:
+          type: string
+      type: object
+    DatabasePriceList:
+      example:
+        providers:
+        - architecture: architecture
+          availability_zone: availability_zone
+          billing_config: billing_config
+          capacity_unit: capacity_unit
+          cost_per_capacity_unit: 0.8008281904610115
+          cost_per_hour: 6.027456183070403
+          cost_per_io_request: 1.4658129805029452
+          cost_per_iops_hour: 5.962133916683182
+          cost_per_storage_gb_hour: 5.637376656633329
+          cost_per_throughput_mbps_hour: 2.3021358869347655
+          cost_per_vcpu_license_hour: 7.061401241503109
+          cpu_cores: 9.301444243932576
+          cpu_cores_cost_per_hour: 3.616076749251911
+          created_at: created_at
+          currency: currency
+          deployment_option: deployment_option
+          edition: edition
+          engine: engine
+          id: id
+          instance_type: instance_type
+          max_iops: 2.027123023002322
+          max_storage_gb: 4.145608029883936
+          max_throughput_mbps: 7.386281948385884
+          min_iops: 1.2315135367772556
+          min_storage_gb: 1.0246457001441578
+          min_throughput_mbps: 1.4894159098541704
+          native_cost_per_hour: 6.84685269835264
+          native_cost_per_storage_gb_hour: 7.457744773683766
+          period_billing_hours: 1.1730742509559433
+          provider: provider
+          ram_gb: 4.965218492984954
+          ram_gb_cost_per_hour: 5.025004791520295
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          storage_type: storage_type
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        - architecture: architecture
+          availability_zone: availability_zone
+          billing_config: billing_config
+          capacity_unit: capacity_unit
+          cost_per_capacity_unit: 0.8008281904610115
+          cost_per_hour: 6.027456183070403
+          cost_per_io_request: 1.4658129805029452
+          cost_per_iops_hour: 5.962133916683182
+          cost_per_storage_gb_hour: 5.637376656633329
+          cost_per_throughput_mbps_hour: 2.3021358869347655
+          cost_per_vcpu_license_hour: 7.061401241503109
+          cpu_cores: 9.301444243932576
+          cpu_cores_cost_per_hour: 3.616076749251911
+          created_at: created_at
+          currency: currency
+          deployment_option: deployment_option
+          edition: edition
+          engine: engine
+          id: id
+          instance_type: instance_type
+          max_iops: 2.027123023002322
+          max_storage_gb: 4.145608029883936
+          max_throughput_mbps: 7.386281948385884
+          min_iops: 1.2315135367772556
+          min_storage_gb: 1.0246457001441578
+          min_throughput_mbps: 1.4894159098541704
+          native_cost_per_hour: 6.84685269835264
+          native_cost_per_storage_gb_hour: 7.457744773683766
+          period_billing_hours: 1.1730742509559433
+          provider: provider
+          ram_gb: 4.965218492984954
+          ram_gb_cost_per_hour: 5.025004791520295
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          storage_type: storage_type
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+      properties:
+        providers:
+          items:
+            $ref: "#/components/schemas/DatabasePrice"
+          type: array
+      type: object
+    DatabasePricePage:
+      example:
+        data:
+        - architecture: architecture
+          availability_zone: availability_zone
+          billing_config: billing_config
+          capacity_unit: capacity_unit
+          cost_per_capacity_unit: 0.8008281904610115
+          cost_per_hour: 6.027456183070403
+          cost_per_io_request: 1.4658129805029452
+          cost_per_iops_hour: 5.962133916683182
+          cost_per_storage_gb_hour: 5.637376656633329
+          cost_per_throughput_mbps_hour: 2.3021358869347655
+          cost_per_vcpu_license_hour: 7.061401241503109
+          cpu_cores: 9.301444243932576
+          cpu_cores_cost_per_hour: 3.616076749251911
+          created_at: created_at
+          currency: currency
+          deployment_option: deployment_option
+          edition: edition
+          engine: engine
+          id: id
+          instance_type: instance_type
+          max_iops: 2.027123023002322
+          max_storage_gb: 4.145608029883936
+          max_throughput_mbps: 7.386281948385884
+          min_iops: 1.2315135367772556
+          min_storage_gb: 1.0246457001441578
+          min_throughput_mbps: 1.4894159098541704
+          native_cost_per_hour: 6.84685269835264
+          native_cost_per_storage_gb_hour: 7.457744773683766
+          period_billing_hours: 1.1730742509559433
+          provider: provider
+          ram_gb: 4.965218492984954
+          ram_gb_cost_per_hour: 5.025004791520295
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          storage_type: storage_type
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        - architecture: architecture
+          availability_zone: availability_zone
+          billing_config: billing_config
+          capacity_unit: capacity_unit
+          cost_per_capacity_unit: 0.8008281904610115
+          cost_per_hour: 6.027456183070403
+          cost_per_io_request: 1.4658129805029452
+          cost_per_iops_hour: 5.962133916683182
+          cost_per_storage_gb_hour: 5.637376656633329
+          cost_per_throughput_mbps_hour: 2.3021358869347655
+          cost_per_vcpu_license_hour: 7.061401241503109
+          cpu_cores: 9.301444243932576
+          cpu_cores_cost_per_hour: 3.616076749251911
+          created_at: created_at
+          currency: currency
+          deployment_option: deployment_option
+          edition: edition
+          engine: engine
+          id: id
+          instance_type: instance_type
+          max_iops: 2.027123023002322
+          max_storage_gb: 4.145608029883936
+          max_throughput_mbps: 7.386281948385884
+          min_iops: 1.2315135367772556
+          min_storage_gb: 1.0246457001441578
+          min_throughput_mbps: 1.4894159098541704
+          native_cost_per_hour: 6.84685269835264
+          native_cost_per_storage_gb_hour: 7.457744773683766
+          period_billing_hours: 1.1730742509559433
+          provider: provider
+          ram_gb: 4.965218492984954
+          ram_gb_cost_per_hour: 5.025004791520295
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          storage_type: storage_type
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        page:
+          has_more: true
+          next_cursor: next_cursor
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/DatabasePrice"
+          type: array
+        page:
+          $ref: "#/components/schemas/Page"
+      type: object
+    DatabasePricesRequest:
+      example:
+        entries:
+        - architecture: architecture
+          availability_zone: availability_zone
+          billing_config: billing_config
+          capacity_unit: capacity_unit
+          cost_per_capacity_unit: 0.8008281904610115
+          cost_per_hour: 6.027456183070403
+          cost_per_io_request: 1.4658129805029452
+          cost_per_iops_hour: 5.962133916683182
+          cost_per_storage_gb_hour: 5.637376656633329
+          cost_per_throughput_mbps_hour: 2.3021358869347655
+          cost_per_vcpu_license_hour: 7.061401241503109
+          cpu_cores: 9.301444243932576
+          cpu_cores_cost_per_hour: 3.616076749251911
+          created_at: created_at
+          currency: currency
+          deployment_option: deployment_option
+          edition: edition
+          engine: engine
+          id: id
+          instance_type: instance_type
+          max_iops: 2.027123023002322
+          max_storage_gb: 4.145608029883936
+          max_throughput_mbps: 7.386281948385884
+          min_iops: 1.2315135367772556
+          min_storage_gb: 1.0246457001441578
+          min_throughput_mbps: 1.4894159098541704
+          native_cost_per_hour: 6.84685269835264
+          native_cost_per_storage_gb_hour: 7.457744773683766
+          period_billing_hours: 1.1730742509559433
+          provider: provider
+          ram_gb: 4.965218492984954
+          ram_gb_cost_per_hour: 5.025004791520295
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          storage_type: storage_type
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        - architecture: architecture
+          availability_zone: availability_zone
+          billing_config: billing_config
+          capacity_unit: capacity_unit
+          cost_per_capacity_unit: 0.8008281904610115
+          cost_per_hour: 6.027456183070403
+          cost_per_io_request: 1.4658129805029452
+          cost_per_iops_hour: 5.962133916683182
+          cost_per_storage_gb_hour: 5.637376656633329
+          cost_per_throughput_mbps_hour: 2.3021358869347655
+          cost_per_vcpu_license_hour: 7.061401241503109
+          cpu_cores: 9.301444243932576
+          cpu_cores_cost_per_hour: 3.616076749251911
+          created_at: created_at
+          currency: currency
+          deployment_option: deployment_option
+          edition: edition
+          engine: engine
+          id: id
+          instance_type: instance_type
+          max_iops: 2.027123023002322
+          max_storage_gb: 4.145608029883936
+          max_throughput_mbps: 7.386281948385884
+          min_iops: 1.2315135367772556
+          min_storage_gb: 1.0246457001441578
+          min_throughput_mbps: 1.4894159098541704
+          native_cost_per_hour: 6.84685269835264
+          native_cost_per_storage_gb_hour: 7.457744773683766
+          period_billing_hours: 1.1730742509559433
+          provider: provider
+          ram_gb: 4.965218492984954
+          ram_gb_cost_per_hour: 5.025004791520295
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          storage_type: storage_type
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+      properties:
+        entries:
+          items:
+            $ref: "#/components/schemas/DatabasePrice"
+          minItems: 1
+          type: array
+      required:
+      - entries
+      type: object
+    Disk:
+      example:
+        availability_zone: availability_zone
+        capacity_gb: 0.8008281904610115
+        fallback_to_base_pricing: true
+        id: id
+        iops: 6.027456183070403
+        provider: GCP
+        region: region
+        service: ComputeEngine
+        throughput_mbps: 1.4658129805029452
+        type: type
+        usage_type: SPOT_PREEMPTIBLE
+      properties:
+        availability_zone:
+          type: string
+        capacity_gb:
+          type: number
+        fallback_to_base_pricing:
+          type: boolean
+        id:
+          type: string
+        iops:
+          type: number
+        provider:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Provider"
+        region:
+          type: string
+        service:
+          $ref: "#/components/schemas/types.Service"
+        throughput_mbps:
+          type: number
+        type:
+          type: string
+        usage_type:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.UsageType"
+      type: object
+    DiskPrice:
+      example:
+        availability_zone: availability_zone
+        cost_per_gb_hour: 0.8008281904610115
+        cost_per_iops_hour: 6.027456183070403
+        cost_per_throughput_mbps_hour: 1.4658129805029452
+        created_at: created_at
+        currency: currency
+        id: id
+        max_capacity_gb: 5.962133916683182
+        max_iops: 5.637376656633329
+        max_throughput_mbps: 2.3021358869347655
+        min_capacity_gb: 7.061401241503109
+        min_iops: 9.301444243932576
+        min_throughput_mbps: 3.616076749251911
+        native_cost_per_gb_hour: 2.027123023002322
+        native_cost_per_iops_hour: 4.145608029883936
+        native_cost_per_throughput_mbps_hour: 7.386281948385884
+        period_billing_hours: 1.2315135367772556
+        provider: provider
+        raw_pricing_data: "{}"
+        region: region
+        service: service
+        tags: "{}"
+        type: type
+        updated_at: updated_at
+        usage_type: usage_type
       properties:
         availability_zone:
           type: string
@@ -774,6 +3359,8 @@ components:
         cost_per_throughput_mbps_hour:
           type: number
         created_at:
+          type: string
+        currency:
           type: string
         id:
           type: string
@@ -788,6 +3375,12 @@ components:
         min_iops:
           type: number
         min_throughput_mbps:
+          type: number
+        native_cost_per_gb_hour:
+          type: number
+        native_cost_per_iops_hour:
+          type: number
+        native_cost_per_throughput_mbps_hour:
           type: number
         period_billing_hours:
           type: number
@@ -810,148 +3403,1400 @@ components:
         usage_type:
           type: string
       type: object
-    types.ComputeRequest:
+    DiskPriceList:
+      example:
+        providers:
+        - availability_zone: availability_zone
+          cost_per_gb_hour: 0.8008281904610115
+          cost_per_iops_hour: 6.027456183070403
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          id: id
+          max_capacity_gb: 5.962133916683182
+          max_iops: 5.637376656633329
+          max_throughput_mbps: 2.3021358869347655
+          min_capacity_gb: 7.061401241503109
+          min_iops: 9.301444243932576
+          min_throughput_mbps: 3.616076749251911
+          native_cost_per_gb_hour: 2.027123023002322
+          native_cost_per_iops_hour: 4.145608029883936
+          native_cost_per_throughput_mbps_hour: 7.386281948385884
+          period_billing_hours: 1.2315135367772556
+          provider: provider
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          type: type
+          updated_at: updated_at
+          usage_type: usage_type
+        - availability_zone: availability_zone
+          cost_per_gb_hour: 0.8008281904610115
+          cost_per_iops_hour: 6.027456183070403
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          id: id
+          max_capacity_gb: 5.962133916683182
+          max_iops: 5.637376656633329
+          max_throughput_mbps: 2.3021358869347655
+          min_capacity_gb: 7.061401241503109
+          min_iops: 9.301444243932576
+          min_throughput_mbps: 3.616076749251911
+          native_cost_per_gb_hour: 2.027123023002322
+          native_cost_per_iops_hour: 4.145608029883936
+          native_cost_per_throughput_mbps_hour: 7.386281948385884
+          period_billing_hours: 1.2315135367772556
+          provider: provider
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          type: type
+          updated_at: updated_at
+          usage_type: usage_type
+      properties:
+        providers:
+          items:
+            $ref: "#/components/schemas/DiskPrice"
+          type: array
+      type: object
+    DiskPricePage:
+      example:
+        data:
+        - availability_zone: availability_zone
+          cost_per_gb_hour: 0.8008281904610115
+          cost_per_iops_hour: 6.027456183070403
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          id: id
+          max_capacity_gb: 5.962133916683182
+          max_iops: 5.637376656633329
+          max_throughput_mbps: 2.3021358869347655
+          min_capacity_gb: 7.061401241503109
+          min_iops: 9.301444243932576
+          min_throughput_mbps: 3.616076749251911
+          native_cost_per_gb_hour: 2.027123023002322
+          native_cost_per_iops_hour: 4.145608029883936
+          native_cost_per_throughput_mbps_hour: 7.386281948385884
+          period_billing_hours: 1.2315135367772556
+          provider: provider
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          type: type
+          updated_at: updated_at
+          usage_type: usage_type
+        - availability_zone: availability_zone
+          cost_per_gb_hour: 0.8008281904610115
+          cost_per_iops_hour: 6.027456183070403
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          id: id
+          max_capacity_gb: 5.962133916683182
+          max_iops: 5.637376656633329
+          max_throughput_mbps: 2.3021358869347655
+          min_capacity_gb: 7.061401241503109
+          min_iops: 9.301444243932576
+          min_throughput_mbps: 3.616076749251911
+          native_cost_per_gb_hour: 2.027123023002322
+          native_cost_per_iops_hour: 4.145608029883936
+          native_cost_per_throughput_mbps_hour: 7.386281948385884
+          period_billing_hours: 1.2315135367772556
+          provider: provider
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          type: type
+          updated_at: updated_at
+          usage_type: usage_type
+        page:
+          has_more: true
+          next_cursor: next_cursor
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/DiskPrice"
+          type: array
+        page:
+          $ref: "#/components/schemas/Page"
+      type: object
+    DiskPricesRequest:
+      example:
+        entries:
+        - availability_zone: availability_zone
+          cost_per_gb_hour: 0.8008281904610115
+          cost_per_iops_hour: 6.027456183070403
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          id: id
+          max_capacity_gb: 5.962133916683182
+          max_iops: 5.637376656633329
+          max_throughput_mbps: 2.3021358869347655
+          min_capacity_gb: 7.061401241503109
+          min_iops: 9.301444243932576
+          min_throughput_mbps: 3.616076749251911
+          native_cost_per_gb_hour: 2.027123023002322
+          native_cost_per_iops_hour: 4.145608029883936
+          native_cost_per_throughput_mbps_hour: 7.386281948385884
+          period_billing_hours: 1.2315135367772556
+          provider: provider
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          type: type
+          updated_at: updated_at
+          usage_type: usage_type
+        - availability_zone: availability_zone
+          cost_per_gb_hour: 0.8008281904610115
+          cost_per_iops_hour: 6.027456183070403
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          id: id
+          max_capacity_gb: 5.962133916683182
+          max_iops: 5.637376656633329
+          max_throughput_mbps: 2.3021358869347655
+          min_capacity_gb: 7.061401241503109
+          min_iops: 9.301444243932576
+          min_throughput_mbps: 3.616076749251911
+          native_cost_per_gb_hour: 2.027123023002322
+          native_cost_per_iops_hour: 4.145608029883936
+          native_cost_per_throughput_mbps_hour: 7.386281948385884
+          period_billing_hours: 1.2315135367772556
+          provider: provider
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          type: type
+          updated_at: updated_at
+          usage_type: usage_type
+      properties:
+        entries:
+          items:
+            $ref: "#/components/schemas/DiskPrice"
+          minItems: 1
+          type: array
+      required:
+      - entries
+      type: object
+    DiskRecommendation:
+      example:
+        pricing:
+          availability_zone: availability_zone
+          cost_per_gb_hour: 0.8008281904610115
+          cost_per_iops_hour: 6.027456183070403
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          id: id
+          max_capacity_gb: 5.962133916683182
+          max_iops: 5.637376656633329
+          max_throughput_mbps: 2.3021358869347655
+          min_capacity_gb: 7.061401241503109
+          min_iops: 9.301444243932576
+          min_throughput_mbps: 3.616076749251911
+          native_cost_per_gb_hour: 2.027123023002322
+          native_cost_per_iops_hour: 4.145608029883936
+          native_cost_per_throughput_mbps_hour: 7.386281948385884
+          period_billing_hours: 1.2315135367772556
+          provider: provider
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          type: type
+          updated_at: updated_at
+          usage_type: usage_type
+        savings:
+          amount_per_hour: 0.8008281904610115
+          amount_per_month: 6.027456183070403
+          amount_per_year: 1.4658129805029452
+          percentage: 5.962133916683182
+      properties:
+        pricing:
+          $ref: "#/components/schemas/DiskPrice"
+        savings:
+          $ref: "#/components/schemas/types.Savings"
+      type: object
+    DiskRecommendationRequest:
+      example:
+        include_metadata: true
+        instance:
+          availability_zone: availability_zone
+          capacity_gb: 0.8008281904610115
+          fallback_to_base_pricing: true
+          id: id
+          iops: 6.027456183070403
+          provider: GCP
+          region: region
+          service: ComputeEngine
+          throughput_mbps: 1.4658129805029452
+          type: type
+          usage_type: SPOT_PREEMPTIBLE
+        predicates:
+          availability_zones:
+          - availability_zones
+          - availability_zones
+          disk_types:
+          - disk_types
+          - disk_types
+          instance_types:
+          - instance_types
+          - instance_types
+          operating_systems:
+          - operating_systems
+          - operating_systems
+          providers:
+          - providers
+          - providers
+          regions:
+          - regions
+          - regions
+          services:
+          - services
+          - services
+          usage_types:
+          - usage_types
+          - usage_types
+        usage:
+          availability_zone: availability_zone
+          capacity_gb: 0.8008281904610115
+          fallback_to_base_pricing: true
+          id: id
+          iops: 6.027456183070403
+          provider: GCP
+          region: region
+          service: ComputeEngine
+          throughput_mbps: 1.4658129805029452
+          type: type
+          usage_type: SPOT_PREEMPTIBLE
       properties:
         include_metadata:
           type: boolean
         instance:
-          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Instance"
+          $ref: "#/components/schemas/types.Disk"
         predicates:
           $ref: "#/components/schemas/types.Predicates"
         usage:
+          $ref: "#/components/schemas/types.Disk"
+      type: object
+    ErrorResponse:
+      example:
+        error: error
+      properties:
+        error:
+          type: string
+      type: object
+    FieldError:
+      example:
+        detail: detail
+        pointer: pointer
+      properties:
+        detail:
+          type: string
+        pointer:
+          type: string
+      type: object
+    FilterSet:
+      example:
+        filters:
+        - filters
+        - filters
+        kind: kind
+      properties:
+        filters:
+          items:
+            type: string
+          type: array
+        kind:
+          type: string
+      type: object
+    Instance:
+      example:
+        availability_zone: availability_zone
+        fallback_to_base_pricing: true
+        id: id
+        instance_type: instance_type
+        operating_system: operating_system
+        provider: GCP
+        region: region
+        service: ComputeEngine
+        usage_type: SPOT_PREEMPTIBLE
+        vm:
+          cpu_cores: 0.8008281904610115
+          ram_gb: 6.027456183070403
+      properties:
+        availability_zone:
+          type: string
+        fallback_to_base_pricing:
+          type: boolean
+        id:
+          type: string
+        instance_type:
+          type: string
+        operating_system:
+          type: string
+        provider:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Provider"
+        region:
+          type: string
+        service:
+          $ref: "#/components/schemas/types.Service"
+        usage_type:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.UsageType"
+        vm:
           $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.VM"
       type: object
-    types.ComputeResults:
+    ModelPrice:
+      example:
+        context_limit: 0
+        currency: currency
+        effective_from: effective_from
+        effective_to: effective_to
+        fetched_at: fetched_at
+        host: host
+        id: id
+        modalities_input:
+        - modalities_input
+        - modalities_input
+        modalities_output:
+        - modalities_output
+        - modalities_output
+        model: model
+        model_id: model_id
+        open_weights: true
+        output_limit: 6
+        provider: provider
+        publisher: publisher
+        raw_pricing_data: "{}"
+        reasoning: true
+        region: region
+        sku_price_id: sku_price_id
+        source: source
+        source_url: source_url
+        structured_output: true
+        tags: "{}"
+        token_bucket: token_bucket
+        tool_call: true
+        unit_price_per_mtok: 1.4658129805029452
+      properties:
+        context_limit:
+          type: integer
+        currency:
+          type: string
+        effective_from:
+          type: string
+        effective_to:
+          type: string
+        fetched_at:
+          type: string
+        host:
+          type: string
+        id:
+          type: string
+        modalities_input:
+          items:
+            type: string
+          type: array
+        modalities_output:
+          items:
+            type: string
+          type: array
+        model:
+          type: string
+        model_id:
+          type: string
+        open_weights:
+          type: boolean
+        output_limit:
+          type: integer
+        provider:
+          type: string
+        publisher:
+          type: string
+        raw_pricing_data:
+          type: object
+        reasoning:
+          type: boolean
+        region:
+          type: string
+        sku_price_id:
+          type: string
+        source:
+          type: string
+        source_url:
+          type: string
+        structured_output:
+          type: boolean
+        tags:
+          type: object
+        token_bucket:
+          type: string
+        tool_call:
+          type: boolean
+        unit_price_per_mtok:
+          type: number
+      type: object
+    ModelPriceList:
+      example:
+        providers:
+        - context_limit: 0
+          currency: currency
+          effective_from: effective_from
+          effective_to: effective_to
+          fetched_at: fetched_at
+          host: host
+          id: id
+          modalities_input:
+          - modalities_input
+          - modalities_input
+          modalities_output:
+          - modalities_output
+          - modalities_output
+          model: model
+          model_id: model_id
+          open_weights: true
+          output_limit: 6
+          provider: provider
+          publisher: publisher
+          raw_pricing_data: "{}"
+          reasoning: true
+          region: region
+          sku_price_id: sku_price_id
+          source: source
+          source_url: source_url
+          structured_output: true
+          tags: "{}"
+          token_bucket: token_bucket
+          tool_call: true
+          unit_price_per_mtok: 1.4658129805029452
+        - context_limit: 0
+          currency: currency
+          effective_from: effective_from
+          effective_to: effective_to
+          fetched_at: fetched_at
+          host: host
+          id: id
+          modalities_input:
+          - modalities_input
+          - modalities_input
+          modalities_output:
+          - modalities_output
+          - modalities_output
+          model: model
+          model_id: model_id
+          open_weights: true
+          output_limit: 6
+          provider: provider
+          publisher: publisher
+          raw_pricing_data: "{}"
+          reasoning: true
+          region: region
+          sku_price_id: sku_price_id
+          source: source
+          source_url: source_url
+          structured_output: true
+          tags: "{}"
+          token_bucket: token_bucket
+          tool_call: true
+          unit_price_per_mtok: 1.4658129805029452
+      properties:
+        providers:
+          items:
+            $ref: "#/components/schemas/ModelPrice"
+          type: array
+      type: object
+    ModelPricePage:
+      example:
+        data:
+        - context_limit: 0
+          currency: currency
+          effective_from: effective_from
+          effective_to: effective_to
+          fetched_at: fetched_at
+          host: host
+          id: id
+          modalities_input:
+          - modalities_input
+          - modalities_input
+          modalities_output:
+          - modalities_output
+          - modalities_output
+          model: model
+          model_id: model_id
+          open_weights: true
+          output_limit: 6
+          provider: provider
+          publisher: publisher
+          raw_pricing_data: "{}"
+          reasoning: true
+          region: region
+          sku_price_id: sku_price_id
+          source: source
+          source_url: source_url
+          structured_output: true
+          tags: "{}"
+          token_bucket: token_bucket
+          tool_call: true
+          unit_price_per_mtok: 1.4658129805029452
+        - context_limit: 0
+          currency: currency
+          effective_from: effective_from
+          effective_to: effective_to
+          fetched_at: fetched_at
+          host: host
+          id: id
+          modalities_input:
+          - modalities_input
+          - modalities_input
+          modalities_output:
+          - modalities_output
+          - modalities_output
+          model: model
+          model_id: model_id
+          open_weights: true
+          output_limit: 6
+          provider: provider
+          publisher: publisher
+          raw_pricing_data: "{}"
+          reasoning: true
+          region: region
+          sku_price_id: sku_price_id
+          source: source
+          source_url: source_url
+          structured_output: true
+          tags: "{}"
+          token_bucket: token_bucket
+          tool_call: true
+          unit_price_per_mtok: 1.4658129805029452
+        page:
+          has_more: true
+          next_cursor: next_cursor
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/ModelPrice"
+          type: array
+        page:
+          $ref: "#/components/schemas/Page"
+      type: object
+    ModelPricesRequest:
+      example:
+        entries:
+        - context_limit: 0
+          currency: currency
+          effective_from: effective_from
+          effective_to: effective_to
+          fetched_at: fetched_at
+          host: host
+          id: id
+          modalities_input:
+          - modalities_input
+          - modalities_input
+          modalities_output:
+          - modalities_output
+          - modalities_output
+          model: model
+          model_id: model_id
+          open_weights: true
+          output_limit: 6
+          provider: provider
+          publisher: publisher
+          raw_pricing_data: "{}"
+          reasoning: true
+          region: region
+          sku_price_id: sku_price_id
+          source: source
+          source_url: source_url
+          structured_output: true
+          tags: "{}"
+          token_bucket: token_bucket
+          tool_call: true
+          unit_price_per_mtok: 1.4658129805029452
+        - context_limit: 0
+          currency: currency
+          effective_from: effective_from
+          effective_to: effective_to
+          fetched_at: fetched_at
+          host: host
+          id: id
+          modalities_input:
+          - modalities_input
+          - modalities_input
+          modalities_output:
+          - modalities_output
+          - modalities_output
+          model: model
+          model_id: model_id
+          open_weights: true
+          output_limit: 6
+          provider: provider
+          publisher: publisher
+          raw_pricing_data: "{}"
+          reasoning: true
+          region: region
+          sku_price_id: sku_price_id
+          source: source
+          source_url: source_url
+          structured_output: true
+          tags: "{}"
+          token_bucket: token_bucket
+          tool_call: true
+          unit_price_per_mtok: 1.4658129805029452
+      properties:
+        entries:
+          items:
+            $ref: "#/components/schemas/ModelPrice"
+          minItems: 1
+          type: array
+      required:
+      - entries
+      type: object
+    Page:
+      example:
+        has_more: true
+        next_cursor: next_cursor
+      properties:
+        has_more:
+          type: boolean
+        next_cursor:
+          type: string
+      type: object
+    Problem:
+      example:
+        code: code
+        detail: detail
+        errors:
+        - detail: detail
+          pointer: pointer
+        - detail: detail
+          pointer: pointer
+        instance: instance
+        status: 0
+        title: title
+        type: type
+      properties:
+        code:
+          type: string
+        detail:
+          type: string
+        errors:
+          items:
+            $ref: "#/components/schemas/FieldError"
+          type: array
+        instance:
+          type: string
+        status:
+          type: integer
+        title:
+          type: string
+        type:
+          type: string
+      type: object
+    ProviderConfig:
+      properties:
+        predicates:
+          $ref: "#/components/schemas/types.Predicates"
+        provider:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Provider"
+      type: object
+    ProviderConfigs:
       additionalProperties:
-        items:
-          $ref: "#/components/schemas/types_ComputeResults_value_inner"
-        type: array
+        $ref: "#/components/schemas/ProviderConfig"
       type: object
-    types.CustomDiskPriceRequest:
+    PublishedComputePrices:
+      example:
+        data:
+        - architecture: architecture
+          availability_zone: availability_zone
+          cost_per_hour: 0.8008281904610115
+          cpu_cores: 6.027456183070403
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          gpu_cost_per_hour: 5.962133916683182
+          gpu_count: 5.637376656633329
+          gpu_type: gpu_type
+          id: id
+          instance_type: instance_type
+          native_cost_per_hour: 2.3021358869347655
+          operating_system: operating_system
+          period_billing_hours: 7.061401241503109
+          provider: provider
+          ram_gb: 9.301444243932576
+          ram_gb_cost_per_hour: 3.616076749251911
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        - architecture: architecture
+          availability_zone: availability_zone
+          cost_per_hour: 0.8008281904610115
+          cpu_cores: 6.027456183070403
+          cpu_cores_cost_per_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          gpu_cost_per_hour: 5.962133916683182
+          gpu_count: 5.637376656633329
+          gpu_type: gpu_type
+          id: id
+          instance_type: instance_type
+          native_cost_per_hour: 2.3021358869347655
+          operating_system: operating_system
+          period_billing_hours: 7.061401241503109
+          provider: provider
+          ram_gb: 9.301444243932576
+          ram_gb_cost_per_hour: 3.616076749251911
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
       properties:
-        entries:
+        data:
           items:
-            $ref: "#/components/schemas/schema.DiskPricingsRow"
-          minItems: 1
+            $ref: "#/components/schemas/ComputePrice"
           type: array
-      required:
-      - entries
       type: object
-    types.CustomDiskPricingResponse:
+    PublishedDatabasePrices:
+      example:
+        data:
+        - architecture: architecture
+          availability_zone: availability_zone
+          billing_config: billing_config
+          capacity_unit: capacity_unit
+          cost_per_capacity_unit: 0.8008281904610115
+          cost_per_hour: 6.027456183070403
+          cost_per_io_request: 1.4658129805029452
+          cost_per_iops_hour: 5.962133916683182
+          cost_per_storage_gb_hour: 5.637376656633329
+          cost_per_throughput_mbps_hour: 2.3021358869347655
+          cost_per_vcpu_license_hour: 7.061401241503109
+          cpu_cores: 9.301444243932576
+          cpu_cores_cost_per_hour: 3.616076749251911
+          created_at: created_at
+          currency: currency
+          deployment_option: deployment_option
+          edition: edition
+          engine: engine
+          id: id
+          instance_type: instance_type
+          max_iops: 2.027123023002322
+          max_storage_gb: 4.145608029883936
+          max_throughput_mbps: 7.386281948385884
+          min_iops: 1.2315135367772556
+          min_storage_gb: 1.0246457001441578
+          min_throughput_mbps: 1.4894159098541704
+          native_cost_per_hour: 6.84685269835264
+          native_cost_per_storage_gb_hour: 7.457744773683766
+          period_billing_hours: 1.1730742509559433
+          provider: provider
+          ram_gb: 4.965218492984954
+          ram_gb_cost_per_hour: 5.025004791520295
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          storage_type: storage_type
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        - architecture: architecture
+          availability_zone: availability_zone
+          billing_config: billing_config
+          capacity_unit: capacity_unit
+          cost_per_capacity_unit: 0.8008281904610115
+          cost_per_hour: 6.027456183070403
+          cost_per_io_request: 1.4658129805029452
+          cost_per_iops_hour: 5.962133916683182
+          cost_per_storage_gb_hour: 5.637376656633329
+          cost_per_throughput_mbps_hour: 2.3021358869347655
+          cost_per_vcpu_license_hour: 7.061401241503109
+          cpu_cores: 9.301444243932576
+          cpu_cores_cost_per_hour: 3.616076749251911
+          created_at: created_at
+          currency: currency
+          deployment_option: deployment_option
+          edition: edition
+          engine: engine
+          id: id
+          instance_type: instance_type
+          max_iops: 2.027123023002322
+          max_storage_gb: 4.145608029883936
+          max_throughput_mbps: 7.386281948385884
+          min_iops: 1.2315135367772556
+          min_storage_gb: 1.0246457001441578
+          min_throughput_mbps: 1.4894159098541704
+          native_cost_per_hour: 6.84685269835264
+          native_cost_per_storage_gb_hour: 7.457744773683766
+          period_billing_hours: 1.1730742509559433
+          provider: provider
+          ram_gb: 4.965218492984954
+          ram_gb_cost_per_hour: 5.025004791520295
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          storage_type: storage_type
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/DatabasePrice"
+          type: array
+      type: object
+    PublishedDiskPrices:
+      example:
+        data:
+        - availability_zone: availability_zone
+          cost_per_gb_hour: 0.8008281904610115
+          cost_per_iops_hour: 6.027456183070403
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          id: id
+          max_capacity_gb: 5.962133916683182
+          max_iops: 5.637376656633329
+          max_throughput_mbps: 2.3021358869347655
+          min_capacity_gb: 7.061401241503109
+          min_iops: 9.301444243932576
+          min_throughput_mbps: 3.616076749251911
+          native_cost_per_gb_hour: 2.027123023002322
+          native_cost_per_iops_hour: 4.145608029883936
+          native_cost_per_throughput_mbps_hour: 7.386281948385884
+          period_billing_hours: 1.2315135367772556
+          provider: provider
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          type: type
+          updated_at: updated_at
+          usage_type: usage_type
+        - availability_zone: availability_zone
+          cost_per_gb_hour: 0.8008281904610115
+          cost_per_iops_hour: 6.027456183070403
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          id: id
+          max_capacity_gb: 5.962133916683182
+          max_iops: 5.637376656633329
+          max_throughput_mbps: 2.3021358869347655
+          min_capacity_gb: 7.061401241503109
+          min_iops: 9.301444243932576
+          min_throughput_mbps: 3.616076749251911
+          native_cost_per_gb_hour: 2.027123023002322
+          native_cost_per_iops_hour: 4.145608029883936
+          native_cost_per_throughput_mbps_hour: 7.386281948385884
+          period_billing_hours: 1.2315135367772556
+          provider: provider
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          type: type
+          updated_at: updated_at
+          usage_type: usage_type
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/DiskPrice"
+          type: array
+      type: object
+    PublishedModelPrices:
+      example:
+        data:
+        - context_limit: 0
+          currency: currency
+          effective_from: effective_from
+          effective_to: effective_to
+          fetched_at: fetched_at
+          host: host
+          id: id
+          modalities_input:
+          - modalities_input
+          - modalities_input
+          modalities_output:
+          - modalities_output
+          - modalities_output
+          model: model
+          model_id: model_id
+          open_weights: true
+          output_limit: 6
+          provider: provider
+          publisher: publisher
+          raw_pricing_data: "{}"
+          reasoning: true
+          region: region
+          sku_price_id: sku_price_id
+          source: source
+          source_url: source_url
+          structured_output: true
+          tags: "{}"
+          token_bucket: token_bucket
+          tool_call: true
+          unit_price_per_mtok: 1.4658129805029452
+        - context_limit: 0
+          currency: currency
+          effective_from: effective_from
+          effective_to: effective_to
+          fetched_at: fetched_at
+          host: host
+          id: id
+          modalities_input:
+          - modalities_input
+          - modalities_input
+          modalities_output:
+          - modalities_output
+          - modalities_output
+          model: model
+          model_id: model_id
+          open_weights: true
+          output_limit: 6
+          provider: provider
+          publisher: publisher
+          raw_pricing_data: "{}"
+          reasoning: true
+          region: region
+          sku_price_id: sku_price_id
+          source: source
+          source_url: source_url
+          structured_output: true
+          tags: "{}"
+          token_bucket: token_bucket
+          tool_call: true
+          unit_price_per_mtok: 1.4658129805029452
+      properties:
+        data:
+          items:
+            $ref: "#/components/schemas/ModelPrice"
+          type: array
+      type: object
+    RegisteredComputePrices:
       example:
         entries:
-        - max_capacity_gb: 5.962133916683182
+        - architecture: architecture
           availability_zone: availability_zone
-          min_throughput_mbps: 3.616076749251911
-          cost_per_gb_hour: 0.8008281904610115
-          min_capacity_gb: 7.061401241503109
-          max_throughput_mbps: 2.3021358869347655
+          cost_per_hour: 0.8008281904610115
+          cpu_cores: 6.027456183070403
+          cpu_cores_cost_per_hour: 1.4658129805029452
           created_at: created_at
-          max_iops: 5.637376656633329
-          period_billing_hours: 2.027123023002322
-          cost_per_iops_hour: 6.027456183070403
-          type: type
-          tags: "{}"
-          cost_per_throughput_mbps_hour: 1.4658129805029452
-          updated_at: updated_at
-          provider: provider
-          usage_type: usage_type
-          raw_pricing_data: "{}"
-          service: service
-          min_iops: 9.301444243932576
+          currency: currency
+          gpu_cost_per_hour: 5.962133916683182
+          gpu_count: 5.637376656633329
+          gpu_type: gpu_type
           id: id
+          instance_type: instance_type
+          native_cost_per_hour: 2.3021358869347655
+          operating_system: operating_system
+          period_billing_hours: 7.061401241503109
+          provider: provider
+          ram_gb: 9.301444243932576
+          ram_gb_cost_per_hour: 3.616076749251911
+          raw_pricing_data: "{}"
           region: region
-        - max_capacity_gb: 5.962133916683182
+          service: service
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        - architecture: architecture
           availability_zone: availability_zone
-          min_throughput_mbps: 3.616076749251911
-          cost_per_gb_hour: 0.8008281904610115
-          min_capacity_gb: 7.061401241503109
-          max_throughput_mbps: 2.3021358869347655
+          cost_per_hour: 0.8008281904610115
+          cpu_cores: 6.027456183070403
+          cpu_cores_cost_per_hour: 1.4658129805029452
           created_at: created_at
-          max_iops: 5.637376656633329
-          period_billing_hours: 2.027123023002322
-          cost_per_iops_hour: 6.027456183070403
-          type: type
-          tags: "{}"
-          cost_per_throughput_mbps_hour: 1.4658129805029452
-          updated_at: updated_at
-          provider: provider
-          usage_type: usage_type
-          raw_pricing_data: "{}"
-          service: service
-          min_iops: 9.301444243932576
+          currency: currency
+          gpu_cost_per_hour: 5.962133916683182
+          gpu_count: 5.637376656633329
+          gpu_type: gpu_type
           id: id
+          instance_type: instance_type
+          native_cost_per_hour: 2.3021358869347655
+          operating_system: operating_system
+          period_billing_hours: 7.061401241503109
+          provider: provider
+          ram_gb: 9.301444243932576
+          ram_gb_cost_per_hour: 3.616076749251911
+          raw_pricing_data: "{}"
           region: region
+          service: service
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
         status: Registered
       properties:
         entries:
           items:
-            $ref: "#/components/schemas/schema.DiskPricingsRow"
+            $ref: "#/components/schemas/ComputePrice"
           type: array
         status:
-          $ref: "#/components/schemas/github_com_baselinehq_pricingapi_pkg_types.Status"
+          $ref: "#/components/schemas/RegistrationStatus"
       type: object
-    types.CustomPriceRequest:
-      properties:
-        entries:
-          items:
-            $ref: "#/components/schemas/schema.ComputePricingsRow"
-          minItems: 1
-          type: array
-      required:
-      - entries
-      type: object
-    types.CustomPricingResponse:
+    RegisteredDatabasePrices:
       example:
         entries:
-        - availability_zone: availability_zone
+        - architecture: architecture
+          availability_zone: availability_zone
+          billing_config: billing_config
+          capacity_unit: capacity_unit
+          cost_per_capacity_unit: 0.8008281904610115
+          cost_per_hour: 6.027456183070403
+          cost_per_io_request: 1.4658129805029452
+          cost_per_iops_hour: 5.962133916683182
+          cost_per_storage_gb_hour: 5.637376656633329
+          cost_per_throughput_mbps_hour: 2.3021358869347655
+          cost_per_vcpu_license_hour: 7.061401241503109
+          cpu_cores: 9.301444243932576
+          cpu_cores_cost_per_hour: 3.616076749251911
           created_at: created_at
-          cpu_cores: 6.027456183070403
-          period_billing_hours: 5.962133916683182
-          ram_gb: 5.637376656633329
-          tags: "{}"
-          cost_per_hour: 0.8008281904610115
-          updated_at: updated_at
-          cpu_cores_cost_per_hour: 1.4658129805029452
-          provider: provider
-          usage_type: usage_type
-          raw_pricing_data: "{}"
-          service: service
-          operating_system: operating_system
-          ram_gb_cost_per_hour: 2.3021358869347655
+          currency: currency
+          deployment_option: deployment_option
+          edition: edition
+          engine: engine
           id: id
-          region: region
           instance_type: instance_type
-          architecture: architecture
-        - availability_zone: availability_zone
+          max_iops: 2.027123023002322
+          max_storage_gb: 4.145608029883936
+          max_throughput_mbps: 7.386281948385884
+          min_iops: 1.2315135367772556
+          min_storage_gb: 1.0246457001441578
+          min_throughput_mbps: 1.4894159098541704
+          native_cost_per_hour: 6.84685269835264
+          native_cost_per_storage_gb_hour: 7.457744773683766
+          period_billing_hours: 1.1730742509559433
+          provider: provider
+          ram_gb: 4.965218492984954
+          ram_gb_cost_per_hour: 5.025004791520295
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          storage_type: storage_type
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
+        - architecture: architecture
+          availability_zone: availability_zone
+          billing_config: billing_config
+          capacity_unit: capacity_unit
+          cost_per_capacity_unit: 0.8008281904610115
+          cost_per_hour: 6.027456183070403
+          cost_per_io_request: 1.4658129805029452
+          cost_per_iops_hour: 5.962133916683182
+          cost_per_storage_gb_hour: 5.637376656633329
+          cost_per_throughput_mbps_hour: 2.3021358869347655
+          cost_per_vcpu_license_hour: 7.061401241503109
+          cpu_cores: 9.301444243932576
+          cpu_cores_cost_per_hour: 3.616076749251911
           created_at: created_at
-          cpu_cores: 6.027456183070403
-          period_billing_hours: 5.962133916683182
-          ram_gb: 5.637376656633329
-          tags: "{}"
-          cost_per_hour: 0.8008281904610115
-          updated_at: updated_at
-          cpu_cores_cost_per_hour: 1.4658129805029452
-          provider: provider
-          usage_type: usage_type
-          raw_pricing_data: "{}"
-          service: service
-          operating_system: operating_system
-          ram_gb_cost_per_hour: 2.3021358869347655
+          currency: currency
+          deployment_option: deployment_option
+          edition: edition
+          engine: engine
           id: id
-          region: region
           instance_type: instance_type
-          architecture: architecture
+          max_iops: 2.027123023002322
+          max_storage_gb: 4.145608029883936
+          max_throughput_mbps: 7.386281948385884
+          min_iops: 1.2315135367772556
+          min_storage_gb: 1.0246457001441578
+          min_throughput_mbps: 1.4894159098541704
+          native_cost_per_hour: 6.84685269835264
+          native_cost_per_storage_gb_hour: 7.457744773683766
+          period_billing_hours: 1.1730742509559433
+          provider: provider
+          ram_gb: 4.965218492984954
+          ram_gb_cost_per_hour: 5.025004791520295
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          storage_type: storage_type
+          tags: "{}"
+          updated_at: updated_at
+          usage_type: usage_type
         status: Registered
       properties:
         entries:
           items:
-            $ref: "#/components/schemas/schema.ComputePricingsRow"
+            $ref: "#/components/schemas/DatabasePrice"
           type: array
         status:
-          $ref: "#/components/schemas/github_com_baselinehq_pricingapi_pkg_types.Status"
+          $ref: "#/components/schemas/RegistrationStatus"
+      type: object
+    RegisteredDiskPrices:
+      example:
+        entries:
+        - availability_zone: availability_zone
+          cost_per_gb_hour: 0.8008281904610115
+          cost_per_iops_hour: 6.027456183070403
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          id: id
+          max_capacity_gb: 5.962133916683182
+          max_iops: 5.637376656633329
+          max_throughput_mbps: 2.3021358869347655
+          min_capacity_gb: 7.061401241503109
+          min_iops: 9.301444243932576
+          min_throughput_mbps: 3.616076749251911
+          native_cost_per_gb_hour: 2.027123023002322
+          native_cost_per_iops_hour: 4.145608029883936
+          native_cost_per_throughput_mbps_hour: 7.386281948385884
+          period_billing_hours: 1.2315135367772556
+          provider: provider
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          type: type
+          updated_at: updated_at
+          usage_type: usage_type
+        - availability_zone: availability_zone
+          cost_per_gb_hour: 0.8008281904610115
+          cost_per_iops_hour: 6.027456183070403
+          cost_per_throughput_mbps_hour: 1.4658129805029452
+          created_at: created_at
+          currency: currency
+          id: id
+          max_capacity_gb: 5.962133916683182
+          max_iops: 5.637376656633329
+          max_throughput_mbps: 2.3021358869347655
+          min_capacity_gb: 7.061401241503109
+          min_iops: 9.301444243932576
+          min_throughput_mbps: 3.616076749251911
+          native_cost_per_gb_hour: 2.027123023002322
+          native_cost_per_iops_hour: 4.145608029883936
+          native_cost_per_throughput_mbps_hour: 7.386281948385884
+          period_billing_hours: 1.2315135367772556
+          provider: provider
+          raw_pricing_data: "{}"
+          region: region
+          service: service
+          tags: "{}"
+          type: type
+          updated_at: updated_at
+          usage_type: usage_type
+        status: Registered
+      properties:
+        entries:
+          items:
+            $ref: "#/components/schemas/DiskPrice"
+          type: array
+        status:
+          $ref: "#/components/schemas/RegistrationStatus"
+      type: object
+    RegisteredModelPrices:
+      example:
+        entries:
+        - context_limit: 0
+          currency: currency
+          effective_from: effective_from
+          effective_to: effective_to
+          fetched_at: fetched_at
+          host: host
+          id: id
+          modalities_input:
+          - modalities_input
+          - modalities_input
+          modalities_output:
+          - modalities_output
+          - modalities_output
+          model: model
+          model_id: model_id
+          open_weights: true
+          output_limit: 6
+          provider: provider
+          publisher: publisher
+          raw_pricing_data: "{}"
+          reasoning: true
+          region: region
+          sku_price_id: sku_price_id
+          source: source
+          source_url: source_url
+          structured_output: true
+          tags: "{}"
+          token_bucket: token_bucket
+          tool_call: true
+          unit_price_per_mtok: 1.4658129805029452
+        - context_limit: 0
+          currency: currency
+          effective_from: effective_from
+          effective_to: effective_to
+          fetched_at: fetched_at
+          host: host
+          id: id
+          modalities_input:
+          - modalities_input
+          - modalities_input
+          modalities_output:
+          - modalities_output
+          - modalities_output
+          model: model
+          model_id: model_id
+          open_weights: true
+          output_limit: 6
+          provider: provider
+          publisher: publisher
+          raw_pricing_data: "{}"
+          reasoning: true
+          region: region
+          sku_price_id: sku_price_id
+          source: source
+          source_url: source_url
+          structured_output: true
+          tags: "{}"
+          token_bucket: token_bucket
+          tool_call: true
+          unit_price_per_mtok: 1.4658129805029452
+        status: Registered
+      properties:
+        entries:
+          items:
+            $ref: "#/components/schemas/ModelPrice"
+          type: array
+        status:
+          $ref: "#/components/schemas/RegistrationStatus"
+      type: object
+    RegistrationStatus:
+      enum:
+      - Registered
+      - Deleted
+      type: string
+      x-enum-varnames:
+      - Registered
+      - Deleted
+    datatypes.JSON:
+      type: object
+    github_com_baselinehq_golang-shared_types.Instance:
+      example:
+        availability_zone: availability_zone
+        fallback_to_base_pricing: true
+        id: id
+        instance_type: instance_type
+        operating_system: operating_system
+        provider: GCP
+        region: region
+        service: ComputeEngine
+        usage_type: SPOT_PREEMPTIBLE
+        vm:
+          cpu_cores: 0.8008281904610115
+          ram_gb: 6.027456183070403
+      properties:
+        availability_zone:
+          type: string
+        fallback_to_base_pricing:
+          type: boolean
+        id:
+          type: string
+        instance_type:
+          type: string
+        operating_system:
+          type: string
+        provider:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Provider"
+        region:
+          type: string
+        service:
+          $ref: "#/components/schemas/types.Service"
+        usage_type:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.UsageType"
+        vm:
+          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.VM"
+      type: object
+    github_com_baselinehq_golang-shared_types.Provider:
+      enum:
+      - GCP
+      - AWS
+      - DigitalOcean
+      - Azure
+      - Hetzner
+      - OVHCloud
+      - PlanetScale
+      - STACKIT
+      - Akamai
+      - Base
+      type: string
+      x-enum-comments:
+        Base: "Base provider for default pricing, no specific cloud provider"
+      x-enum-descriptions:
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - "Base provider for default pricing, no specific cloud provider"
+      x-enum-varnames:
+      - GCP
+      - AWS
+      - DigitalOcean
+      - Azure
+      - Hetzner
+      - OVHCloud
+      - PlanetScale
+      - STACKIT
+      - Akamai
+      - Base
+    github_com_baselinehq_golang-shared_types.UsageType:
+      enum:
+      - SPOT_PREEMPTIBLE
+      - ONDEMAND
+      - RESERVED
+      - ONDEMAND_CUSTOM
+      - SPOT_PREEMPTIBLE_CUSTOM
+      - RESERVED_CUSTOM
+      - SOLE_TENANCY
+      - CUSTOM
+      - EXTENDED
+      type: string
+      x-enum-varnames:
+      - SPOT_PREEMPTIBLE
+      - ONDEMAND
+      - RESERVED
+      - ONDEMAND_CUSTOM
+      - SPOT_PREEMPTIBLE_CUSTOM
+      - RESERVED_CUSTOM
+      - SOLE_TENANCY
+      - CUSTOM
+      - EXTENDED
+    github_com_baselinehq_golang-shared_types.VM:
+      example:
+        cpu_cores: 0.8008281904610115
+        ram_gb: 6.027456183070403
+      properties:
+        cpu_cores:
+          type: number
+        ram_gb:
+          type: number
       type: object
     types.Disk:
+      example:
+        availability_zone: availability_zone
+        capacity_gb: 0.8008281904610115
+        fallback_to_base_pricing: true
+        id: id
+        iops: 6.027456183070403
+        provider: GCP
+        region: region
+        service: ComputeEngine
+        throughput_mbps: 1.4658129805029452
+        type: type
+        usage_type: SPOT_PREEMPTIBLE
       properties:
         availability_zone:
           type: string
@@ -968,7 +4813,7 @@ components:
         region:
           type: string
         service:
-          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.Service"
+          $ref: "#/components/schemas/types.Service"
         throughput_mbps:
           type: number
         type:
@@ -976,122 +4821,32 @@ components:
         usage_type:
           $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.UsageType"
       type: object
-    types.DiskRequest:
-      properties:
-        include_metadata:
-          type: boolean
-        instance:
-          $ref: "#/components/schemas/types.Disk"
-        predicates:
-          $ref: "#/components/schemas/types.Predicates"
-        usage:
-          $ref: "#/components/schemas/types.Disk"
-      type: object
-    types.DiskResults:
-      additionalProperties:
-        items:
-          $ref: "#/components/schemas/types_DiskResults_value_inner"
-        type: array
-      type: object
-    types.MarketplaceDiskProvidersResponse:
-      example:
-        providers:
-        - max_capacity_gb: 5.962133916683182
-          availability_zone: availability_zone
-          min_throughput_mbps: 3.616076749251911
-          cost_per_gb_hour: 0.8008281904610115
-          min_capacity_gb: 7.061401241503109
-          max_throughput_mbps: 2.3021358869347655
-          created_at: created_at
-          max_iops: 5.637376656633329
-          period_billing_hours: 2.027123023002322
-          cost_per_iops_hour: 6.027456183070403
-          type: type
-          tags: "{}"
-          cost_per_throughput_mbps_hour: 1.4658129805029452
-          updated_at: updated_at
-          provider: provider
-          usage_type: usage_type
-          raw_pricing_data: "{}"
-          service: service
-          min_iops: 9.301444243932576
-          id: id
-          region: region
-        - max_capacity_gb: 5.962133916683182
-          availability_zone: availability_zone
-          min_throughput_mbps: 3.616076749251911
-          cost_per_gb_hour: 0.8008281904610115
-          min_capacity_gb: 7.061401241503109
-          max_throughput_mbps: 2.3021358869347655
-          created_at: created_at
-          max_iops: 5.637376656633329
-          period_billing_hours: 2.027123023002322
-          cost_per_iops_hour: 6.027456183070403
-          type: type
-          tags: "{}"
-          cost_per_throughput_mbps_hour: 1.4658129805029452
-          updated_at: updated_at
-          provider: provider
-          usage_type: usage_type
-          raw_pricing_data: "{}"
-          service: service
-          min_iops: 9.301444243932576
-          id: id
-          region: region
-      properties:
-        providers:
-          items:
-            $ref: "#/components/schemas/schema.DiskPricingsRow"
-          type: array
-      type: object
-    types.MarketplaceProvidersResponse:
-      example:
-        providers:
-        - availability_zone: availability_zone
-          created_at: created_at
-          cpu_cores: 6.027456183070403
-          period_billing_hours: 5.962133916683182
-          ram_gb: 5.637376656633329
-          tags: "{}"
-          cost_per_hour: 0.8008281904610115
-          updated_at: updated_at
-          cpu_cores_cost_per_hour: 1.4658129805029452
-          provider: provider
-          usage_type: usage_type
-          raw_pricing_data: "{}"
-          service: service
-          operating_system: operating_system
-          ram_gb_cost_per_hour: 2.3021358869347655
-          id: id
-          region: region
-          instance_type: instance_type
-          architecture: architecture
-        - availability_zone: availability_zone
-          created_at: created_at
-          cpu_cores: 6.027456183070403
-          period_billing_hours: 5.962133916683182
-          ram_gb: 5.637376656633329
-          tags: "{}"
-          cost_per_hour: 0.8008281904610115
-          updated_at: updated_at
-          cpu_cores_cost_per_hour: 1.4658129805029452
-          provider: provider
-          usage_type: usage_type
-          raw_pricing_data: "{}"
-          service: service
-          operating_system: operating_system
-          ram_gb_cost_per_hour: 2.3021358869347655
-          id: id
-          region: region
-          instance_type: instance_type
-          architecture: architecture
-      properties:
-        providers:
-          items:
-            $ref: "#/components/schemas/schema.ComputePricingsRow"
-          type: array
-      type: object
     types.Predicates:
+      example:
+        availability_zones:
+        - availability_zones
+        - availability_zones
+        disk_types:
+        - disk_types
+        - disk_types
+        instance_types:
+        - instance_types
+        - instance_types
+        operating_systems:
+        - operating_systems
+        - operating_systems
+        providers:
+        - providers
+        - providers
+        regions:
+        - regions
+        - regions
+        services:
+        - services
+        - services
+        usage_types:
+        - usage_types
+        - usage_types
       properties:
         availability_zones:
           items:
@@ -1127,6 +4882,11 @@ components:
           type: array
       type: object
     types.Savings:
+      example:
+        amount_per_hour: 0.8008281904610115
+        amount_per_month: 6.027456183070403
+        amount_per_year: 1.4658129805029452
+        percentage: 5.962133916683182
       properties:
         amount_per_hour:
           type: number
@@ -1137,24 +4897,64 @@ components:
         percentage:
           type: number
       type: object
-    types_ComputeResults_value_inner:
-      properties:
-        instance_pricing:
-          $ref: "#/components/schemas/schema.ComputePricingsRow"
-        savings:
-          $ref: "#/components/schemas/types.Savings"
-        vm:
-          $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.VM"
-      type: object
-    types_DiskResults_value_inner:
-      properties:
-        disk:
-          $ref: "#/components/schemas/schema.DiskPricingsRow"
-        disk_pricing:
-          $ref: "#/components/schemas/schema.DiskPricingsRow"
-        savings:
-          $ref: "#/components/schemas/types.Savings"
-      type: object
+    types.Service:
+      enum:
+      - ComputeEngine
+      - AmazonEC2
+      - Droplet
+      - AzureCompute
+      - AzureManagedDisks
+      - HetznerCompute
+      - OVHPublicCloud
+      - BaseCompute
+      - BaseDisks
+      - AmazonEBS
+      - AmazonRDS
+      - AuroraDSQL
+      - CloudSQL
+      - AlloyDB
+      - CloudSpanner
+      - AzureDatabaseForPostgreSQL
+      - AzureDatabaseForMySQL
+      - AzureSQLDatabase
+      - AzureSQLManagedInstance
+      - PlanetScale
+      - ComputeEnginePersistentDisk
+      - STACKITCompute
+      - STACKITBlockStorage
+      - STACKITDatabase
+      - AkamaiLinode
+      - AkamaiBlockStorage
+      - AkamaiDatabase
+      type: string
+      x-enum-varnames:
+      - ComputeEngine
+      - AmazonEC2
+      - Droplet
+      - AzureCompute
+      - AzureManagedDisks
+      - HetznerCompute
+      - OVHPublicCloud
+      - BaseCompute
+      - BaseDisks
+      - AmazonEBS
+      - AmazonRDS
+      - AuroraDSQL
+      - CloudSQL
+      - AlloyDB
+      - CloudSpanner
+      - AzureDatabaseForPostgreSQL
+      - AzureDatabaseForMySQL
+      - AzureSQLDatabase
+      - AzureSQLManagedInstance
+      - PlanetScaleDB
+      - ComputeEnginePersistentDisk
+      - STACKITCompute
+      - STACKITBlockStorage
+      - STACKITDatabase
+      - AkamaiLinode
+      - AkamaiBlockStorage
+      - AkamaiDatabase
   securitySchemes:
     ApiKeyAuth:
       description: API key with "bl_" prefix (e.g. "bl_<api_key>")

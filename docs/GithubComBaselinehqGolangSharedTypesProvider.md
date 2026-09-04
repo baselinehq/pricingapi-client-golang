@@ -15,6 +15,12 @@
 
 * `OVHCloud` (value: `"OVHCloud"`)
 
+* `PlanetScale` (value: `"PlanetScale"`)
+
+* `STACKIT` (value: `"STACKIT"`)
+
+* `Akamai` (value: `"Akamai"`)
+
 * `Base` (value: `"Base"`)
 
 
