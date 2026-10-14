@@ -21,16 +21,58 @@ type GithubComBaselinehqGolangSharedTypesProvider string
 
 // List of github_com_baselinehq_golang-shared_types.Provider
 const (
-	GCP          GithubComBaselinehqGolangSharedTypesProvider = "GCP"
-	AWS          GithubComBaselinehqGolangSharedTypesProvider = "AWS"
-	DigitalOcean GithubComBaselinehqGolangSharedTypesProvider = "DigitalOcean"
-	Azure        GithubComBaselinehqGolangSharedTypesProvider = "Azure"
-	Hetzner      GithubComBaselinehqGolangSharedTypesProvider = "Hetzner"
-	OVHCloud     GithubComBaselinehqGolangSharedTypesProvider = "OVHCloud"
-	PlanetScale  GithubComBaselinehqGolangSharedTypesProvider = "PlanetScale"
-	STACKIT      GithubComBaselinehqGolangSharedTypesProvider = "STACKIT"
-	Akamai       GithubComBaselinehqGolangSharedTypesProvider = "Akamai"
-	Base         GithubComBaselinehqGolangSharedTypesProvider = "Base"
+	GCP            GithubComBaselinehqGolangSharedTypesProvider = "GCP"
+	AWS            GithubComBaselinehqGolangSharedTypesProvider = "AWS"
+	DigitalOcean   GithubComBaselinehqGolangSharedTypesProvider = "DigitalOcean"
+	Azure          GithubComBaselinehqGolangSharedTypesProvider = "Azure"
+	Hetzner        GithubComBaselinehqGolangSharedTypesProvider = "Hetzner"
+	OVHCloud       GithubComBaselinehqGolangSharedTypesProvider = "OVHCloud"
+	PlanetScale    GithubComBaselinehqGolangSharedTypesProvider = "PlanetScale"
+	STACKIT        GithubComBaselinehqGolangSharedTypesProvider = "STACKIT"
+	Linode         GithubComBaselinehqGolangSharedTypesProvider = "Linode"
+	Base           GithubComBaselinehqGolangSharedTypesProvider = "Base"
+	Akash          GithubComBaselinehqGolangSharedTypesProvider = "Akash"
+	Alibaba        GithubComBaselinehqGolangSharedTypesProvider = "Alibaba"
+	Baseten        GithubComBaselinehqGolangSharedTypesProvider = "Baseten"
+	Beam           GithubComBaselinehqGolangSharedTypesProvider = "Beam"
+	Cerebrium      GithubComBaselinehqGolangSharedTypesProvider = "Cerebrium"
+	CIRunners      GithubComBaselinehqGolangSharedTypesProvider = "CIRunners"
+	Civo           GithubComBaselinehqGolangSharedTypesProvider = "Civo"
+	Clore          GithubComBaselinehqGolangSharedTypesProvider = "Clore"
+	CoreWeave      GithubComBaselinehqGolangSharedTypesProvider = "CoreWeave"
+	Crusoe         GithubComBaselinehqGolangSharedTypesProvider = "Crusoe"
+	CUDO           GithubComBaselinehqGolangSharedTypesProvider = "CUDO"
+	DataCrunch     GithubComBaselinehqGolangSharedTypesProvider = "DataCrunch"
+	DeepInfra      GithubComBaselinehqGolangSharedTypesProvider = "DeepInfra"
+	Denvr          GithubComBaselinehqGolangSharedTypesProvider = "Denvr"
+	E2ENetworks    GithubComBaselinehqGolangSharedTypesProvider = "E2ENetworks"
+	Exoscale       GithubComBaselinehqGolangSharedTypesProvider = "Exoscale"
+	Fal            GithubComBaselinehqGolangSharedTypesProvider = "Fal"
+	HotAisle       GithubComBaselinehqGolangSharedTypesProvider = "HotAisle"
+	Hyperbolic     GithubComBaselinehqGolangSharedTypesProvider = "Hyperbolic"
+	Hyperstack     GithubComBaselinehqGolangSharedTypesProvider = "Hyperstack"
+	IBM            GithubComBaselinehqGolangSharedTypesProvider = "IBM"
+	Lambda         GithubComBaselinehqGolangSharedTypesProvider = "Lambda"
+	Latitude       GithubComBaselinehqGolangSharedTypesProvider = "Latitude"
+	MassedCompute  GithubComBaselinehqGolangSharedTypesProvider = "MassedCompute"
+	Modal          GithubComBaselinehqGolangSharedTypesProvider = "Modal"
+	Nebius         GithubComBaselinehqGolangSharedTypesProvider = "Nebius"
+	Northflank     GithubComBaselinehqGolangSharedTypesProvider = "Northflank"
+	Novita         GithubComBaselinehqGolangSharedTypesProvider = "Novita"
+	Oblivus        GithubComBaselinehqGolangSharedTypesProvider = "Oblivus"
+	OCI            GithubComBaselinehqGolangSharedTypesProvider = "OCI"
+	OpenTelekom    GithubComBaselinehqGolangSharedTypesProvider = "OpenTelekom"
+	PrimeIntellect GithubComBaselinehqGolangSharedTypesProvider = "PrimeIntellect"
+	Replicate      GithubComBaselinehqGolangSharedTypesProvider = "Replicate"
+	RunPod         GithubComBaselinehqGolangSharedTypesProvider = "RunPod"
+	Salad          GithubComBaselinehqGolangSharedTypesProvider = "Salad"
+	Scaleway       GithubComBaselinehqGolangSharedTypesProvider = "Scaleway"
+	Sesterce       GithubComBaselinehqGolangSharedTypesProvider = "Sesterce"
+	Shadeform      GithubComBaselinehqGolangSharedTypesProvider = "Shadeform"
+	ThunderCompute GithubComBaselinehqGolangSharedTypesProvider = "ThunderCompute"
+	UpCloud        GithubComBaselinehqGolangSharedTypesProvider = "UpCloud"
+	Vast           GithubComBaselinehqGolangSharedTypesProvider = "Vast"
+	Vultr          GithubComBaselinehqGolangSharedTypesProvider = "Vultr"
 )
 
 // All allowed values of GithubComBaselinehqGolangSharedTypesProvider enum
@@ -43,8 +85,50 @@ var AllowedGithubComBaselinehqGolangSharedTypesProviderEnumValues = []GithubComB
 	"OVHCloud",
 	"PlanetScale",
 	"STACKIT",
-	"Akamai",
+	"Linode",
 	"Base",
+	"Akash",
+	"Alibaba",
+	"Baseten",
+	"Beam",
+	"Cerebrium",
+	"CIRunners",
+	"Civo",
+	"Clore",
+	"CoreWeave",
+	"Crusoe",
+	"CUDO",
+	"DataCrunch",
+	"DeepInfra",
+	"Denvr",
+	"E2ENetworks",
+	"Exoscale",
+	"Fal",
+	"HotAisle",
+	"Hyperbolic",
+	"Hyperstack",
+	"IBM",
+	"Lambda",
+	"Latitude",
+	"MassedCompute",
+	"Modal",
+	"Nebius",
+	"Northflank",
+	"Novita",
+	"Oblivus",
+	"OCI",
+	"OpenTelekom",
+	"PrimeIntellect",
+	"Replicate",
+	"RunPod",
+	"Salad",
+	"Scaleway",
+	"Sesterce",
+	"Shadeform",
+	"ThunderCompute",
+	"UpCloud",
+	"Vast",
+	"Vultr",
 }
 
 func (v *GithubComBaselinehqGolangSharedTypesProvider) UnmarshalJSON(src []byte) error {

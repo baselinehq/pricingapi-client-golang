@@ -808,7 +808,7 @@ func main() {
 	model := "model_example" // string | Filter by model (optional)
 	provider := "provider_example" // string | Filter by model provider (optional)
 	region := "region_example" // string | Filter by region (optional)
-	tokenBucket := "tokenBucket_example" // string | Filter by token bucket (optional)
+	tokenBucket := "tokenBucket_example" // string | Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -838,7 +838,7 @@ Name | Type | Description  | Notes
  **model** | **string** | Filter by model | 
  **provider** | **string** | Filter by model provider | 
  **region** | **string** | Filter by region | 
- **tokenBucket** | **string** | Filter by token bucket | 
+ **tokenBucket** | **string** | Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket | 
 
 ### Return type
 
@@ -926,7 +926,7 @@ Name | Type | Description  | Notes
 
 ## PricingComputePost
 
-> ComputePrice PricingComputePost(ctx).Instance(instance).Execute()
+> ComputePrice PricingComputePost(ctx).Instance(instance).Persist(persist).Execute()
 
 Get pricing for an instance
 
@@ -946,10 +946,11 @@ import (
 
 func main() {
 	instance := *openapiclient.NewInstance() // Instance | Instance
+	persist := true // bool | Save a price computed for a shape the catalogue does not list. Defaults to true. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DefaultAPI.PricingComputePost(context.Background()).Instance(instance).Execute()
+	resp, r, err := apiClient.DefaultAPI.PricingComputePost(context.Background()).Instance(instance).Persist(persist).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.PricingComputePost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -971,6 +972,7 @@ Other parameters are passed through a pointer to a apiPricingComputePostRequest 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance** | [**Instance**](Instance.md) | Instance | 
+ **persist** | **bool** | Save a price computed for a shape the catalogue does not list. Defaults to true. | 
 
 ### Return type
 
@@ -1058,7 +1060,7 @@ Name | Type | Description  | Notes
 
 ## PricingPost
 
-> ComputePrice PricingPost(ctx).Instance(instance).Execute()
+> ComputePrice PricingPost(ctx).Instance(instance).Persist(persist).Execute()
 
 Get pricing for an instance
 
@@ -1078,10 +1080,11 @@ import (
 
 func main() {
 	instance := *openapiclient.NewInstance() // Instance | Instance
+	persist := true // bool | Save a price computed for a shape the catalogue does not list. Defaults to true. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DefaultAPI.PricingPost(context.Background()).Instance(instance).Execute()
+	resp, r, err := apiClient.DefaultAPI.PricingPost(context.Background()).Instance(instance).Persist(persist).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.PricingPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -1103,6 +1106,7 @@ Other parameters are passed through a pointer to a apiPricingPostRequest struct 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance** | [**Instance**](Instance.md) | Instance | 
+ **persist** | **bool** | Save a price computed for a shape the catalogue does not list. Defaults to true. | 
 
 ### Return type
 
@@ -1185,7 +1189,7 @@ Other parameters are passed through a pointer to a apiProvidersGetRequest struct
 
 ## RecommendationsComputePost
 
-> []ComputeRecommendation RecommendationsComputePost(ctx).Instance(instance).Execute()
+> []ComputeRecommendation RecommendationsComputePost(ctx).Instance(instance).Persist(persist).Execute()
 
 Get recommendations for compute instances
 
@@ -1205,10 +1209,11 @@ import (
 
 func main() {
 	instance := *openapiclient.NewComputeRecommendationRequest() // ComputeRecommendationRequest | Instance
+	persist := true // bool | Save a price computed for a shape the catalogue does not list. Defaults to true. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DefaultAPI.RecommendationsComputePost(context.Background()).Instance(instance).Execute()
+	resp, r, err := apiClient.DefaultAPI.RecommendationsComputePost(context.Background()).Instance(instance).Persist(persist).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.RecommendationsComputePost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -1230,6 +1235,7 @@ Other parameters are passed through a pointer to a apiRecommendationsComputePost
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance** | [**ComputeRecommendationRequest**](ComputeRecommendationRequest.md) | Instance | 
+ **persist** | **bool** | Save a price computed for a shape the catalogue does not list. Defaults to true. | 
 
 ### Return type
 
@@ -1317,7 +1323,7 @@ Name | Type | Description  | Notes
 
 ## RecommendationsPost
 
-> []ComputeRecommendation RecommendationsPost(ctx).Instance(instance).Execute()
+> []ComputeRecommendation RecommendationsPost(ctx).Instance(instance).Persist(persist).Execute()
 
 Get recommendations for compute instances
 
@@ -1337,10 +1343,11 @@ import (
 
 func main() {
 	instance := *openapiclient.NewComputeRecommendationRequest() // ComputeRecommendationRequest | Instance
+	persist := true // bool | Save a price computed for a shape the catalogue does not list. Defaults to true. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.DefaultAPI.RecommendationsPost(context.Background()).Instance(instance).Execute()
+	resp, r, err := apiClient.DefaultAPI.RecommendationsPost(context.Background()).Instance(instance).Persist(persist).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `DefaultAPI.RecommendationsPost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -1362,6 +1369,7 @@ Other parameters are passed through a pointer to a apiRecommendationsPostRequest
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance** | [**ComputeRecommendationRequest**](ComputeRecommendationRequest.md) | Instance | 
+ **persist** | **bool** | Save a price computed for a shape the catalogue does not list. Defaults to true. | 
 
 ### Return type
 

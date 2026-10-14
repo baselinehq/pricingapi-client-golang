@@ -26,6 +26,8 @@ type TypesPredicates struct {
 	OperatingSystems  []string `json:"operating_systems,omitempty"`
 	Providers         []string `json:"providers,omitempty"`
 	Regions           []string `json:"regions,omitempty"`
+	SameArchitecture  *bool    `json:"same_architecture,omitempty"`
+	SameContinent     *bool    `json:"same_continent,omitempty"`
 	Services          []string `json:"services,omitempty"`
 	UsageTypes        []string `json:"usage_types,omitempty"`
 }
@@ -239,6 +241,70 @@ func (o *TypesPredicates) SetRegions(v []string) {
 	o.Regions = v
 }
 
+// GetSameArchitecture returns the SameArchitecture field value if set, zero value otherwise.
+func (o *TypesPredicates) GetSameArchitecture() bool {
+	if o == nil || IsNil(o.SameArchitecture) {
+		var ret bool
+		return ret
+	}
+	return *o.SameArchitecture
+}
+
+// GetSameArchitectureOk returns a tuple with the SameArchitecture field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TypesPredicates) GetSameArchitectureOk() (*bool, bool) {
+	if o == nil || IsNil(o.SameArchitecture) {
+		return nil, false
+	}
+	return o.SameArchitecture, true
+}
+
+// HasSameArchitecture returns a boolean if a field has been set.
+func (o *TypesPredicates) HasSameArchitecture() bool {
+	if o != nil && !IsNil(o.SameArchitecture) {
+		return true
+	}
+
+	return false
+}
+
+// SetSameArchitecture gets a reference to the given bool and assigns it to the SameArchitecture field.
+func (o *TypesPredicates) SetSameArchitecture(v bool) {
+	o.SameArchitecture = &v
+}
+
+// GetSameContinent returns the SameContinent field value if set, zero value otherwise.
+func (o *TypesPredicates) GetSameContinent() bool {
+	if o == nil || IsNil(o.SameContinent) {
+		var ret bool
+		return ret
+	}
+	return *o.SameContinent
+}
+
+// GetSameContinentOk returns a tuple with the SameContinent field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TypesPredicates) GetSameContinentOk() (*bool, bool) {
+	if o == nil || IsNil(o.SameContinent) {
+		return nil, false
+	}
+	return o.SameContinent, true
+}
+
+// HasSameContinent returns a boolean if a field has been set.
+func (o *TypesPredicates) HasSameContinent() bool {
+	if o != nil && !IsNil(o.SameContinent) {
+		return true
+	}
+
+	return false
+}
+
+// SetSameContinent gets a reference to the given bool and assigns it to the SameContinent field.
+func (o *TypesPredicates) SetSameContinent(v bool) {
+	o.SameContinent = &v
+}
+
 // GetServices returns the Services field value if set, zero value otherwise.
 func (o *TypesPredicates) GetServices() []string {
 	if o == nil || IsNil(o.Services) {
@@ -330,6 +396,12 @@ func (o TypesPredicates) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Regions) {
 		toSerialize["regions"] = o.Regions
+	}
+	if !IsNil(o.SameArchitecture) {
+		toSerialize["same_architecture"] = o.SameArchitecture
+	}
+	if !IsNil(o.SameContinent) {
+		toSerialize["same_continent"] = o.SameContinent
 	}
 	if !IsNil(o.Services) {
 		toSerialize["services"] = o.Services

@@ -24,6 +24,8 @@ type DiskRecommendationRequest struct {
 	Instance        *TypesDisk       `json:"instance,omitempty"`
 	Predicates      *TypesPredicates `json:"predicates,omitempty"`
 	Usage           *TypesDisk       `json:"usage,omitempty"`
+	// WorkloadClass selects which accelerator gates a compute recommendation applies: inference_single, inference_multi or training_distributed. Empty means inference_multi, which is what the recommender did before the classes existed. Disk requests do not carry one.
+	WorkloadClass *string `json:"workload_class,omitempty"`
 }
 
 // NewDiskRecommendationRequest instantiates a new DiskRecommendationRequest object
@@ -171,6 +173,38 @@ func (o *DiskRecommendationRequest) SetUsage(v TypesDisk) {
 	o.Usage = &v
 }
 
+// GetWorkloadClass returns the WorkloadClass field value if set, zero value otherwise.
+func (o *DiskRecommendationRequest) GetWorkloadClass() string {
+	if o == nil || IsNil(o.WorkloadClass) {
+		var ret string
+		return ret
+	}
+	return *o.WorkloadClass
+}
+
+// GetWorkloadClassOk returns a tuple with the WorkloadClass field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *DiskRecommendationRequest) GetWorkloadClassOk() (*string, bool) {
+	if o == nil || IsNil(o.WorkloadClass) {
+		return nil, false
+	}
+	return o.WorkloadClass, true
+}
+
+// HasWorkloadClass returns a boolean if a field has been set.
+func (o *DiskRecommendationRequest) HasWorkloadClass() bool {
+	if o != nil && !IsNil(o.WorkloadClass) {
+		return true
+	}
+
+	return false
+}
+
+// SetWorkloadClass gets a reference to the given string and assigns it to the WorkloadClass field.
+func (o *DiskRecommendationRequest) SetWorkloadClass(v string) {
+	o.WorkloadClass = &v
+}
+
 func (o DiskRecommendationRequest) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -192,6 +226,9 @@ func (o DiskRecommendationRequest) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Usage) {
 		toSerialize["usage"] = o.Usage
+	}
+	if !IsNil(o.WorkloadClass) {
+		toSerialize["workload_class"] = o.WorkloadClass
 	}
 	return toSerialize, nil
 }

@@ -10,6 +10,8 @@ Name | Type | Description | Notes
 **OperatingSystems** | Pointer to **[]string** |  | [optional] 
 **Providers** | Pointer to **[]string** |  | [optional] 
 **Regions** | Pointer to **[]string** |  | [optional] 
+**SameArchitecture** | Pointer to **bool** |  | [optional] 
+**SameContinent** | Pointer to **bool** |  | [optional] 
 **Services** | Pointer to **[]string** |  | [optional] 
 **UsageTypes** | Pointer to **[]string** |  | [optional] 
 
@@ -181,6 +183,56 @@ SetRegions sets Regions field to given value.
 `func (o *TypesPredicates) HasRegions() bool`
 
 HasRegions returns a boolean if a field has been set.
+
+### GetSameArchitecture
+
+`func (o *TypesPredicates) GetSameArchitecture() bool`
+
+GetSameArchitecture returns the SameArchitecture field if non-nil, zero value otherwise.
+
+### GetSameArchitectureOk
+
+`func (o *TypesPredicates) GetSameArchitectureOk() (*bool, bool)`
+
+GetSameArchitectureOk returns a tuple with the SameArchitecture field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSameArchitecture
+
+`func (o *TypesPredicates) SetSameArchitecture(v bool)`
+
+SetSameArchitecture sets SameArchitecture field to given value.
+
+### HasSameArchitecture
+
+`func (o *TypesPredicates) HasSameArchitecture() bool`
+
+HasSameArchitecture returns a boolean if a field has been set.
+
+### GetSameContinent
+
+`func (o *TypesPredicates) GetSameContinent() bool`
+
+GetSameContinent returns the SameContinent field if non-nil, zero value otherwise.
+
+### GetSameContinentOk
+
+`func (o *TypesPredicates) GetSameContinentOk() (*bool, bool)`
+
+GetSameContinentOk returns a tuple with the SameContinent field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSameContinent
+
+`func (o *TypesPredicates) SetSameContinent(v bool)`
+
+SetSameContinent sets SameContinent field to given value.
+
+### HasSameContinent
+
+`func (o *TypesPredicates) HasSameContinent() bool`
+
+HasSameContinent returns a boolean if a field has been set.
 
 ### GetServices
 

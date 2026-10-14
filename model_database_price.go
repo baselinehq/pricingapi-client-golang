@@ -20,38 +20,39 @@ var _ MappedNullable = &DatabasePrice{}
 
 // DatabasePrice struct for DatabasePrice
 type DatabasePrice struct {
-	Architecture               *string                `json:"architecture,omitempty"`
-	AvailabilityZone           *string                `json:"availability_zone,omitempty"`
-	BillingConfig              *string                `json:"billing_config,omitempty"`
-	CapacityUnit               *string                `json:"capacity_unit,omitempty"`
-	CostPerCapacityUnit        *float32               `json:"cost_per_capacity_unit,omitempty"`
-	CostPerHour                *float32               `json:"cost_per_hour,omitempty"`
-	CostPerIoRequest           *float32               `json:"cost_per_io_request,omitempty"`
-	CostPerIopsHour            *float32               `json:"cost_per_iops_hour,omitempty"`
-	CostPerStorageGbHour       *float32               `json:"cost_per_storage_gb_hour,omitempty"`
-	CostPerThroughputMbpsHour  *float32               `json:"cost_per_throughput_mbps_hour,omitempty"`
-	CostPerVcpuLicenseHour     *float32               `json:"cost_per_vcpu_license_hour,omitempty"`
-	CpuCores                   *float32               `json:"cpu_cores,omitempty"`
-	CpuCoresCostPerHour        *float32               `json:"cpu_cores_cost_per_hour,omitempty"`
-	CreatedAt                  *string                `json:"created_at,omitempty"`
+	Architecture              *string         `json:"architecture,omitempty"`
+	AvailabilityZone          *string         `json:"availability_zone,omitempty"`
+	BillingConfig             *string         `json:"billing_config,omitempty"`
+	CapacityUnit              NullableString  `json:"capacity_unit,omitempty"`
+	CostPerCapacityUnit       NullableFloat32 `json:"cost_per_capacity_unit,omitempty"`
+	CostPerHour               NullableFloat32 `json:"cost_per_hour,omitempty"`
+	CostPerIoRequest          NullableFloat32 `json:"cost_per_io_request,omitempty"`
+	CostPerIopsHour           NullableFloat32 `json:"cost_per_iops_hour,omitempty"`
+	CostPerStorageGbHour      NullableFloat32 `json:"cost_per_storage_gb_hour,omitempty"`
+	CostPerThroughputMbpsHour NullableFloat32 `json:"cost_per_throughput_mbps_hour,omitempty"`
+	CostPerVcpuLicenseHour    NullableFloat32 `json:"cost_per_vcpu_license_hour,omitempty"`
+	CpuCores                  NullableFloat32 `json:"cpu_cores,omitempty"`
+	CpuCoresCostPerHour       NullableFloat32 `json:"cpu_cores_cost_per_hour,omitempty"`
+	CreatedAt                 *string         `json:"created_at,omitempty"`
+	// Currency the provider published this price in. Cost columns are always normalized USD.
 	Currency                   *string                `json:"currency,omitempty"`
 	DeploymentOption           *string                `json:"deployment_option,omitempty"`
 	Edition                    *string                `json:"edition,omitempty"`
 	Engine                     *string                `json:"engine,omitempty"`
 	Id                         *string                `json:"id,omitempty"`
 	InstanceType               *string                `json:"instance_type,omitempty"`
-	MaxIops                    *float32               `json:"max_iops,omitempty"`
-	MaxStorageGb               *float32               `json:"max_storage_gb,omitempty"`
-	MaxThroughputMbps          *float32               `json:"max_throughput_mbps,omitempty"`
-	MinIops                    *float32               `json:"min_iops,omitempty"`
-	MinStorageGb               *float32               `json:"min_storage_gb,omitempty"`
-	MinThroughputMbps          *float32               `json:"min_throughput_mbps,omitempty"`
+	MaxIops                    NullableFloat32        `json:"max_iops,omitempty"`
+	MaxStorageGb               NullableFloat32        `json:"max_storage_gb,omitempty"`
+	MaxThroughputMbps          NullableFloat32        `json:"max_throughput_mbps,omitempty"`
+	MinIops                    NullableFloat32        `json:"min_iops,omitempty"`
+	MinStorageGb               NullableFloat32        `json:"min_storage_gb,omitempty"`
+	MinThroughputMbps          NullableFloat32        `json:"min_throughput_mbps,omitempty"`
 	NativeCostPerHour          *float32               `json:"native_cost_per_hour,omitempty"`
 	NativeCostPerStorageGbHour *float32               `json:"native_cost_per_storage_gb_hour,omitempty"`
 	PeriodBillingHours         *float32               `json:"period_billing_hours,omitempty"`
 	Provider                   *string                `json:"provider,omitempty"`
-	RamGb                      *float32               `json:"ram_gb,omitempty"`
-	RamGbCostPerHour           *float32               `json:"ram_gb_cost_per_hour,omitempty"`
+	RamGb                      NullableFloat32        `json:"ram_gb,omitempty"`
+	RamGbCostPerHour           NullableFloat32        `json:"ram_gb_cost_per_hour,omitempty"`
 	RawPricingData             map[string]interface{} `json:"raw_pricing_data,omitempty"`
 	Region                     *string                `json:"region,omitempty"`
 	Service                    *string                `json:"service,omitempty"`
@@ -174,324 +175,434 @@ func (o *DatabasePrice) SetBillingConfig(v string) {
 	o.BillingConfig = &v
 }
 
-// GetCapacityUnit returns the CapacityUnit field value if set, zero value otherwise.
+// GetCapacityUnit returns the CapacityUnit field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetCapacityUnit() string {
-	if o == nil || IsNil(o.CapacityUnit) {
+	if o == nil || IsNil(o.CapacityUnit.Get()) {
 		var ret string
 		return ret
 	}
-	return *o.CapacityUnit
+	return *o.CapacityUnit.Get()
 }
 
 // GetCapacityUnitOk returns a tuple with the CapacityUnit field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetCapacityUnitOk() (*string, bool) {
-	if o == nil || IsNil(o.CapacityUnit) {
+	if o == nil {
 		return nil, false
 	}
-	return o.CapacityUnit, true
+	return o.CapacityUnit.Get(), o.CapacityUnit.IsSet()
 }
 
 // HasCapacityUnit returns a boolean if a field has been set.
 func (o *DatabasePrice) HasCapacityUnit() bool {
-	if o != nil && !IsNil(o.CapacityUnit) {
+	if o != nil && o.CapacityUnit.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetCapacityUnit gets a reference to the given string and assigns it to the CapacityUnit field.
+// SetCapacityUnit gets a reference to the given NullableString and assigns it to the CapacityUnit field.
 func (o *DatabasePrice) SetCapacityUnit(v string) {
-	o.CapacityUnit = &v
+	o.CapacityUnit.Set(&v)
 }
 
-// GetCostPerCapacityUnit returns the CostPerCapacityUnit field value if set, zero value otherwise.
+// SetCapacityUnitNil sets the value for CapacityUnit to be an explicit nil
+func (o *DatabasePrice) SetCapacityUnitNil() {
+	o.CapacityUnit.Set(nil)
+}
+
+// UnsetCapacityUnit ensures that no value is present for CapacityUnit, not even an explicit nil
+func (o *DatabasePrice) UnsetCapacityUnit() {
+	o.CapacityUnit.Unset()
+}
+
+// GetCostPerCapacityUnit returns the CostPerCapacityUnit field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetCostPerCapacityUnit() float32 {
-	if o == nil || IsNil(o.CostPerCapacityUnit) {
+	if o == nil || IsNil(o.CostPerCapacityUnit.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.CostPerCapacityUnit
+	return *o.CostPerCapacityUnit.Get()
 }
 
 // GetCostPerCapacityUnitOk returns a tuple with the CostPerCapacityUnit field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetCostPerCapacityUnitOk() (*float32, bool) {
-	if o == nil || IsNil(o.CostPerCapacityUnit) {
+	if o == nil {
 		return nil, false
 	}
-	return o.CostPerCapacityUnit, true
+	return o.CostPerCapacityUnit.Get(), o.CostPerCapacityUnit.IsSet()
 }
 
 // HasCostPerCapacityUnit returns a boolean if a field has been set.
 func (o *DatabasePrice) HasCostPerCapacityUnit() bool {
-	if o != nil && !IsNil(o.CostPerCapacityUnit) {
+	if o != nil && o.CostPerCapacityUnit.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetCostPerCapacityUnit gets a reference to the given float32 and assigns it to the CostPerCapacityUnit field.
+// SetCostPerCapacityUnit gets a reference to the given NullableFloat32 and assigns it to the CostPerCapacityUnit field.
 func (o *DatabasePrice) SetCostPerCapacityUnit(v float32) {
-	o.CostPerCapacityUnit = &v
+	o.CostPerCapacityUnit.Set(&v)
 }
 
-// GetCostPerHour returns the CostPerHour field value if set, zero value otherwise.
+// SetCostPerCapacityUnitNil sets the value for CostPerCapacityUnit to be an explicit nil
+func (o *DatabasePrice) SetCostPerCapacityUnitNil() {
+	o.CostPerCapacityUnit.Set(nil)
+}
+
+// UnsetCostPerCapacityUnit ensures that no value is present for CostPerCapacityUnit, not even an explicit nil
+func (o *DatabasePrice) UnsetCostPerCapacityUnit() {
+	o.CostPerCapacityUnit.Unset()
+}
+
+// GetCostPerHour returns the CostPerHour field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetCostPerHour() float32 {
-	if o == nil || IsNil(o.CostPerHour) {
+	if o == nil || IsNil(o.CostPerHour.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.CostPerHour
+	return *o.CostPerHour.Get()
 }
 
 // GetCostPerHourOk returns a tuple with the CostPerHour field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetCostPerHourOk() (*float32, bool) {
-	if o == nil || IsNil(o.CostPerHour) {
+	if o == nil {
 		return nil, false
 	}
-	return o.CostPerHour, true
+	return o.CostPerHour.Get(), o.CostPerHour.IsSet()
 }
 
 // HasCostPerHour returns a boolean if a field has been set.
 func (o *DatabasePrice) HasCostPerHour() bool {
-	if o != nil && !IsNil(o.CostPerHour) {
+	if o != nil && o.CostPerHour.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetCostPerHour gets a reference to the given float32 and assigns it to the CostPerHour field.
+// SetCostPerHour gets a reference to the given NullableFloat32 and assigns it to the CostPerHour field.
 func (o *DatabasePrice) SetCostPerHour(v float32) {
-	o.CostPerHour = &v
+	o.CostPerHour.Set(&v)
 }
 
-// GetCostPerIoRequest returns the CostPerIoRequest field value if set, zero value otherwise.
+// SetCostPerHourNil sets the value for CostPerHour to be an explicit nil
+func (o *DatabasePrice) SetCostPerHourNil() {
+	o.CostPerHour.Set(nil)
+}
+
+// UnsetCostPerHour ensures that no value is present for CostPerHour, not even an explicit nil
+func (o *DatabasePrice) UnsetCostPerHour() {
+	o.CostPerHour.Unset()
+}
+
+// GetCostPerIoRequest returns the CostPerIoRequest field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetCostPerIoRequest() float32 {
-	if o == nil || IsNil(o.CostPerIoRequest) {
+	if o == nil || IsNil(o.CostPerIoRequest.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.CostPerIoRequest
+	return *o.CostPerIoRequest.Get()
 }
 
 // GetCostPerIoRequestOk returns a tuple with the CostPerIoRequest field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetCostPerIoRequestOk() (*float32, bool) {
-	if o == nil || IsNil(o.CostPerIoRequest) {
+	if o == nil {
 		return nil, false
 	}
-	return o.CostPerIoRequest, true
+	return o.CostPerIoRequest.Get(), o.CostPerIoRequest.IsSet()
 }
 
 // HasCostPerIoRequest returns a boolean if a field has been set.
 func (o *DatabasePrice) HasCostPerIoRequest() bool {
-	if o != nil && !IsNil(o.CostPerIoRequest) {
+	if o != nil && o.CostPerIoRequest.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetCostPerIoRequest gets a reference to the given float32 and assigns it to the CostPerIoRequest field.
+// SetCostPerIoRequest gets a reference to the given NullableFloat32 and assigns it to the CostPerIoRequest field.
 func (o *DatabasePrice) SetCostPerIoRequest(v float32) {
-	o.CostPerIoRequest = &v
+	o.CostPerIoRequest.Set(&v)
 }
 
-// GetCostPerIopsHour returns the CostPerIopsHour field value if set, zero value otherwise.
+// SetCostPerIoRequestNil sets the value for CostPerIoRequest to be an explicit nil
+func (o *DatabasePrice) SetCostPerIoRequestNil() {
+	o.CostPerIoRequest.Set(nil)
+}
+
+// UnsetCostPerIoRequest ensures that no value is present for CostPerIoRequest, not even an explicit nil
+func (o *DatabasePrice) UnsetCostPerIoRequest() {
+	o.CostPerIoRequest.Unset()
+}
+
+// GetCostPerIopsHour returns the CostPerIopsHour field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetCostPerIopsHour() float32 {
-	if o == nil || IsNil(o.CostPerIopsHour) {
+	if o == nil || IsNil(o.CostPerIopsHour.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.CostPerIopsHour
+	return *o.CostPerIopsHour.Get()
 }
 
 // GetCostPerIopsHourOk returns a tuple with the CostPerIopsHour field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetCostPerIopsHourOk() (*float32, bool) {
-	if o == nil || IsNil(o.CostPerIopsHour) {
+	if o == nil {
 		return nil, false
 	}
-	return o.CostPerIopsHour, true
+	return o.CostPerIopsHour.Get(), o.CostPerIopsHour.IsSet()
 }
 
 // HasCostPerIopsHour returns a boolean if a field has been set.
 func (o *DatabasePrice) HasCostPerIopsHour() bool {
-	if o != nil && !IsNil(o.CostPerIopsHour) {
+	if o != nil && o.CostPerIopsHour.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetCostPerIopsHour gets a reference to the given float32 and assigns it to the CostPerIopsHour field.
+// SetCostPerIopsHour gets a reference to the given NullableFloat32 and assigns it to the CostPerIopsHour field.
 func (o *DatabasePrice) SetCostPerIopsHour(v float32) {
-	o.CostPerIopsHour = &v
+	o.CostPerIopsHour.Set(&v)
 }
 
-// GetCostPerStorageGbHour returns the CostPerStorageGbHour field value if set, zero value otherwise.
+// SetCostPerIopsHourNil sets the value for CostPerIopsHour to be an explicit nil
+func (o *DatabasePrice) SetCostPerIopsHourNil() {
+	o.CostPerIopsHour.Set(nil)
+}
+
+// UnsetCostPerIopsHour ensures that no value is present for CostPerIopsHour, not even an explicit nil
+func (o *DatabasePrice) UnsetCostPerIopsHour() {
+	o.CostPerIopsHour.Unset()
+}
+
+// GetCostPerStorageGbHour returns the CostPerStorageGbHour field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetCostPerStorageGbHour() float32 {
-	if o == nil || IsNil(o.CostPerStorageGbHour) {
+	if o == nil || IsNil(o.CostPerStorageGbHour.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.CostPerStorageGbHour
+	return *o.CostPerStorageGbHour.Get()
 }
 
 // GetCostPerStorageGbHourOk returns a tuple with the CostPerStorageGbHour field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetCostPerStorageGbHourOk() (*float32, bool) {
-	if o == nil || IsNil(o.CostPerStorageGbHour) {
+	if o == nil {
 		return nil, false
 	}
-	return o.CostPerStorageGbHour, true
+	return o.CostPerStorageGbHour.Get(), o.CostPerStorageGbHour.IsSet()
 }
 
 // HasCostPerStorageGbHour returns a boolean if a field has been set.
 func (o *DatabasePrice) HasCostPerStorageGbHour() bool {
-	if o != nil && !IsNil(o.CostPerStorageGbHour) {
+	if o != nil && o.CostPerStorageGbHour.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetCostPerStorageGbHour gets a reference to the given float32 and assigns it to the CostPerStorageGbHour field.
+// SetCostPerStorageGbHour gets a reference to the given NullableFloat32 and assigns it to the CostPerStorageGbHour field.
 func (o *DatabasePrice) SetCostPerStorageGbHour(v float32) {
-	o.CostPerStorageGbHour = &v
+	o.CostPerStorageGbHour.Set(&v)
 }
 
-// GetCostPerThroughputMbpsHour returns the CostPerThroughputMbpsHour field value if set, zero value otherwise.
+// SetCostPerStorageGbHourNil sets the value for CostPerStorageGbHour to be an explicit nil
+func (o *DatabasePrice) SetCostPerStorageGbHourNil() {
+	o.CostPerStorageGbHour.Set(nil)
+}
+
+// UnsetCostPerStorageGbHour ensures that no value is present for CostPerStorageGbHour, not even an explicit nil
+func (o *DatabasePrice) UnsetCostPerStorageGbHour() {
+	o.CostPerStorageGbHour.Unset()
+}
+
+// GetCostPerThroughputMbpsHour returns the CostPerThroughputMbpsHour field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetCostPerThroughputMbpsHour() float32 {
-	if o == nil || IsNil(o.CostPerThroughputMbpsHour) {
+	if o == nil || IsNil(o.CostPerThroughputMbpsHour.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.CostPerThroughputMbpsHour
+	return *o.CostPerThroughputMbpsHour.Get()
 }
 
 // GetCostPerThroughputMbpsHourOk returns a tuple with the CostPerThroughputMbpsHour field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetCostPerThroughputMbpsHourOk() (*float32, bool) {
-	if o == nil || IsNil(o.CostPerThroughputMbpsHour) {
+	if o == nil {
 		return nil, false
 	}
-	return o.CostPerThroughputMbpsHour, true
+	return o.CostPerThroughputMbpsHour.Get(), o.CostPerThroughputMbpsHour.IsSet()
 }
 
 // HasCostPerThroughputMbpsHour returns a boolean if a field has been set.
 func (o *DatabasePrice) HasCostPerThroughputMbpsHour() bool {
-	if o != nil && !IsNil(o.CostPerThroughputMbpsHour) {
+	if o != nil && o.CostPerThroughputMbpsHour.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetCostPerThroughputMbpsHour gets a reference to the given float32 and assigns it to the CostPerThroughputMbpsHour field.
+// SetCostPerThroughputMbpsHour gets a reference to the given NullableFloat32 and assigns it to the CostPerThroughputMbpsHour field.
 func (o *DatabasePrice) SetCostPerThroughputMbpsHour(v float32) {
-	o.CostPerThroughputMbpsHour = &v
+	o.CostPerThroughputMbpsHour.Set(&v)
 }
 
-// GetCostPerVcpuLicenseHour returns the CostPerVcpuLicenseHour field value if set, zero value otherwise.
+// SetCostPerThroughputMbpsHourNil sets the value for CostPerThroughputMbpsHour to be an explicit nil
+func (o *DatabasePrice) SetCostPerThroughputMbpsHourNil() {
+	o.CostPerThroughputMbpsHour.Set(nil)
+}
+
+// UnsetCostPerThroughputMbpsHour ensures that no value is present for CostPerThroughputMbpsHour, not even an explicit nil
+func (o *DatabasePrice) UnsetCostPerThroughputMbpsHour() {
+	o.CostPerThroughputMbpsHour.Unset()
+}
+
+// GetCostPerVcpuLicenseHour returns the CostPerVcpuLicenseHour field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetCostPerVcpuLicenseHour() float32 {
-	if o == nil || IsNil(o.CostPerVcpuLicenseHour) {
+	if o == nil || IsNil(o.CostPerVcpuLicenseHour.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.CostPerVcpuLicenseHour
+	return *o.CostPerVcpuLicenseHour.Get()
 }
 
 // GetCostPerVcpuLicenseHourOk returns a tuple with the CostPerVcpuLicenseHour field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetCostPerVcpuLicenseHourOk() (*float32, bool) {
-	if o == nil || IsNil(o.CostPerVcpuLicenseHour) {
+	if o == nil {
 		return nil, false
 	}
-	return o.CostPerVcpuLicenseHour, true
+	return o.CostPerVcpuLicenseHour.Get(), o.CostPerVcpuLicenseHour.IsSet()
 }
 
 // HasCostPerVcpuLicenseHour returns a boolean if a field has been set.
 func (o *DatabasePrice) HasCostPerVcpuLicenseHour() bool {
-	if o != nil && !IsNil(o.CostPerVcpuLicenseHour) {
+	if o != nil && o.CostPerVcpuLicenseHour.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetCostPerVcpuLicenseHour gets a reference to the given float32 and assigns it to the CostPerVcpuLicenseHour field.
+// SetCostPerVcpuLicenseHour gets a reference to the given NullableFloat32 and assigns it to the CostPerVcpuLicenseHour field.
 func (o *DatabasePrice) SetCostPerVcpuLicenseHour(v float32) {
-	o.CostPerVcpuLicenseHour = &v
+	o.CostPerVcpuLicenseHour.Set(&v)
 }
 
-// GetCpuCores returns the CpuCores field value if set, zero value otherwise.
+// SetCostPerVcpuLicenseHourNil sets the value for CostPerVcpuLicenseHour to be an explicit nil
+func (o *DatabasePrice) SetCostPerVcpuLicenseHourNil() {
+	o.CostPerVcpuLicenseHour.Set(nil)
+}
+
+// UnsetCostPerVcpuLicenseHour ensures that no value is present for CostPerVcpuLicenseHour, not even an explicit nil
+func (o *DatabasePrice) UnsetCostPerVcpuLicenseHour() {
+	o.CostPerVcpuLicenseHour.Unset()
+}
+
+// GetCpuCores returns the CpuCores field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetCpuCores() float32 {
-	if o == nil || IsNil(o.CpuCores) {
+	if o == nil || IsNil(o.CpuCores.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.CpuCores
+	return *o.CpuCores.Get()
 }
 
 // GetCpuCoresOk returns a tuple with the CpuCores field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetCpuCoresOk() (*float32, bool) {
-	if o == nil || IsNil(o.CpuCores) {
+	if o == nil {
 		return nil, false
 	}
-	return o.CpuCores, true
+	return o.CpuCores.Get(), o.CpuCores.IsSet()
 }
 
 // HasCpuCores returns a boolean if a field has been set.
 func (o *DatabasePrice) HasCpuCores() bool {
-	if o != nil && !IsNil(o.CpuCores) {
+	if o != nil && o.CpuCores.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetCpuCores gets a reference to the given float32 and assigns it to the CpuCores field.
+// SetCpuCores gets a reference to the given NullableFloat32 and assigns it to the CpuCores field.
 func (o *DatabasePrice) SetCpuCores(v float32) {
-	o.CpuCores = &v
+	o.CpuCores.Set(&v)
 }
 
-// GetCpuCoresCostPerHour returns the CpuCoresCostPerHour field value if set, zero value otherwise.
+// SetCpuCoresNil sets the value for CpuCores to be an explicit nil
+func (o *DatabasePrice) SetCpuCoresNil() {
+	o.CpuCores.Set(nil)
+}
+
+// UnsetCpuCores ensures that no value is present for CpuCores, not even an explicit nil
+func (o *DatabasePrice) UnsetCpuCores() {
+	o.CpuCores.Unset()
+}
+
+// GetCpuCoresCostPerHour returns the CpuCoresCostPerHour field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetCpuCoresCostPerHour() float32 {
-	if o == nil || IsNil(o.CpuCoresCostPerHour) {
+	if o == nil || IsNil(o.CpuCoresCostPerHour.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.CpuCoresCostPerHour
+	return *o.CpuCoresCostPerHour.Get()
 }
 
 // GetCpuCoresCostPerHourOk returns a tuple with the CpuCoresCostPerHour field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetCpuCoresCostPerHourOk() (*float32, bool) {
-	if o == nil || IsNil(o.CpuCoresCostPerHour) {
+	if o == nil {
 		return nil, false
 	}
-	return o.CpuCoresCostPerHour, true
+	return o.CpuCoresCostPerHour.Get(), o.CpuCoresCostPerHour.IsSet()
 }
 
 // HasCpuCoresCostPerHour returns a boolean if a field has been set.
 func (o *DatabasePrice) HasCpuCoresCostPerHour() bool {
-	if o != nil && !IsNil(o.CpuCoresCostPerHour) {
+	if o != nil && o.CpuCoresCostPerHour.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetCpuCoresCostPerHour gets a reference to the given float32 and assigns it to the CpuCoresCostPerHour field.
+// SetCpuCoresCostPerHour gets a reference to the given NullableFloat32 and assigns it to the CpuCoresCostPerHour field.
 func (o *DatabasePrice) SetCpuCoresCostPerHour(v float32) {
-	o.CpuCoresCostPerHour = &v
+	o.CpuCoresCostPerHour.Set(&v)
+}
+
+// SetCpuCoresCostPerHourNil sets the value for CpuCoresCostPerHour to be an explicit nil
+func (o *DatabasePrice) SetCpuCoresCostPerHourNil() {
+	o.CpuCoresCostPerHour.Set(nil)
+}
+
+// UnsetCpuCoresCostPerHour ensures that no value is present for CpuCoresCostPerHour, not even an explicit nil
+func (o *DatabasePrice) UnsetCpuCoresCostPerHour() {
+	o.CpuCoresCostPerHour.Unset()
 }
 
 // GetCreatedAt returns the CreatedAt field value if set, zero value otherwise.
@@ -718,196 +829,262 @@ func (o *DatabasePrice) SetInstanceType(v string) {
 	o.InstanceType = &v
 }
 
-// GetMaxIops returns the MaxIops field value if set, zero value otherwise.
+// GetMaxIops returns the MaxIops field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetMaxIops() float32 {
-	if o == nil || IsNil(o.MaxIops) {
+	if o == nil || IsNil(o.MaxIops.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.MaxIops
+	return *o.MaxIops.Get()
 }
 
 // GetMaxIopsOk returns a tuple with the MaxIops field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetMaxIopsOk() (*float32, bool) {
-	if o == nil || IsNil(o.MaxIops) {
+	if o == nil {
 		return nil, false
 	}
-	return o.MaxIops, true
+	return o.MaxIops.Get(), o.MaxIops.IsSet()
 }
 
 // HasMaxIops returns a boolean if a field has been set.
 func (o *DatabasePrice) HasMaxIops() bool {
-	if o != nil && !IsNil(o.MaxIops) {
+	if o != nil && o.MaxIops.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetMaxIops gets a reference to the given float32 and assigns it to the MaxIops field.
+// SetMaxIops gets a reference to the given NullableFloat32 and assigns it to the MaxIops field.
 func (o *DatabasePrice) SetMaxIops(v float32) {
-	o.MaxIops = &v
+	o.MaxIops.Set(&v)
 }
 
-// GetMaxStorageGb returns the MaxStorageGb field value if set, zero value otherwise.
+// SetMaxIopsNil sets the value for MaxIops to be an explicit nil
+func (o *DatabasePrice) SetMaxIopsNil() {
+	o.MaxIops.Set(nil)
+}
+
+// UnsetMaxIops ensures that no value is present for MaxIops, not even an explicit nil
+func (o *DatabasePrice) UnsetMaxIops() {
+	o.MaxIops.Unset()
+}
+
+// GetMaxStorageGb returns the MaxStorageGb field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetMaxStorageGb() float32 {
-	if o == nil || IsNil(o.MaxStorageGb) {
+	if o == nil || IsNil(o.MaxStorageGb.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.MaxStorageGb
+	return *o.MaxStorageGb.Get()
 }
 
 // GetMaxStorageGbOk returns a tuple with the MaxStorageGb field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetMaxStorageGbOk() (*float32, bool) {
-	if o == nil || IsNil(o.MaxStorageGb) {
+	if o == nil {
 		return nil, false
 	}
-	return o.MaxStorageGb, true
+	return o.MaxStorageGb.Get(), o.MaxStorageGb.IsSet()
 }
 
 // HasMaxStorageGb returns a boolean if a field has been set.
 func (o *DatabasePrice) HasMaxStorageGb() bool {
-	if o != nil && !IsNil(o.MaxStorageGb) {
+	if o != nil && o.MaxStorageGb.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetMaxStorageGb gets a reference to the given float32 and assigns it to the MaxStorageGb field.
+// SetMaxStorageGb gets a reference to the given NullableFloat32 and assigns it to the MaxStorageGb field.
 func (o *DatabasePrice) SetMaxStorageGb(v float32) {
-	o.MaxStorageGb = &v
+	o.MaxStorageGb.Set(&v)
 }
 
-// GetMaxThroughputMbps returns the MaxThroughputMbps field value if set, zero value otherwise.
+// SetMaxStorageGbNil sets the value for MaxStorageGb to be an explicit nil
+func (o *DatabasePrice) SetMaxStorageGbNil() {
+	o.MaxStorageGb.Set(nil)
+}
+
+// UnsetMaxStorageGb ensures that no value is present for MaxStorageGb, not even an explicit nil
+func (o *DatabasePrice) UnsetMaxStorageGb() {
+	o.MaxStorageGb.Unset()
+}
+
+// GetMaxThroughputMbps returns the MaxThroughputMbps field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetMaxThroughputMbps() float32 {
-	if o == nil || IsNil(o.MaxThroughputMbps) {
+	if o == nil || IsNil(o.MaxThroughputMbps.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.MaxThroughputMbps
+	return *o.MaxThroughputMbps.Get()
 }
 
 // GetMaxThroughputMbpsOk returns a tuple with the MaxThroughputMbps field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetMaxThroughputMbpsOk() (*float32, bool) {
-	if o == nil || IsNil(o.MaxThroughputMbps) {
+	if o == nil {
 		return nil, false
 	}
-	return o.MaxThroughputMbps, true
+	return o.MaxThroughputMbps.Get(), o.MaxThroughputMbps.IsSet()
 }
 
 // HasMaxThroughputMbps returns a boolean if a field has been set.
 func (o *DatabasePrice) HasMaxThroughputMbps() bool {
-	if o != nil && !IsNil(o.MaxThroughputMbps) {
+	if o != nil && o.MaxThroughputMbps.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetMaxThroughputMbps gets a reference to the given float32 and assigns it to the MaxThroughputMbps field.
+// SetMaxThroughputMbps gets a reference to the given NullableFloat32 and assigns it to the MaxThroughputMbps field.
 func (o *DatabasePrice) SetMaxThroughputMbps(v float32) {
-	o.MaxThroughputMbps = &v
+	o.MaxThroughputMbps.Set(&v)
 }
 
-// GetMinIops returns the MinIops field value if set, zero value otherwise.
+// SetMaxThroughputMbpsNil sets the value for MaxThroughputMbps to be an explicit nil
+func (o *DatabasePrice) SetMaxThroughputMbpsNil() {
+	o.MaxThroughputMbps.Set(nil)
+}
+
+// UnsetMaxThroughputMbps ensures that no value is present for MaxThroughputMbps, not even an explicit nil
+func (o *DatabasePrice) UnsetMaxThroughputMbps() {
+	o.MaxThroughputMbps.Unset()
+}
+
+// GetMinIops returns the MinIops field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetMinIops() float32 {
-	if o == nil || IsNil(o.MinIops) {
+	if o == nil || IsNil(o.MinIops.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.MinIops
+	return *o.MinIops.Get()
 }
 
 // GetMinIopsOk returns a tuple with the MinIops field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetMinIopsOk() (*float32, bool) {
-	if o == nil || IsNil(o.MinIops) {
+	if o == nil {
 		return nil, false
 	}
-	return o.MinIops, true
+	return o.MinIops.Get(), o.MinIops.IsSet()
 }
 
 // HasMinIops returns a boolean if a field has been set.
 func (o *DatabasePrice) HasMinIops() bool {
-	if o != nil && !IsNil(o.MinIops) {
+	if o != nil && o.MinIops.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetMinIops gets a reference to the given float32 and assigns it to the MinIops field.
+// SetMinIops gets a reference to the given NullableFloat32 and assigns it to the MinIops field.
 func (o *DatabasePrice) SetMinIops(v float32) {
-	o.MinIops = &v
+	o.MinIops.Set(&v)
 }
 
-// GetMinStorageGb returns the MinStorageGb field value if set, zero value otherwise.
+// SetMinIopsNil sets the value for MinIops to be an explicit nil
+func (o *DatabasePrice) SetMinIopsNil() {
+	o.MinIops.Set(nil)
+}
+
+// UnsetMinIops ensures that no value is present for MinIops, not even an explicit nil
+func (o *DatabasePrice) UnsetMinIops() {
+	o.MinIops.Unset()
+}
+
+// GetMinStorageGb returns the MinStorageGb field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetMinStorageGb() float32 {
-	if o == nil || IsNil(o.MinStorageGb) {
+	if o == nil || IsNil(o.MinStorageGb.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.MinStorageGb
+	return *o.MinStorageGb.Get()
 }
 
 // GetMinStorageGbOk returns a tuple with the MinStorageGb field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetMinStorageGbOk() (*float32, bool) {
-	if o == nil || IsNil(o.MinStorageGb) {
+	if o == nil {
 		return nil, false
 	}
-	return o.MinStorageGb, true
+	return o.MinStorageGb.Get(), o.MinStorageGb.IsSet()
 }
 
 // HasMinStorageGb returns a boolean if a field has been set.
 func (o *DatabasePrice) HasMinStorageGb() bool {
-	if o != nil && !IsNil(o.MinStorageGb) {
+	if o != nil && o.MinStorageGb.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetMinStorageGb gets a reference to the given float32 and assigns it to the MinStorageGb field.
+// SetMinStorageGb gets a reference to the given NullableFloat32 and assigns it to the MinStorageGb field.
 func (o *DatabasePrice) SetMinStorageGb(v float32) {
-	o.MinStorageGb = &v
+	o.MinStorageGb.Set(&v)
 }
 
-// GetMinThroughputMbps returns the MinThroughputMbps field value if set, zero value otherwise.
+// SetMinStorageGbNil sets the value for MinStorageGb to be an explicit nil
+func (o *DatabasePrice) SetMinStorageGbNil() {
+	o.MinStorageGb.Set(nil)
+}
+
+// UnsetMinStorageGb ensures that no value is present for MinStorageGb, not even an explicit nil
+func (o *DatabasePrice) UnsetMinStorageGb() {
+	o.MinStorageGb.Unset()
+}
+
+// GetMinThroughputMbps returns the MinThroughputMbps field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetMinThroughputMbps() float32 {
-	if o == nil || IsNil(o.MinThroughputMbps) {
+	if o == nil || IsNil(o.MinThroughputMbps.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.MinThroughputMbps
+	return *o.MinThroughputMbps.Get()
 }
 
 // GetMinThroughputMbpsOk returns a tuple with the MinThroughputMbps field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetMinThroughputMbpsOk() (*float32, bool) {
-	if o == nil || IsNil(o.MinThroughputMbps) {
+	if o == nil {
 		return nil, false
 	}
-	return o.MinThroughputMbps, true
+	return o.MinThroughputMbps.Get(), o.MinThroughputMbps.IsSet()
 }
 
 // HasMinThroughputMbps returns a boolean if a field has been set.
 func (o *DatabasePrice) HasMinThroughputMbps() bool {
-	if o != nil && !IsNil(o.MinThroughputMbps) {
+	if o != nil && o.MinThroughputMbps.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetMinThroughputMbps gets a reference to the given float32 and assigns it to the MinThroughputMbps field.
+// SetMinThroughputMbps gets a reference to the given NullableFloat32 and assigns it to the MinThroughputMbps field.
 func (o *DatabasePrice) SetMinThroughputMbps(v float32) {
-	o.MinThroughputMbps = &v
+	o.MinThroughputMbps.Set(&v)
+}
+
+// SetMinThroughputMbpsNil sets the value for MinThroughputMbps to be an explicit nil
+func (o *DatabasePrice) SetMinThroughputMbpsNil() {
+	o.MinThroughputMbps.Set(nil)
+}
+
+// UnsetMinThroughputMbps ensures that no value is present for MinThroughputMbps, not even an explicit nil
+func (o *DatabasePrice) UnsetMinThroughputMbps() {
+	o.MinThroughputMbps.Unset()
 }
 
 // GetNativeCostPerHour returns the NativeCostPerHour field value if set, zero value otherwise.
@@ -1038,68 +1215,90 @@ func (o *DatabasePrice) SetProvider(v string) {
 	o.Provider = &v
 }
 
-// GetRamGb returns the RamGb field value if set, zero value otherwise.
+// GetRamGb returns the RamGb field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetRamGb() float32 {
-	if o == nil || IsNil(o.RamGb) {
+	if o == nil || IsNil(o.RamGb.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.RamGb
+	return *o.RamGb.Get()
 }
 
 // GetRamGbOk returns a tuple with the RamGb field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetRamGbOk() (*float32, bool) {
-	if o == nil || IsNil(o.RamGb) {
+	if o == nil {
 		return nil, false
 	}
-	return o.RamGb, true
+	return o.RamGb.Get(), o.RamGb.IsSet()
 }
 
 // HasRamGb returns a boolean if a field has been set.
 func (o *DatabasePrice) HasRamGb() bool {
-	if o != nil && !IsNil(o.RamGb) {
+	if o != nil && o.RamGb.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetRamGb gets a reference to the given float32 and assigns it to the RamGb field.
+// SetRamGb gets a reference to the given NullableFloat32 and assigns it to the RamGb field.
 func (o *DatabasePrice) SetRamGb(v float32) {
-	o.RamGb = &v
+	o.RamGb.Set(&v)
 }
 
-// GetRamGbCostPerHour returns the RamGbCostPerHour field value if set, zero value otherwise.
+// SetRamGbNil sets the value for RamGb to be an explicit nil
+func (o *DatabasePrice) SetRamGbNil() {
+	o.RamGb.Set(nil)
+}
+
+// UnsetRamGb ensures that no value is present for RamGb, not even an explicit nil
+func (o *DatabasePrice) UnsetRamGb() {
+	o.RamGb.Unset()
+}
+
+// GetRamGbCostPerHour returns the RamGbCostPerHour field value if set, zero value otherwise (both if not set or set to explicit null).
 func (o *DatabasePrice) GetRamGbCostPerHour() float32 {
-	if o == nil || IsNil(o.RamGbCostPerHour) {
+	if o == nil || IsNil(o.RamGbCostPerHour.Get()) {
 		var ret float32
 		return ret
 	}
-	return *o.RamGbCostPerHour
+	return *o.RamGbCostPerHour.Get()
 }
 
 // GetRamGbCostPerHourOk returns a tuple with the RamGbCostPerHour field value if set, nil otherwise
 // and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
 func (o *DatabasePrice) GetRamGbCostPerHourOk() (*float32, bool) {
-	if o == nil || IsNil(o.RamGbCostPerHour) {
+	if o == nil {
 		return nil, false
 	}
-	return o.RamGbCostPerHour, true
+	return o.RamGbCostPerHour.Get(), o.RamGbCostPerHour.IsSet()
 }
 
 // HasRamGbCostPerHour returns a boolean if a field has been set.
 func (o *DatabasePrice) HasRamGbCostPerHour() bool {
-	if o != nil && !IsNil(o.RamGbCostPerHour) {
+	if o != nil && o.RamGbCostPerHour.IsSet() {
 		return true
 	}
 
 	return false
 }
 
-// SetRamGbCostPerHour gets a reference to the given float32 and assigns it to the RamGbCostPerHour field.
+// SetRamGbCostPerHour gets a reference to the given NullableFloat32 and assigns it to the RamGbCostPerHour field.
 func (o *DatabasePrice) SetRamGbCostPerHour(v float32) {
-	o.RamGbCostPerHour = &v
+	o.RamGbCostPerHour.Set(&v)
+}
+
+// SetRamGbCostPerHourNil sets the value for RamGbCostPerHour to be an explicit nil
+func (o *DatabasePrice) SetRamGbCostPerHourNil() {
+	o.RamGbCostPerHour.Set(nil)
+}
+
+// UnsetRamGbCostPerHour ensures that no value is present for RamGbCostPerHour, not even an explicit nil
+func (o *DatabasePrice) UnsetRamGbCostPerHour() {
+	o.RamGbCostPerHour.Unset()
 }
 
 // GetRawPricingData returns the RawPricingData field value if set, zero value otherwise.
@@ -1345,35 +1544,35 @@ func (o DatabasePrice) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.BillingConfig) {
 		toSerialize["billing_config"] = o.BillingConfig
 	}
-	if !IsNil(o.CapacityUnit) {
-		toSerialize["capacity_unit"] = o.CapacityUnit
+	if o.CapacityUnit.IsSet() {
+		toSerialize["capacity_unit"] = o.CapacityUnit.Get()
 	}
-	if !IsNil(o.CostPerCapacityUnit) {
-		toSerialize["cost_per_capacity_unit"] = o.CostPerCapacityUnit
+	if o.CostPerCapacityUnit.IsSet() {
+		toSerialize["cost_per_capacity_unit"] = o.CostPerCapacityUnit.Get()
 	}
-	if !IsNil(o.CostPerHour) {
-		toSerialize["cost_per_hour"] = o.CostPerHour
+	if o.CostPerHour.IsSet() {
+		toSerialize["cost_per_hour"] = o.CostPerHour.Get()
 	}
-	if !IsNil(o.CostPerIoRequest) {
-		toSerialize["cost_per_io_request"] = o.CostPerIoRequest
+	if o.CostPerIoRequest.IsSet() {
+		toSerialize["cost_per_io_request"] = o.CostPerIoRequest.Get()
 	}
-	if !IsNil(o.CostPerIopsHour) {
-		toSerialize["cost_per_iops_hour"] = o.CostPerIopsHour
+	if o.CostPerIopsHour.IsSet() {
+		toSerialize["cost_per_iops_hour"] = o.CostPerIopsHour.Get()
 	}
-	if !IsNil(o.CostPerStorageGbHour) {
-		toSerialize["cost_per_storage_gb_hour"] = o.CostPerStorageGbHour
+	if o.CostPerStorageGbHour.IsSet() {
+		toSerialize["cost_per_storage_gb_hour"] = o.CostPerStorageGbHour.Get()
 	}
-	if !IsNil(o.CostPerThroughputMbpsHour) {
-		toSerialize["cost_per_throughput_mbps_hour"] = o.CostPerThroughputMbpsHour
+	if o.CostPerThroughputMbpsHour.IsSet() {
+		toSerialize["cost_per_throughput_mbps_hour"] = o.CostPerThroughputMbpsHour.Get()
 	}
-	if !IsNil(o.CostPerVcpuLicenseHour) {
-		toSerialize["cost_per_vcpu_license_hour"] = o.CostPerVcpuLicenseHour
+	if o.CostPerVcpuLicenseHour.IsSet() {
+		toSerialize["cost_per_vcpu_license_hour"] = o.CostPerVcpuLicenseHour.Get()
 	}
-	if !IsNil(o.CpuCores) {
-		toSerialize["cpu_cores"] = o.CpuCores
+	if o.CpuCores.IsSet() {
+		toSerialize["cpu_cores"] = o.CpuCores.Get()
 	}
-	if !IsNil(o.CpuCoresCostPerHour) {
-		toSerialize["cpu_cores_cost_per_hour"] = o.CpuCoresCostPerHour
+	if o.CpuCoresCostPerHour.IsSet() {
+		toSerialize["cpu_cores_cost_per_hour"] = o.CpuCoresCostPerHour.Get()
 	}
 	if !IsNil(o.CreatedAt) {
 		toSerialize["created_at"] = o.CreatedAt
@@ -1396,23 +1595,23 @@ func (o DatabasePrice) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.InstanceType) {
 		toSerialize["instance_type"] = o.InstanceType
 	}
-	if !IsNil(o.MaxIops) {
-		toSerialize["max_iops"] = o.MaxIops
+	if o.MaxIops.IsSet() {
+		toSerialize["max_iops"] = o.MaxIops.Get()
 	}
-	if !IsNil(o.MaxStorageGb) {
-		toSerialize["max_storage_gb"] = o.MaxStorageGb
+	if o.MaxStorageGb.IsSet() {
+		toSerialize["max_storage_gb"] = o.MaxStorageGb.Get()
 	}
-	if !IsNil(o.MaxThroughputMbps) {
-		toSerialize["max_throughput_mbps"] = o.MaxThroughputMbps
+	if o.MaxThroughputMbps.IsSet() {
+		toSerialize["max_throughput_mbps"] = o.MaxThroughputMbps.Get()
 	}
-	if !IsNil(o.MinIops) {
-		toSerialize["min_iops"] = o.MinIops
+	if o.MinIops.IsSet() {
+		toSerialize["min_iops"] = o.MinIops.Get()
 	}
-	if !IsNil(o.MinStorageGb) {
-		toSerialize["min_storage_gb"] = o.MinStorageGb
+	if o.MinStorageGb.IsSet() {
+		toSerialize["min_storage_gb"] = o.MinStorageGb.Get()
 	}
-	if !IsNil(o.MinThroughputMbps) {
-		toSerialize["min_throughput_mbps"] = o.MinThroughputMbps
+	if o.MinThroughputMbps.IsSet() {
+		toSerialize["min_throughput_mbps"] = o.MinThroughputMbps.Get()
 	}
 	if !IsNil(o.NativeCostPerHour) {
 		toSerialize["native_cost_per_hour"] = o.NativeCostPerHour
@@ -1426,11 +1625,11 @@ func (o DatabasePrice) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.Provider) {
 		toSerialize["provider"] = o.Provider
 	}
-	if !IsNil(o.RamGb) {
-		toSerialize["ram_gb"] = o.RamGb
+	if o.RamGb.IsSet() {
+		toSerialize["ram_gb"] = o.RamGb.Get()
 	}
-	if !IsNil(o.RamGbCostPerHour) {
-		toSerialize["ram_gb_cost_per_hour"] = o.RamGbCostPerHour
+	if o.RamGbCostPerHour.IsSet() {
+		toSerialize["ram_gb_cost_per_hour"] = o.RamGbCostPerHour.Get()
 	}
 	if !IsNil(o.RawPricingData) {
 		toSerialize["raw_pricing_data"] = o.RawPricingData

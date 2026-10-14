@@ -7,35 +7,35 @@ Name | Type | Description | Notes
 **Architecture** | Pointer to **string** |  | [optional] 
 **AvailabilityZone** | Pointer to **string** |  | [optional] 
 **BillingConfig** | Pointer to **string** |  | [optional] 
-**CapacityUnit** | Pointer to **string** |  | [optional] 
-**CostPerCapacityUnit** | Pointer to **float32** |  | [optional] 
-**CostPerHour** | Pointer to **float32** |  | [optional] 
-**CostPerIoRequest** | Pointer to **float32** |  | [optional] 
-**CostPerIopsHour** | Pointer to **float32** |  | [optional] 
-**CostPerStorageGbHour** | Pointer to **float32** |  | [optional] 
-**CostPerThroughputMbpsHour** | Pointer to **float32** |  | [optional] 
-**CostPerVcpuLicenseHour** | Pointer to **float32** |  | [optional] 
-**CpuCores** | Pointer to **float32** |  | [optional] 
-**CpuCoresCostPerHour** | Pointer to **float32** |  | [optional] 
+**CapacityUnit** | Pointer to **NullableString** |  | [optional] 
+**CostPerCapacityUnit** | Pointer to **NullableFloat32** |  | [optional] 
+**CostPerHour** | Pointer to **NullableFloat32** |  | [optional] 
+**CostPerIoRequest** | Pointer to **NullableFloat32** |  | [optional] 
+**CostPerIopsHour** | Pointer to **NullableFloat32** |  | [optional] 
+**CostPerStorageGbHour** | Pointer to **NullableFloat32** |  | [optional] 
+**CostPerThroughputMbpsHour** | Pointer to **NullableFloat32** |  | [optional] 
+**CostPerVcpuLicenseHour** | Pointer to **NullableFloat32** |  | [optional] 
+**CpuCores** | Pointer to **NullableFloat32** |  | [optional] 
+**CpuCoresCostPerHour** | Pointer to **NullableFloat32** |  | [optional] 
 **CreatedAt** | Pointer to **string** |  | [optional] 
-**Currency** | Pointer to **string** |  | [optional] 
+**Currency** | Pointer to **string** | Currency the provider published this price in. Cost columns are always normalized USD. | [optional] 
 **DeploymentOption** | Pointer to **string** |  | [optional] 
 **Edition** | Pointer to **string** |  | [optional] 
 **Engine** | Pointer to **string** |  | [optional] 
 **Id** | Pointer to **string** |  | [optional] 
 **InstanceType** | Pointer to **string** |  | [optional] 
-**MaxIops** | Pointer to **float32** |  | [optional] 
-**MaxStorageGb** | Pointer to **float32** |  | [optional] 
-**MaxThroughputMbps** | Pointer to **float32** |  | [optional] 
-**MinIops** | Pointer to **float32** |  | [optional] 
-**MinStorageGb** | Pointer to **float32** |  | [optional] 
-**MinThroughputMbps** | Pointer to **float32** |  | [optional] 
+**MaxIops** | Pointer to **NullableFloat32** |  | [optional] 
+**MaxStorageGb** | Pointer to **NullableFloat32** |  | [optional] 
+**MaxThroughputMbps** | Pointer to **NullableFloat32** |  | [optional] 
+**MinIops** | Pointer to **NullableFloat32** |  | [optional] 
+**MinStorageGb** | Pointer to **NullableFloat32** |  | [optional] 
+**MinThroughputMbps** | Pointer to **NullableFloat32** |  | [optional] 
 **NativeCostPerHour** | Pointer to **float32** |  | [optional] 
 **NativeCostPerStorageGbHour** | Pointer to **float32** |  | [optional] 
 **PeriodBillingHours** | Pointer to **float32** |  | [optional] 
 **Provider** | Pointer to **string** |  | [optional] 
-**RamGb** | Pointer to **float32** |  | [optional] 
-**RamGbCostPerHour** | Pointer to **float32** |  | [optional] 
+**RamGb** | Pointer to **NullableFloat32** |  | [optional] 
+**RamGbCostPerHour** | Pointer to **NullableFloat32** |  | [optional] 
 **RawPricingData** | Pointer to **map[string]interface{}** |  | [optional] 
 **Region** | Pointer to **string** |  | [optional] 
 **Service** | Pointer to **string** |  | [optional] 
@@ -163,6 +163,16 @@ SetCapacityUnit sets CapacityUnit field to given value.
 
 HasCapacityUnit returns a boolean if a field has been set.
 
+### SetCapacityUnitNil
+
+`func (o *DatabasePrice) SetCapacityUnitNil(b bool)`
+
+ SetCapacityUnitNil sets the value for CapacityUnit to be an explicit nil
+
+### UnsetCapacityUnit
+`func (o *DatabasePrice) UnsetCapacityUnit()`
+
+UnsetCapacityUnit ensures that no value is present for CapacityUnit, not even an explicit nil
 ### GetCostPerCapacityUnit
 
 `func (o *DatabasePrice) GetCostPerCapacityUnit() float32`
@@ -188,6 +198,16 @@ SetCostPerCapacityUnit sets CostPerCapacityUnit field to given value.
 
 HasCostPerCapacityUnit returns a boolean if a field has been set.
 
+### SetCostPerCapacityUnitNil
+
+`func (o *DatabasePrice) SetCostPerCapacityUnitNil(b bool)`
+
+ SetCostPerCapacityUnitNil sets the value for CostPerCapacityUnit to be an explicit nil
+
+### UnsetCostPerCapacityUnit
+`func (o *DatabasePrice) UnsetCostPerCapacityUnit()`
+
+UnsetCostPerCapacityUnit ensures that no value is present for CostPerCapacityUnit, not even an explicit nil
 ### GetCostPerHour
 
 `func (o *DatabasePrice) GetCostPerHour() float32`
@@ -213,6 +233,16 @@ SetCostPerHour sets CostPerHour field to given value.
 
 HasCostPerHour returns a boolean if a field has been set.
 
+### SetCostPerHourNil
+
+`func (o *DatabasePrice) SetCostPerHourNil(b bool)`
+
+ SetCostPerHourNil sets the value for CostPerHour to be an explicit nil
+
+### UnsetCostPerHour
+`func (o *DatabasePrice) UnsetCostPerHour()`
+
+UnsetCostPerHour ensures that no value is present for CostPerHour, not even an explicit nil
 ### GetCostPerIoRequest
 
 `func (o *DatabasePrice) GetCostPerIoRequest() float32`
@@ -238,6 +268,16 @@ SetCostPerIoRequest sets CostPerIoRequest field to given value.
 
 HasCostPerIoRequest returns a boolean if a field has been set.
 
+### SetCostPerIoRequestNil
+
+`func (o *DatabasePrice) SetCostPerIoRequestNil(b bool)`
+
+ SetCostPerIoRequestNil sets the value for CostPerIoRequest to be an explicit nil
+
+### UnsetCostPerIoRequest
+`func (o *DatabasePrice) UnsetCostPerIoRequest()`
+
+UnsetCostPerIoRequest ensures that no value is present for CostPerIoRequest, not even an explicit nil
 ### GetCostPerIopsHour
 
 `func (o *DatabasePrice) GetCostPerIopsHour() float32`
@@ -263,6 +303,16 @@ SetCostPerIopsHour sets CostPerIopsHour field to given value.
 
 HasCostPerIopsHour returns a boolean if a field has been set.
 
+### SetCostPerIopsHourNil
+
+`func (o *DatabasePrice) SetCostPerIopsHourNil(b bool)`
+
+ SetCostPerIopsHourNil sets the value for CostPerIopsHour to be an explicit nil
+
+### UnsetCostPerIopsHour
+`func (o *DatabasePrice) UnsetCostPerIopsHour()`
+
+UnsetCostPerIopsHour ensures that no value is present for CostPerIopsHour, not even an explicit nil
 ### GetCostPerStorageGbHour
 
 `func (o *DatabasePrice) GetCostPerStorageGbHour() float32`
@@ -288,6 +338,16 @@ SetCostPerStorageGbHour sets CostPerStorageGbHour field to given value.
 
 HasCostPerStorageGbHour returns a boolean if a field has been set.
 
+### SetCostPerStorageGbHourNil
+
+`func (o *DatabasePrice) SetCostPerStorageGbHourNil(b bool)`
+
+ SetCostPerStorageGbHourNil sets the value for CostPerStorageGbHour to be an explicit nil
+
+### UnsetCostPerStorageGbHour
+`func (o *DatabasePrice) UnsetCostPerStorageGbHour()`
+
+UnsetCostPerStorageGbHour ensures that no value is present for CostPerStorageGbHour, not even an explicit nil
 ### GetCostPerThroughputMbpsHour
 
 `func (o *DatabasePrice) GetCostPerThroughputMbpsHour() float32`
@@ -313,6 +373,16 @@ SetCostPerThroughputMbpsHour sets CostPerThroughputMbpsHour field to given value
 
 HasCostPerThroughputMbpsHour returns a boolean if a field has been set.
 
+### SetCostPerThroughputMbpsHourNil
+
+`func (o *DatabasePrice) SetCostPerThroughputMbpsHourNil(b bool)`
+
+ SetCostPerThroughputMbpsHourNil sets the value for CostPerThroughputMbpsHour to be an explicit nil
+
+### UnsetCostPerThroughputMbpsHour
+`func (o *DatabasePrice) UnsetCostPerThroughputMbpsHour()`
+
+UnsetCostPerThroughputMbpsHour ensures that no value is present for CostPerThroughputMbpsHour, not even an explicit nil
 ### GetCostPerVcpuLicenseHour
 
 `func (o *DatabasePrice) GetCostPerVcpuLicenseHour() float32`
@@ -338,6 +408,16 @@ SetCostPerVcpuLicenseHour sets CostPerVcpuLicenseHour field to given value.
 
 HasCostPerVcpuLicenseHour returns a boolean if a field has been set.
 
+### SetCostPerVcpuLicenseHourNil
+
+`func (o *DatabasePrice) SetCostPerVcpuLicenseHourNil(b bool)`
+
+ SetCostPerVcpuLicenseHourNil sets the value for CostPerVcpuLicenseHour to be an explicit nil
+
+### UnsetCostPerVcpuLicenseHour
+`func (o *DatabasePrice) UnsetCostPerVcpuLicenseHour()`
+
+UnsetCostPerVcpuLicenseHour ensures that no value is present for CostPerVcpuLicenseHour, not even an explicit nil
 ### GetCpuCores
 
 `func (o *DatabasePrice) GetCpuCores() float32`
@@ -363,6 +443,16 @@ SetCpuCores sets CpuCores field to given value.
 
 HasCpuCores returns a boolean if a field has been set.
 
+### SetCpuCoresNil
+
+`func (o *DatabasePrice) SetCpuCoresNil(b bool)`
+
+ SetCpuCoresNil sets the value for CpuCores to be an explicit nil
+
+### UnsetCpuCores
+`func (o *DatabasePrice) UnsetCpuCores()`
+
+UnsetCpuCores ensures that no value is present for CpuCores, not even an explicit nil
 ### GetCpuCoresCostPerHour
 
 `func (o *DatabasePrice) GetCpuCoresCostPerHour() float32`
@@ -388,6 +478,16 @@ SetCpuCoresCostPerHour sets CpuCoresCostPerHour field to given value.
 
 HasCpuCoresCostPerHour returns a boolean if a field has been set.
 
+### SetCpuCoresCostPerHourNil
+
+`func (o *DatabasePrice) SetCpuCoresCostPerHourNil(b bool)`
+
+ SetCpuCoresCostPerHourNil sets the value for CpuCoresCostPerHour to be an explicit nil
+
+### UnsetCpuCoresCostPerHour
+`func (o *DatabasePrice) UnsetCpuCoresCostPerHour()`
+
+UnsetCpuCoresCostPerHour ensures that no value is present for CpuCoresCostPerHour, not even an explicit nil
 ### GetCreatedAt
 
 `func (o *DatabasePrice) GetCreatedAt() string`
@@ -588,6 +688,16 @@ SetMaxIops sets MaxIops field to given value.
 
 HasMaxIops returns a boolean if a field has been set.
 
+### SetMaxIopsNil
+
+`func (o *DatabasePrice) SetMaxIopsNil(b bool)`
+
+ SetMaxIopsNil sets the value for MaxIops to be an explicit nil
+
+### UnsetMaxIops
+`func (o *DatabasePrice) UnsetMaxIops()`
+
+UnsetMaxIops ensures that no value is present for MaxIops, not even an explicit nil
 ### GetMaxStorageGb
 
 `func (o *DatabasePrice) GetMaxStorageGb() float32`
@@ -613,6 +723,16 @@ SetMaxStorageGb sets MaxStorageGb field to given value.
 
 HasMaxStorageGb returns a boolean if a field has been set.
 
+### SetMaxStorageGbNil
+
+`func (o *DatabasePrice) SetMaxStorageGbNil(b bool)`
+
+ SetMaxStorageGbNil sets the value for MaxStorageGb to be an explicit nil
+
+### UnsetMaxStorageGb
+`func (o *DatabasePrice) UnsetMaxStorageGb()`
+
+UnsetMaxStorageGb ensures that no value is present for MaxStorageGb, not even an explicit nil
 ### GetMaxThroughputMbps
 
 `func (o *DatabasePrice) GetMaxThroughputMbps() float32`
@@ -638,6 +758,16 @@ SetMaxThroughputMbps sets MaxThroughputMbps field to given value.
 
 HasMaxThroughputMbps returns a boolean if a field has been set.
 
+### SetMaxThroughputMbpsNil
+
+`func (o *DatabasePrice) SetMaxThroughputMbpsNil(b bool)`
+
+ SetMaxThroughputMbpsNil sets the value for MaxThroughputMbps to be an explicit nil
+
+### UnsetMaxThroughputMbps
+`func (o *DatabasePrice) UnsetMaxThroughputMbps()`
+
+UnsetMaxThroughputMbps ensures that no value is present for MaxThroughputMbps, not even an explicit nil
 ### GetMinIops
 
 `func (o *DatabasePrice) GetMinIops() float32`
@@ -663,6 +793,16 @@ SetMinIops sets MinIops field to given value.
 
 HasMinIops returns a boolean if a field has been set.
 
+### SetMinIopsNil
+
+`func (o *DatabasePrice) SetMinIopsNil(b bool)`
+
+ SetMinIopsNil sets the value for MinIops to be an explicit nil
+
+### UnsetMinIops
+`func (o *DatabasePrice) UnsetMinIops()`
+
+UnsetMinIops ensures that no value is present for MinIops, not even an explicit nil
 ### GetMinStorageGb
 
 `func (o *DatabasePrice) GetMinStorageGb() float32`
@@ -688,6 +828,16 @@ SetMinStorageGb sets MinStorageGb field to given value.
 
 HasMinStorageGb returns a boolean if a field has been set.
 
+### SetMinStorageGbNil
+
+`func (o *DatabasePrice) SetMinStorageGbNil(b bool)`
+
+ SetMinStorageGbNil sets the value for MinStorageGb to be an explicit nil
+
+### UnsetMinStorageGb
+`func (o *DatabasePrice) UnsetMinStorageGb()`
+
+UnsetMinStorageGb ensures that no value is present for MinStorageGb, not even an explicit nil
 ### GetMinThroughputMbps
 
 `func (o *DatabasePrice) GetMinThroughputMbps() float32`
@@ -713,6 +863,16 @@ SetMinThroughputMbps sets MinThroughputMbps field to given value.
 
 HasMinThroughputMbps returns a boolean if a field has been set.
 
+### SetMinThroughputMbpsNil
+
+`func (o *DatabasePrice) SetMinThroughputMbpsNil(b bool)`
+
+ SetMinThroughputMbpsNil sets the value for MinThroughputMbps to be an explicit nil
+
+### UnsetMinThroughputMbps
+`func (o *DatabasePrice) UnsetMinThroughputMbps()`
+
+UnsetMinThroughputMbps ensures that no value is present for MinThroughputMbps, not even an explicit nil
 ### GetNativeCostPerHour
 
 `func (o *DatabasePrice) GetNativeCostPerHour() float32`
@@ -838,6 +998,16 @@ SetRamGb sets RamGb field to given value.
 
 HasRamGb returns a boolean if a field has been set.
 
+### SetRamGbNil
+
+`func (o *DatabasePrice) SetRamGbNil(b bool)`
+
+ SetRamGbNil sets the value for RamGb to be an explicit nil
+
+### UnsetRamGb
+`func (o *DatabasePrice) UnsetRamGb()`
+
+UnsetRamGb ensures that no value is present for RamGb, not even an explicit nil
 ### GetRamGbCostPerHour
 
 `func (o *DatabasePrice) GetRamGbCostPerHour() float32`
@@ -863,6 +1033,16 @@ SetRamGbCostPerHour sets RamGbCostPerHour field to given value.
 
 HasRamGbCostPerHour returns a boolean if a field has been set.
 
+### SetRamGbCostPerHourNil
+
+`func (o *DatabasePrice) SetRamGbCostPerHourNil(b bool)`
+
+ SetRamGbCostPerHourNil sets the value for RamGbCostPerHour to be an explicit nil
+
+### UnsetRamGbCostPerHour
+`func (o *DatabasePrice) UnsetRamGbCostPerHour()`
+
+UnsetRamGbCostPerHour ensures that no value is present for RamGbCostPerHour, not even an explicit nil
 ### GetRawPricingData
 
 `func (o *DatabasePrice) GetRawPricingData() map[string]interface{}`

@@ -1184,7 +1184,7 @@ func main() {
 	model := "model_example" // string | Filter by model (optional)
 	provider := "provider_example" // string | Filter by model provider (optional)
 	region := "region_example" // string | Filter by region (optional)
-	tokenBucket := "tokenBucket_example" // string | Filter by token bucket (optional)
+	tokenBucket := "tokenBucket_example" // string | Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
@@ -1214,7 +1214,7 @@ Name | Type | Description  | Notes
  **model** | **string** | Filter by model | 
  **provider** | **string** | Filter by model provider | 
  **region** | **string** | Filter by region | 
- **tokenBucket** | **string** | Filter by token bucket | 
+ **tokenBucket** | **string** | Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket | 
 
 ### Return type
 

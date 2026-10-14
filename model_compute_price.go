@@ -20,30 +20,37 @@ var _ MappedNullable = &ComputePrice{}
 
 // ComputePrice struct for ComputePrice
 type ComputePrice struct {
-	Architecture        *string                `json:"architecture,omitempty"`
-	AvailabilityZone    *string                `json:"availability_zone,omitempty"`
-	CostPerHour         *float32               `json:"cost_per_hour,omitempty"`
-	CpuCores            *float32               `json:"cpu_cores,omitempty"`
-	CpuCoresCostPerHour *float32               `json:"cpu_cores_cost_per_hour,omitempty"`
-	CreatedAt           *string                `json:"created_at,omitempty"`
-	Currency            *string                `json:"currency,omitempty"`
-	GpuCostPerHour      *float32               `json:"gpu_cost_per_hour,omitempty"`
-	GpuCount            *float32               `json:"gpu_count,omitempty"`
-	GpuType             *string                `json:"gpu_type,omitempty"`
-	Id                  *string                `json:"id,omitempty"`
-	InstanceType        *string                `json:"instance_type,omitempty"`
-	NativeCostPerHour   *float32               `json:"native_cost_per_hour,omitempty"`
-	OperatingSystem     *string                `json:"operating_system,omitempty"`
-	PeriodBillingHours  *float32               `json:"period_billing_hours,omitempty"`
-	Provider            *string                `json:"provider,omitempty"`
-	RamGb               *float32               `json:"ram_gb,omitempty"`
-	RamGbCostPerHour    *float32               `json:"ram_gb_cost_per_hour,omitempty"`
-	RawPricingData      map[string]interface{} `json:"raw_pricing_data,omitempty"`
-	Region              *string                `json:"region,omitempty"`
-	Service             *string                `json:"service,omitempty"`
-	Tags                map[string]interface{} `json:"tags,omitempty"`
-	UpdatedAt           *string                `json:"updated_at,omitempty"`
-	UsageType           *string                `json:"usage_type,omitempty"`
+	Architecture     *string `json:"architecture,omitempty"`
+	AvailabilityZone *string `json:"availability_zone,omitempty"`
+	// On-demand-equivalent hourly USD; multiply by provider_pricing_rules.month_hours for monthly.
+	CostPerHour         *float32 `json:"cost_per_hour,omitempty"`
+	CpuCores            *float32 `json:"cpu_cores,omitempty"`
+	CpuCoresCostPerHour *float32 `json:"cpu_cores_cost_per_hour,omitempty"`
+	CreatedAt           *string  `json:"created_at,omitempty"`
+	// Currency the provider published this price in. Cost columns are always normalized USD.
+	Currency       *string  `json:"currency,omitempty"`
+	GpuCostPerHour *float32 `json:"gpu_cost_per_hour,omitempty"`
+	GpuCount       *float32 `json:"gpu_count,omitempty"`
+	GpuType        *string  `json:"gpu_type,omitempty"`
+	Id             *string  `json:"id,omitempty"`
+	InstanceType   *string  `json:"instance_type,omitempty"`
+	// cost_per_hour as published, before FX normalization. Zero when currency is USD.
+	NativeCostPerHour *float32 `json:"native_cost_per_hour,omitempty"`
+	OperatingSystem   *string  `json:"operating_system,omitempty"`
+	// Commitment term the raw price covers: 1=hourly on-demand; 8640/25920/43200=1mo/3mo/1yr buckets. cost_per_hour is already normalized to hourly.
+	PeriodBillingHours *float32               `json:"period_billing_hours,omitempty"`
+	Provider           *string                `json:"provider,omitempty"`
+	RamGb              *float32               `json:"ram_gb,omitempty"`
+	RamGbCostPerHour   *float32               `json:"ram_gb_cost_per_hour,omitempty"`
+	RawPricingData     map[string]interface{} `json:"raw_pricing_data,omitempty"`
+	Region             *string                `json:"region,omitempty"`
+	// True when the row carries per-vCPU and per-GB rates for a shape sized at launch; resolution stores and returns a row priced at the requested vCPU and memory. NULL or false is a fixed-size shape.
+	Resizable NullableBool           `json:"resizable,omitempty"`
+	Service   *string                `json:"service,omitempty"`
+	Tags      map[string]interface{} `json:"tags,omitempty"`
+	UpdatedAt *string                `json:"updated_at,omitempty"`
+	// Pricing tier token (ONDEMAND, RESERVED, SPOT_*, *_HBP, *_BYOL, Commit1Yr/3Yr). Filter to ONDEMAND for normal pricing.
+	UsageType *string `json:"usage_type,omitempty"`
 }
 
 // NewComputePrice instantiates a new ComputePrice object
@@ -703,6 +710,49 @@ func (o *ComputePrice) SetRegion(v string) {
 	o.Region = &v
 }
 
+// GetResizable returns the Resizable field value if set, zero value otherwise (both if not set or set to explicit null).
+func (o *ComputePrice) GetResizable() bool {
+	if o == nil || IsNil(o.Resizable.Get()) {
+		var ret bool
+		return ret
+	}
+	return *o.Resizable.Get()
+}
+
+// GetResizableOk returns a tuple with the Resizable field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+// NOTE: If the value is an explicit nil, `nil, true` will be returned
+func (o *ComputePrice) GetResizableOk() (*bool, bool) {
+	if o == nil {
+		return nil, false
+	}
+	return o.Resizable.Get(), o.Resizable.IsSet()
+}
+
+// HasResizable returns a boolean if a field has been set.
+func (o *ComputePrice) HasResizable() bool {
+	if o != nil && o.Resizable.IsSet() {
+		return true
+	}
+
+	return false
+}
+
+// SetResizable gets a reference to the given NullableBool and assigns it to the Resizable field.
+func (o *ComputePrice) SetResizable(v bool) {
+	o.Resizable.Set(&v)
+}
+
+// SetResizableNil sets the value for Resizable to be an explicit nil
+func (o *ComputePrice) SetResizableNil() {
+	o.Resizable.Set(nil)
+}
+
+// UnsetResizable ensures that no value is present for Resizable, not even an explicit nil
+func (o *ComputePrice) UnsetResizable() {
+	o.Resizable.Unset()
+}
+
 // GetService returns the Service field value if set, zero value otherwise.
 func (o *ComputePrice) GetService() string {
 	if o == nil || IsNil(o.Service) {
@@ -900,6 +950,9 @@ func (o ComputePrice) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Region) {
 		toSerialize["region"] = o.Region
+	}
+	if o.Resizable.IsSet() {
+		toSerialize["resizable"] = o.Resizable.Get()
 	}
 	if !IsNil(o.Service) {
 		toSerialize["service"] = o.Service

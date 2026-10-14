@@ -11,7 +11,7 @@ Method | HTTP request | Description
 
 ## V1PricingComputePost
 
-> ComputePrice V1PricingComputePost(ctx).Instance(instance).Execute()
+> ComputePrice V1PricingComputePost(ctx).Instance(instance).Persist(persist).Execute()
 
 Price a machine
 
@@ -31,10 +31,11 @@ import (
 
 func main() {
 	instance := *openapiclient.NewInstance() // Instance | Machine to price
+	persist := true // bool | Save a price computed for a shape the catalogue does not list, so later lookups return the same row. Defaults to true; false returns the same price without saving it. (optional)
 
 	configuration := openapiclient.NewConfiguration()
 	apiClient := openapiclient.NewAPIClient(configuration)
-	resp, r, err := apiClient.PricingAPI.V1PricingComputePost(context.Background()).Instance(instance).Execute()
+	resp, r, err := apiClient.PricingAPI.V1PricingComputePost(context.Background()).Instance(instance).Persist(persist).Execute()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error when calling `PricingAPI.V1PricingComputePost``: %v\n", err)
 		fmt.Fprintf(os.Stderr, "Full HTTP response: %v\n", r)
@@ -56,6 +57,7 @@ Other parameters are passed through a pointer to a apiV1PricingComputePostReques
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
  **instance** | [**Instance**](Instance.md) | Machine to price | 
+ **persist** | **bool** | Save a price computed for a shape the catalogue does not list, so later lookups return the same row. Defaults to true; false returns the same price without saving it. | 
 
 ### Return type
 

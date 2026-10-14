@@ -269,7 +269,7 @@ func (r ApiV1MarketplaceComputeIdDeleteRequest) Execute() (*http.Response, error
 V1MarketplaceComputeIdDelete Delete one compute price
 
 Delete a compute price you have published, by its id.
-Usage still pinned to it stops resolving a price, so re-pin before deleting.
+A price that is still assigned cannot be deleted; the response lists what uses it so you can unassign it first.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id Price id
@@ -393,6 +393,17 @@ func (a *MarketplaceAPIService) V1MarketplaceComputeIdDeleteExecute(r ApiV1Marke
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 409 {
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -638,6 +649,7 @@ func (r ApiV1MarketplaceComputeIdPatchRequest) Execute() (*ComputePrice, *http.R
 V1MarketplaceComputeIdPatch Change one compute price
 
 Change the rate or the descriptive fields of a compute price you have published. Send only the fields you want to change.
+Changing `cost_per_hour` re-derives the per-resource rates, changing a rate re-derives `cost_per_hour`, and sending both requires them to agree within 0.1%. Changing only the size keeps `cost_per_hour` and re-splits the rates; changing only the GPU fields keeps the cpu and memory rates and re-derives `cost_per_hour`.
 The fields that identify the price cannot be changed, because they describe a different SKU; delete the price and register a new one instead.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
@@ -847,6 +859,7 @@ func (r ApiV1MarketplaceComputePostRequest) Execute() (*PublishedComputePrices, 
 V1MarketplaceComputePost Publish compute prices
 
 Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud.
+Send either `cost_per_hour` or the per-resource rates (`cpu_cores_cost_per_hour`, `ram_gb_cost_per_hour`, `gpu_cost_per_hour`) and the other is derived; send both and they must agree within 0.1%. GPU cost is taken out of `cost_per_hour` before the rest is split across cpu and memory. A `cost_per_hour` of 0, or cpu and memory rates that are both 0, count as not sent. `service`, `region`, `cpu_cores`, `ram_gb` and `period_billing_hours` (1 for an hourly price) are required.
 An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU.
 The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag.
 
@@ -1658,6 +1671,8 @@ func (r ApiV1MarketplaceDatabasesIdPatchRequest) Execute() (*DatabasePrice, *htt
 V1MarketplaceDatabasesIdPatch Change one database price
 
 Change the rate or the descriptive fields of a database price you have published. Send only the fields you want to change.
+Changing `cost_per_hour` re-derives the per-resource rates, changing a rate re-derives `cost_per_hour`, and sending both requires them to agree within 0.1%. Changing only the size keeps `cost_per_hour` and re-splits the rates.
+Sending null clears an optional database price field; a database left with no price at all is rejected.
 The fields that identify the price cannot be changed, because they describe a different SKU; delete the price and register a new one instead.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
@@ -1867,6 +1882,7 @@ func (r ApiV1MarketplaceDatabasesPostRequest) Execute() (*PublishedDatabasePrice
 V1MarketplaceDatabasesPost Publish database prices
 
 Register your own managed database rates so CostGraph can price clusters it has no public price for.
+Send either `cost_per_hour` or the cpu and memory rates and the other is derived; send both and they must agree within 0.1%. A database without `cpu_cores` or `ram_gb`, such as a serverless one, needs no rates and only at least one price of any kind. `service`, `region`, `engine` and `period_billing_hours` (1 for an hourly price) are required.
 An entry is upserted on its natural key (provider, service, region, engine, edition, instance type and usage type), so re-posting the same entry with a new cost keeps its id and reprices everything already using it.
 The returned id is what you attach to a database with the `costgraph.ai/pricing-id.database` label or tag.
 
@@ -2289,7 +2305,7 @@ func (r ApiV1MarketplaceDisksIdDeleteRequest) Execute() (*http.Response, error) 
 V1MarketplaceDisksIdDelete Delete one disk price
 
 Delete a disk price you have published, by its id.
-Usage still pinned to it stops resolving a price, so re-pin before deleting.
+A price that is still assigned cannot be deleted; the response lists what uses it so you can unassign it first.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@param id Price id
@@ -2413,6 +2429,17 @@ func (a *MarketplaceAPIService) V1MarketplaceDisksIdDeleteExecute(r ApiV1Marketp
 			return localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 404 {
+			var v Problem
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 409 {
 			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -2868,7 +2895,7 @@ V1MarketplaceDisksPost Publish disk prices
 
 Register your own block storage rates so CostGraph can price volumes it has no public price for.
 An entry is upserted on its natural key (provider, service, region, availability zone, usage type, type and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it.
-The returned id is what you attach to a volume with the `costgraph.ai/pricing-id.disk` label or tag.
+The returned id is what you attach to a volume with the `costgraph.ai/pricing-id.storage` label or tag.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiV1MarketplaceDisksPostRequest
@@ -3237,7 +3264,7 @@ func (r ApiV1MarketplaceModelsGetRequest) Region(region string) ApiV1Marketplace
 	return r
 }
 
-// Filter by token bucket
+// Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket
 func (r ApiV1MarketplaceModelsGetRequest) TokenBucket(tokenBucket string) ApiV1MarketplaceModelsGetRequest {
 	r.tokenBucket = &tokenBucket
 	return r
@@ -4020,6 +4047,8 @@ func (r ApiV1MarketplaceModelsPostRequest) Execute() (*PublishedModelPrices, *ht
 V1MarketplaceModelsPost Publish model prices
 
 Register your own token rates for models you host, so CostGraph can price calls it has no public rate for.
+Every token bucket is priced separately, so publish one price per bucket you charge for - `input`, `output`, `cache_read`, `cache_write` - each with its own `unit_price_per_mtok`. A bucket you do not publish has no rate, and usage in it resolves to no price rather than to zero.
+`token_bucket` identifies the price alongside the model, host and region, so it cannot be patched later: delete the price and publish a new one to move a rate to another bucket.
 Entries are versioned: a price change closes the current row and opens a new one, so spend already recorded keeps the rate it was billed at.
 The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change.
 

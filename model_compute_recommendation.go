@@ -20,8 +20,11 @@ var _ MappedNullable = &ComputeRecommendation{}
 
 // ComputeRecommendation struct for ComputeRecommendation
 type ComputeRecommendation struct {
-	Pricing *ComputePrice `json:"pricing,omitempty"`
-	Savings *TypesSavings `json:"savings,omitempty"`
+	CostPerWorkUnit *float32      `json:"cost_per_work_unit,omitempty"`
+	CpuClass        *string       `json:"cpu_class,omitempty"`
+	Pricing         *ComputePrice `json:"pricing,omitempty"`
+	Savings         *TypesSavings `json:"savings,omitempty"`
+	WorkUnit        *string       `json:"work_unit,omitempty"`
 }
 
 // NewComputeRecommendation instantiates a new ComputeRecommendation object
@@ -39,6 +42,70 @@ func NewComputeRecommendation() *ComputeRecommendation {
 func NewComputeRecommendationWithDefaults() *ComputeRecommendation {
 	this := ComputeRecommendation{}
 	return &this
+}
+
+// GetCostPerWorkUnit returns the CostPerWorkUnit field value if set, zero value otherwise.
+func (o *ComputeRecommendation) GetCostPerWorkUnit() float32 {
+	if o == nil || IsNil(o.CostPerWorkUnit) {
+		var ret float32
+		return ret
+	}
+	return *o.CostPerWorkUnit
+}
+
+// GetCostPerWorkUnitOk returns a tuple with the CostPerWorkUnit field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ComputeRecommendation) GetCostPerWorkUnitOk() (*float32, bool) {
+	if o == nil || IsNil(o.CostPerWorkUnit) {
+		return nil, false
+	}
+	return o.CostPerWorkUnit, true
+}
+
+// HasCostPerWorkUnit returns a boolean if a field has been set.
+func (o *ComputeRecommendation) HasCostPerWorkUnit() bool {
+	if o != nil && !IsNil(o.CostPerWorkUnit) {
+		return true
+	}
+
+	return false
+}
+
+// SetCostPerWorkUnit gets a reference to the given float32 and assigns it to the CostPerWorkUnit field.
+func (o *ComputeRecommendation) SetCostPerWorkUnit(v float32) {
+	o.CostPerWorkUnit = &v
+}
+
+// GetCpuClass returns the CpuClass field value if set, zero value otherwise.
+func (o *ComputeRecommendation) GetCpuClass() string {
+	if o == nil || IsNil(o.CpuClass) {
+		var ret string
+		return ret
+	}
+	return *o.CpuClass
+}
+
+// GetCpuClassOk returns a tuple with the CpuClass field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ComputeRecommendation) GetCpuClassOk() (*string, bool) {
+	if o == nil || IsNil(o.CpuClass) {
+		return nil, false
+	}
+	return o.CpuClass, true
+}
+
+// HasCpuClass returns a boolean if a field has been set.
+func (o *ComputeRecommendation) HasCpuClass() bool {
+	if o != nil && !IsNil(o.CpuClass) {
+		return true
+	}
+
+	return false
+}
+
+// SetCpuClass gets a reference to the given string and assigns it to the CpuClass field.
+func (o *ComputeRecommendation) SetCpuClass(v string) {
+	o.CpuClass = &v
 }
 
 // GetPricing returns the Pricing field value if set, zero value otherwise.
@@ -105,6 +172,38 @@ func (o *ComputeRecommendation) SetSavings(v TypesSavings) {
 	o.Savings = &v
 }
 
+// GetWorkUnit returns the WorkUnit field value if set, zero value otherwise.
+func (o *ComputeRecommendation) GetWorkUnit() string {
+	if o == nil || IsNil(o.WorkUnit) {
+		var ret string
+		return ret
+	}
+	return *o.WorkUnit
+}
+
+// GetWorkUnitOk returns a tuple with the WorkUnit field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *ComputeRecommendation) GetWorkUnitOk() (*string, bool) {
+	if o == nil || IsNil(o.WorkUnit) {
+		return nil, false
+	}
+	return o.WorkUnit, true
+}
+
+// HasWorkUnit returns a boolean if a field has been set.
+func (o *ComputeRecommendation) HasWorkUnit() bool {
+	if o != nil && !IsNil(o.WorkUnit) {
+		return true
+	}
+
+	return false
+}
+
+// SetWorkUnit gets a reference to the given string and assigns it to the WorkUnit field.
+func (o *ComputeRecommendation) SetWorkUnit(v string) {
+	o.WorkUnit = &v
+}
+
 func (o ComputeRecommendation) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -115,11 +214,20 @@ func (o ComputeRecommendation) MarshalJSON() ([]byte, error) {
 
 func (o ComputeRecommendation) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.CostPerWorkUnit) {
+		toSerialize["cost_per_work_unit"] = o.CostPerWorkUnit
+	}
+	if !IsNil(o.CpuClass) {
+		toSerialize["cpu_class"] = o.CpuClass
+	}
 	if !IsNil(o.Pricing) {
 		toSerialize["pricing"] = o.Pricing
 	}
 	if !IsNil(o.Savings) {
 		toSerialize["savings"] = o.Savings
+	}
+	if !IsNil(o.WorkUnit) {
+		toSerialize["work_unit"] = o.WorkUnit
 	}
 	return toSerialize, nil
 }

@@ -20,13 +20,14 @@ var _ MappedNullable = &Problem{}
 
 // Problem struct for Problem
 type Problem struct {
-	Code     *string      `json:"code,omitempty"`
-	Detail   *string      `json:"detail,omitempty"`
-	Errors   []FieldError `json:"errors,omitempty"`
-	Instance *string      `json:"instance,omitempty"`
-	Status   *int32       `json:"status,omitempty"`
-	Title    *string      `json:"title,omitempty"`
-	Type     *string      `json:"type,omitempty"`
+	Affected []AffectedResource `json:"affected,omitempty"`
+	Code     *string            `json:"code,omitempty"`
+	Detail   *string            `json:"detail,omitempty"`
+	Errors   []FieldError       `json:"errors,omitempty"`
+	Instance *string            `json:"instance,omitempty"`
+	Status   *int32             `json:"status,omitempty"`
+	Title    *string            `json:"title,omitempty"`
+	Type     *string            `json:"type,omitempty"`
 }
 
 // NewProblem instantiates a new Problem object
@@ -44,6 +45,38 @@ func NewProblem() *Problem {
 func NewProblemWithDefaults() *Problem {
 	this := Problem{}
 	return &this
+}
+
+// GetAffected returns the Affected field value if set, zero value otherwise.
+func (o *Problem) GetAffected() []AffectedResource {
+	if o == nil || IsNil(o.Affected) {
+		var ret []AffectedResource
+		return ret
+	}
+	return o.Affected
+}
+
+// GetAffectedOk returns a tuple with the Affected field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *Problem) GetAffectedOk() ([]AffectedResource, bool) {
+	if o == nil || IsNil(o.Affected) {
+		return nil, false
+	}
+	return o.Affected, true
+}
+
+// HasAffected returns a boolean if a field has been set.
+func (o *Problem) HasAffected() bool {
+	if o != nil && !IsNil(o.Affected) {
+		return true
+	}
+
+	return false
+}
+
+// SetAffected gets a reference to the given []AffectedResource and assigns it to the Affected field.
+func (o *Problem) SetAffected(v []AffectedResource) {
+	o.Affected = v
 }
 
 // GetCode returns the Code field value if set, zero value otherwise.
@@ -280,6 +313,9 @@ func (o Problem) MarshalJSON() ([]byte, error) {
 
 func (o Problem) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Affected) {
+		toSerialize["affected"] = o.Affected
+	}
 	if !IsNil(o.Code) {
 		toSerialize["code"] = o.Code
 	}
