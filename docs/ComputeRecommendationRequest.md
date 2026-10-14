@@ -8,6 +8,7 @@ Name | Type | Description | Notes
 **Instance** | Pointer to [**GithubComBaselinehqGolangSharedTypesInstance**](GithubComBaselinehqGolangSharedTypesInstance.md) |  | [optional] 
 **Predicates** | Pointer to [**TypesPredicates**](TypesPredicates.md) |  | [optional] 
 **Usage** | Pointer to [**GithubComBaselinehqGolangSharedTypesVM**](GithubComBaselinehqGolangSharedTypesVM.md) |  | [optional] 
+**WorkloadClass** | Pointer to **string** | WorkloadClass selects which accelerator gates a compute recommendation applies: inference_single, inference_multi or training_distributed. Empty means inference_multi, which is what the recommender did before the classes existed. Disk requests do not carry one. | [optional] 
 
 ## Methods
 
@@ -127,6 +128,31 @@ SetUsage sets Usage field to given value.
 `func (o *ComputeRecommendationRequest) HasUsage() bool`
 
 HasUsage returns a boolean if a field has been set.
+
+### GetWorkloadClass
+
+`func (o *ComputeRecommendationRequest) GetWorkloadClass() string`
+
+GetWorkloadClass returns the WorkloadClass field if non-nil, zero value otherwise.
+
+### GetWorkloadClassOk
+
+`func (o *ComputeRecommendationRequest) GetWorkloadClassOk() (*string, bool)`
+
+GetWorkloadClassOk returns a tuple with the WorkloadClass field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWorkloadClass
+
+`func (o *ComputeRecommendationRequest) SetWorkloadClass(v string)`
+
+SetWorkloadClass sets WorkloadClass field to given value.
+
+### HasWorkloadClass
+
+`func (o *ComputeRecommendationRequest) HasWorkloadClass() bool`
+
+HasWorkloadClass returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -280,8 +280,30 @@ func (a *DefaultAPIService) MarketplaceProvidersComputeDeleteExecute(r ApiMarket
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		if localVarHTTPResponse.StatusCode == 404 {
 			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -517,6 +539,17 @@ func (a *DefaultAPIService) MarketplaceProvidersComputeGetExecute(r ApiMarketpla
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		if localVarHTTPResponse.StatusCode == 500 {
 			var v ErrorResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -562,6 +595,7 @@ func (r ApiMarketplaceProvidersComputePostRequest) Execute() (*RegisteredCompute
 MarketplaceProvidersComputePost Register a custom provider
 
 Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud.
+Send either `cost_per_hour` or the per-resource rates (`cpu_cores_cost_per_hour`, `ram_gb_cost_per_hour`, `gpu_cost_per_hour`) and the other is derived; send both and they must agree within 0.1%. GPU cost is taken out of `cost_per_hour` before the rest is split across cpu and memory. A `cost_per_hour` of 0, or cpu and memory rates that are both 0, count as not sent. `service`, `region`, `cpu_cores`, `ram_gb` and `period_billing_hours` (1 for an hourly price) are required.
 An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU.
 The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag. Treat it as a secret you hand out deliberately: anyone holding it can pin to the rate, which is how a provider prices clusters it sells on.
 Superseded by POST /v1/marketplace/compute, which returns RFC 9457 problem responses on failure.
@@ -686,6 +720,17 @@ func (a *DefaultAPIService) MarketplaceProvidersComputePostExecute(r ApiMarketpl
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
 			var v ErrorResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -864,6 +909,17 @@ func (a *DefaultAPIService) MarketplaceProvidersDatabasesDeleteExecute(r ApiMark
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
 			var v ErrorResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -1131,6 +1187,17 @@ func (a *DefaultAPIService) MarketplaceProvidersDatabasesGetExecute(r ApiMarketp
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		if localVarHTTPResponse.StatusCode == 500 {
 			var v ErrorResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -1176,6 +1243,7 @@ func (r ApiMarketplaceProvidersDatabasesPostRequest) Execute() (*RegisteredDatab
 MarketplaceProvidersDatabasesPost Register custom database pricing
 
 Register your own managed database rates, keyed by engine, edition, deployment option, storage type and instance type alongside the usual provider, service and region.
+Send either `cost_per_hour` or the cpu and memory rates and the other is derived; send both and they must agree within 0.1%. A database without `cpu_cores` or `ram_gb`, such as a serverless one, needs no rates and only at least one price of any kind. `service`, `region`, `engine` and `period_billing_hours` (1 for an hourly price) are required.
 An entry is upserted on the full natural key (provider, service, region, availability zone, usage type, engine, edition, deployment option, billing config, storage type, instance type, architecture and period billing hours), so re-posting with a new cost keeps its id; changing any key field mints a new one.
 The returned id is what you attach with the `costgraph.ai/pricing-id.database` label or tag.
 Superseded by POST /v1/marketplace/databases, which returns RFC 9457 problem responses on failure.
@@ -1300,6 +1368,17 @@ func (a *DefaultAPIService) MarketplaceProvidersDatabasesPostExecute(r ApiMarket
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
 			var v ErrorResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -1488,8 +1567,30 @@ func (a *DefaultAPIService) MarketplaceProvidersDisksDeleteExecute(r ApiMarketpl
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		if localVarHTTPResponse.StatusCode == 404 {
 			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 409 {
+			var v Problem
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
 				newErr.error = err.Error()
@@ -1725,6 +1826,17 @@ func (a *DefaultAPIService) MarketplaceProvidersDisksGetExecute(r ApiMarketplace
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		if localVarHTTPResponse.StatusCode == 500 {
 			var v ErrorResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -1895,6 +2007,17 @@ func (a *DefaultAPIService) MarketplaceProvidersDisksPostExecute(r ApiMarketplac
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
 		if localVarHTTPResponse.StatusCode == 401 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
+		if localVarHTTPResponse.StatusCode == 403 {
 			var v ErrorResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
 			if err != nil {
@@ -2082,6 +2205,17 @@ func (a *DefaultAPIService) MarketplaceProvidersModelsDeleteExecute(r ApiMarketp
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		if localVarHTTPResponse.StatusCode == 404 {
 			var v ErrorResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -2159,7 +2293,7 @@ func (r ApiMarketplaceProvidersModelsGetRequest) Region(region string) ApiMarket
 	return r
 }
 
-// Filter by token bucket
+// Filter by token bucket. Every bucket is priced separately, so a model has one price per bucket
 func (r ApiMarketplaceProvidersModelsGetRequest) TokenBucket(tokenBucket string) ApiMarketplaceProvidersModelsGetRequest {
 	r.tokenBucket = &tokenBucket
 	return r
@@ -2319,6 +2453,17 @@ func (a *DefaultAPIService) MarketplaceProvidersModelsGetExecute(r ApiMarketplac
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		if localVarHTTPResponse.StatusCode == 500 {
 			var v ErrorResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -2363,7 +2508,8 @@ func (r ApiMarketplaceProvidersModelsPostRequest) Execute() (*RegisteredModelPri
 /*
 MarketplaceProvidersModelsPost Register custom model pricing
 
-Register custom token pricing for models you host. Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at.
+Register custom token pricing for models you host. Every token bucket is priced separately, so submit one entry per bucket you charge for - `input`, `output`, `cache_read`, `cache_write` - each with its own `unit_price_per_mtok`. A bucket you leave out has no rate, and usage in it resolves to no price rather than to zero.
+Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at.
 The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change instead of holding on to an earlier one.
 Superseded by POST /v1/marketplace/models, which returns RFC 9457 problem responses on failure.
 
@@ -2497,6 +2643,17 @@ func (a *DefaultAPIService) MarketplaceProvidersModelsPostExecute(r ApiMarketpla
 			newErr.model = v
 			return localVarReturnValue, localVarHTTPResponse, newErr
 		}
+		if localVarHTTPResponse.StatusCode == 403 {
+			var v ErrorResponse
+			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
+			if err != nil {
+				newErr.error = err.Error()
+				return localVarReturnValue, localVarHTTPResponse, newErr
+			}
+			newErr.error = formatErrorMessage(localVarHTTPResponse.Status, &v)
+			newErr.model = v
+			return localVarReturnValue, localVarHTTPResponse, newErr
+		}
 		if localVarHTTPResponse.StatusCode == 500 {
 			var v ErrorResponse
 			err = a.client.decode(&v, localVarBody, localVarHTTPResponse.Header.Get("Content-Type"))
@@ -2526,11 +2683,18 @@ type ApiPricingComputePostRequest struct {
 	ctx        context.Context
 	ApiService *DefaultAPIService
 	instance   *Instance
+	persist    *bool
 }
 
 // Instance
 func (r ApiPricingComputePostRequest) Instance(instance Instance) ApiPricingComputePostRequest {
 	r.instance = &instance
+	return r
+}
+
+// Save a price computed for a shape the catalogue does not list. Defaults to true.
+func (r ApiPricingComputePostRequest) Persist(persist bool) ApiPricingComputePostRequest {
+	r.persist = &persist
 	return r
 }
 
@@ -2583,6 +2747,9 @@ func (a *DefaultAPIService) PricingComputePostExecute(r ApiPricingComputePostReq
 		return localVarReturnValue, nil, reportError("instance is required and must be specified")
 	}
 
+	if r.persist != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "persist", r.persist, "", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
 
@@ -2902,11 +3069,18 @@ type ApiPricingPostRequest struct {
 	ctx        context.Context
 	ApiService *DefaultAPIService
 	instance   *Instance
+	persist    *bool
 }
 
 // Instance
 func (r ApiPricingPostRequest) Instance(instance Instance) ApiPricingPostRequest {
 	r.instance = &instance
+	return r
+}
+
+// Save a price computed for a shape the catalogue does not list. Defaults to true.
+func (r ApiPricingPostRequest) Persist(persist bool) ApiPricingPostRequest {
+	r.persist = &persist
 	return r
 }
 
@@ -2959,6 +3133,9 @@ func (a *DefaultAPIService) PricingPostExecute(r ApiPricingPostRequest) (*Comput
 		return localVarReturnValue, nil, reportError("instance is required and must be specified")
 	}
 
+	if r.persist != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "persist", r.persist, "", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
 
@@ -3233,11 +3410,18 @@ type ApiRecommendationsComputePostRequest struct {
 	ctx        context.Context
 	ApiService *DefaultAPIService
 	instance   *ComputeRecommendationRequest
+	persist    *bool
 }
 
 // Instance
 func (r ApiRecommendationsComputePostRequest) Instance(instance ComputeRecommendationRequest) ApiRecommendationsComputePostRequest {
 	r.instance = &instance
+	return r
+}
+
+// Save a price computed for a shape the catalogue does not list. Defaults to true.
+func (r ApiRecommendationsComputePostRequest) Persist(persist bool) ApiRecommendationsComputePostRequest {
+	r.persist = &persist
 	return r
 }
 
@@ -3290,6 +3474,9 @@ func (a *DefaultAPIService) RecommendationsComputePostExecute(r ApiRecommendatio
 		return localVarReturnValue, nil, reportError("instance is required and must be specified")
 	}
 
+	if r.persist != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "persist", r.persist, "", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
 
@@ -3609,11 +3796,18 @@ type ApiRecommendationsPostRequest struct {
 	ctx        context.Context
 	ApiService *DefaultAPIService
 	instance   *ComputeRecommendationRequest
+	persist    *bool
 }
 
 // Instance
 func (r ApiRecommendationsPostRequest) Instance(instance ComputeRecommendationRequest) ApiRecommendationsPostRequest {
 	r.instance = &instance
+	return r
+}
+
+// Save a price computed for a shape the catalogue does not list. Defaults to true.
+func (r ApiRecommendationsPostRequest) Persist(persist bool) ApiRecommendationsPostRequest {
+	r.persist = &persist
 	return r
 }
 
@@ -3666,6 +3860,9 @@ func (a *DefaultAPIService) RecommendationsPostExecute(r ApiRecommendationsPostR
 		return localVarReturnValue, nil, reportError("instance is required and must be specified")
 	}
 
+	if r.persist != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "persist", r.persist, "", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
 

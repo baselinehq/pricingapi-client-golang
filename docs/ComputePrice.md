@@ -6,28 +6,29 @@ Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **Architecture** | Pointer to **string** |  | [optional] 
 **AvailabilityZone** | Pointer to **string** |  | [optional] 
-**CostPerHour** | Pointer to **float32** |  | [optional] 
+**CostPerHour** | Pointer to **float32** | On-demand-equivalent hourly USD; multiply by provider_pricing_rules.month_hours for monthly. | [optional] 
 **CpuCores** | Pointer to **float32** |  | [optional] 
 **CpuCoresCostPerHour** | Pointer to **float32** |  | [optional] 
 **CreatedAt** | Pointer to **string** |  | [optional] 
-**Currency** | Pointer to **string** |  | [optional] 
+**Currency** | Pointer to **string** | Currency the provider published this price in. Cost columns are always normalized USD. | [optional] 
 **GpuCostPerHour** | Pointer to **float32** |  | [optional] 
 **GpuCount** | Pointer to **float32** |  | [optional] 
 **GpuType** | Pointer to **string** |  | [optional] 
 **Id** | Pointer to **string** |  | [optional] 
 **InstanceType** | Pointer to **string** |  | [optional] 
-**NativeCostPerHour** | Pointer to **float32** |  | [optional] 
+**NativeCostPerHour** | Pointer to **float32** | cost_per_hour as published, before FX normalization. Zero when currency is USD. | [optional] 
 **OperatingSystem** | Pointer to **string** |  | [optional] 
-**PeriodBillingHours** | Pointer to **float32** |  | [optional] 
+**PeriodBillingHours** | Pointer to **float32** | Commitment term the raw price covers: 1&#x3D;hourly on-demand; 8640/25920/43200&#x3D;1mo/3mo/1yr buckets. cost_per_hour is already normalized to hourly. | [optional] 
 **Provider** | Pointer to **string** |  | [optional] 
 **RamGb** | Pointer to **float32** |  | [optional] 
 **RamGbCostPerHour** | Pointer to **float32** |  | [optional] 
 **RawPricingData** | Pointer to **map[string]interface{}** |  | [optional] 
 **Region** | Pointer to **string** |  | [optional] 
+**Resizable** | Pointer to **NullableBool** | True when the row carries per-vCPU and per-GB rates for a shape sized at launch; resolution stores and returns a row priced at the requested vCPU and memory. NULL or false is a fixed-size shape. | [optional] 
 **Service** | Pointer to **string** |  | [optional] 
 **Tags** | Pointer to **map[string]interface{}** |  | [optional] 
 **UpdatedAt** | Pointer to **string** |  | [optional] 
-**UsageType** | Pointer to **string** |  | [optional] 
+**UsageType** | Pointer to **string** | Pricing tier token (ONDEMAND, RESERVED, SPOT_*, *_HBP, *_BYOL, Commit1Yr/3Yr). Filter to ONDEMAND for normal pricing. | [optional] 
 
 ## Methods
 
@@ -548,6 +549,41 @@ SetRegion sets Region field to given value.
 
 HasRegion returns a boolean if a field has been set.
 
+### GetResizable
+
+`func (o *ComputePrice) GetResizable() bool`
+
+GetResizable returns the Resizable field if non-nil, zero value otherwise.
+
+### GetResizableOk
+
+`func (o *ComputePrice) GetResizableOk() (*bool, bool)`
+
+GetResizableOk returns a tuple with the Resizable field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetResizable
+
+`func (o *ComputePrice) SetResizable(v bool)`
+
+SetResizable sets Resizable field to given value.
+
+### HasResizable
+
+`func (o *ComputePrice) HasResizable() bool`
+
+HasResizable returns a boolean if a field has been set.
+
+### SetResizableNil
+
+`func (o *ComputePrice) SetResizableNil(b bool)`
+
+ SetResizableNil sets the value for Resizable to be an explicit nil
+
+### UnsetResizable
+`func (o *ComputePrice) UnsetResizable()`
+
+UnsetResizable ensures that no value is present for Resizable, not even an explicit nil
 ### GetService
 
 `func (o *ComputePrice) GetService() string`

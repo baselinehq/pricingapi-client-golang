@@ -4,6 +4,7 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Affected** | Pointer to [**[]AffectedResource**](AffectedResource.md) |  | [optional] 
 **Code** | Pointer to **string** |  | [optional] 
 **Detail** | Pointer to **string** |  | [optional] 
 **Errors** | Pointer to [**[]FieldError**](FieldError.md) |  | [optional] 
@@ -30,6 +31,31 @@ will change when the set of required properties is changed
 NewProblemWithDefaults instantiates a new Problem object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetAffected
+
+`func (o *Problem) GetAffected() []AffectedResource`
+
+GetAffected returns the Affected field if non-nil, zero value otherwise.
+
+### GetAffectedOk
+
+`func (o *Problem) GetAffectedOk() (*[]AffectedResource, bool)`
+
+GetAffectedOk returns a tuple with the Affected field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetAffected
+
+`func (o *Problem) SetAffected(v []AffectedResource)`
+
+SetAffected sets Affected field to given value.
+
+### HasAffected
+
+`func (o *Problem) HasAffected() bool`
+
+HasAffected returns a boolean if a field has been set.
 
 ### GetCode
 

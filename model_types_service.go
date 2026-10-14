@@ -48,6 +48,56 @@ const (
 	AkamaiLinode                TypesService = "AkamaiLinode"
 	AkamaiBlockStorage          TypesService = "AkamaiBlockStorage"
 	AkamaiDatabase              TypesService = "AkamaiDatabase"
+	AkashCompute                TypesService = "AkashCompute"
+	AlibabaCompute              TypesService = "AlibabaCompute"
+	AlibabaBlockStorage         TypesService = "AlibabaBlockStorage"
+	BasetenCompute              TypesService = "BasetenCompute"
+	BeamCompute                 TypesService = "BeamCompute"
+	CerebriumCompute            TypesService = "CerebriumCompute"
+	CivoCompute                 TypesService = "CivoCompute"
+	CivoBlockStorage            TypesService = "CivoBlockStorage"
+	CloreCompute                TypesService = "CloreCompute"
+	CoreWeaveCompute            TypesService = "CoreWeaveCompute"
+	CrusoeCompute               TypesService = "CrusoeCompute"
+	CUDOCompute                 TypesService = "CUDOCompute"
+	DataCrunchCompute           TypesService = "DataCrunchCompute"
+	DeepInfraCompute            TypesService = "DeepInfraCompute"
+	DenvrCompute                TypesService = "DenvrCompute"
+	E2ENetworksCompute          TypesService = "E2ENetworksCompute"
+	ExoscaleCompute             TypesService = "ExoscaleCompute"
+	ExoscaleBlockStorage        TypesService = "ExoscaleBlockStorage"
+	FalCompute                  TypesService = "FalCompute"
+	HotAisleCompute             TypesService = "HotAisleCompute"
+	HyperbolicCompute           TypesService = "HyperbolicCompute"
+	HyperstackCompute           TypesService = "HyperstackCompute"
+	IBMCompute                  TypesService = "IBMCompute"
+	IBMBlockStorage             TypesService = "IBMBlockStorage"
+	LambdaCompute               TypesService = "LambdaCompute"
+	LatitudeCompute             TypesService = "LatitudeCompute"
+	MassedComputeCompute        TypesService = "MassedComputeCompute"
+	ModalCompute                TypesService = "ModalCompute"
+	NebiusCompute               TypesService = "NebiusCompute"
+	NorthflankCompute           TypesService = "NorthflankCompute"
+	NorthflankVolume            TypesService = "NorthflankVolume"
+	NovitaCompute               TypesService = "NovitaCompute"
+	OblivusCompute              TypesService = "OblivusCompute"
+	OCICompute                  TypesService = "OCICompute"
+	OCIBlockStorage             TypesService = "OCIBlockStorage"
+	OpenTelekomCompute          TypesService = "OpenTelekomCompute"
+	PrimeIntellectCompute       TypesService = "PrimeIntellectCompute"
+	ReplicateCompute            TypesService = "ReplicateCompute"
+	RunPodCompute               TypesService = "RunPodCompute"
+	SaladCompute                TypesService = "SaladCompute"
+	ScalewayCompute             TypesService = "ScalewayCompute"
+	ScalewayBlockStorage        TypesService = "ScalewayBlockStorage"
+	SesterceCompute             TypesService = "SesterceCompute"
+	ShadeformCompute            TypesService = "ShadeformCompute"
+	ThunderComputeCompute       TypesService = "ThunderComputeCompute"
+	UpCloudCompute              TypesService = "UpCloudCompute"
+	UpCloudBlockStorage         TypesService = "UpCloudBlockStorage"
+	VastCompute                 TypesService = "VastCompute"
+	VultrCompute                TypesService = "VultrCompute"
+	VultrBlockStorage           TypesService = "VultrBlockStorage"
 )
 
 // All allowed values of TypesService enum
@@ -79,6 +129,56 @@ var AllowedTypesServiceEnumValues = []TypesService{
 	"AkamaiLinode",
 	"AkamaiBlockStorage",
 	"AkamaiDatabase",
+	"AkashCompute",
+	"AlibabaCompute",
+	"AlibabaBlockStorage",
+	"BasetenCompute",
+	"BeamCompute",
+	"CerebriumCompute",
+	"CivoCompute",
+	"CivoBlockStorage",
+	"CloreCompute",
+	"CoreWeaveCompute",
+	"CrusoeCompute",
+	"CUDOCompute",
+	"DataCrunchCompute",
+	"DeepInfraCompute",
+	"DenvrCompute",
+	"E2ENetworksCompute",
+	"ExoscaleCompute",
+	"ExoscaleBlockStorage",
+	"FalCompute",
+	"HotAisleCompute",
+	"HyperbolicCompute",
+	"HyperstackCompute",
+	"IBMCompute",
+	"IBMBlockStorage",
+	"LambdaCompute",
+	"LatitudeCompute",
+	"MassedComputeCompute",
+	"ModalCompute",
+	"NebiusCompute",
+	"NorthflankCompute",
+	"NorthflankVolume",
+	"NovitaCompute",
+	"OblivusCompute",
+	"OCICompute",
+	"OCIBlockStorage",
+	"OpenTelekomCompute",
+	"PrimeIntellectCompute",
+	"ReplicateCompute",
+	"RunPodCompute",
+	"SaladCompute",
+	"ScalewayCompute",
+	"ScalewayBlockStorage",
+	"SesterceCompute",
+	"ShadeformCompute",
+	"ThunderComputeCompute",
+	"UpCloudCompute",
+	"UpCloudBlockStorage",
+	"VastCompute",
+	"VultrCompute",
+	"VultrBlockStorage",
 }
 
 func (v *TypesService) UnmarshalJSON(src []byte) error {

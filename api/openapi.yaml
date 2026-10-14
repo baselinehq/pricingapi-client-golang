@@ -64,12 +64,24 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Provider and organization do not match
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Credential lacks the pricing:write scope or admin role
         "404":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Instance not found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Price is still assigned; the response lists what uses it
         "500":
           content:
             application/json:
@@ -136,6 +148,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Credential lacks the pricing:read scope or member role
         "500":
           content:
             application/json:
@@ -150,6 +168,7 @@ paths:
       deprecated: true
       description: |-
         Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud.
+        Send either `cost_per_hour` or the per-resource rates (`cpu_cores_cost_per_hour`, `ram_gb_cost_per_hour`, `gpu_cost_per_hour`) and the other is derived; send both and they must agree within 0.1%. GPU cost is taken out of `cost_per_hour` before the rest is split across cpu and memory. A `cost_per_hour` of 0, or cpu and memory rates that are both 0, count as not sent. `service`, `region`, `cpu_cores`, `ram_gb` and `period_billing_hours` (1 for an hourly price) are required.
         An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU.
         The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag. Treat it as a secret you hand out deliberately: anyone holding it can pin to the rate, which is how a provider prices clusters it sells on.
         Superseded by POST /v1/marketplace/compute, which returns RFC 9457 problem responses on failure.
@@ -179,6 +198,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Provider and organization do not match
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Credential lacks the pricing:write scope or admin role
         "500":
           content:
             application/json:
@@ -224,6 +249,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Provider and organization do not match
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Credential lacks the pricing:write scope or admin role
         "404":
           content:
             application/json:
@@ -306,6 +337,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Credential lacks the pricing:read scope or member role
         "500":
           content:
             application/json:
@@ -320,6 +357,7 @@ paths:
       deprecated: true
       description: |-
         Register your own managed database rates, keyed by engine, edition, deployment option, storage type and instance type alongside the usual provider, service and region.
+        Send either `cost_per_hour` or the cpu and memory rates and the other is derived; send both and they must agree within 0.1%. A database without `cpu_cores` or `ram_gb`, such as a serverless one, needs no rates and only at least one price of any kind. `service`, `region`, `engine` and `period_billing_hours` (1 for an hourly price) are required.
         An entry is upserted on the full natural key (provider, service, region, availability zone, usage type, engine, edition, deployment option, billing config, storage type, instance type, architecture and period billing hours), so re-posting with a new cost keeps its id; changing any key field mints a new one.
         The returned id is what you attach with the `costgraph.ai/pricing-id.database` label or tag.
         Superseded by POST /v1/marketplace/databases, which returns RFC 9457 problem responses on failure.
@@ -349,6 +387,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Provider and organization do not match
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Credential lacks the pricing:write scope or admin role
         "500":
           content:
             application/json:
@@ -394,12 +438,24 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Provider and organization do not match
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Credential lacks the pricing:write scope or admin role
         "404":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Disk pricing entry not found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Price is still assigned; the response lists what uses it
         "500":
           content:
             application/json:
@@ -466,6 +522,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Credential lacks the pricing:read scope or member role
         "500":
           content:
             application/json:
@@ -510,6 +572,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Provider and organization do not match
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Credential lacks the pricing:write scope or admin role
         "500":
           content:
             application/json:
@@ -554,6 +622,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Host and organization do not match
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Credential lacks the pricing:write scope or admin role
         "404":
           content:
             application/json:
@@ -602,10 +676,16 @@ paths:
         name: region
         schema:
           type: string
-      - description: Filter by token bucket
+      - description: "Filter by token bucket. Every bucket is priced separately, so\
+          \ a model has one price per bucket"
         in: query
         name: token_bucket
         schema:
+          enum:
+          - input
+          - output
+          - cache_read
+          - cache_write
           type: string
       responses:
         "200":
@@ -626,6 +706,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Unauthorized
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Credential lacks the pricing:read scope or member role
         "500":
           content:
             application/json:
@@ -639,7 +725,8 @@ paths:
     post:
       deprecated: true
       description: |-
-        Register custom token pricing for models you host. Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at.
+        Register custom token pricing for models you host. Every token bucket is priced separately, so submit one entry per bucket you charge for - `input`, `output`, `cache_read`, `cache_write` - each with its own `unit_price_per_mtok`. A bucket you leave out has no rate, and usage in it resolves to no price rather than to zero.
+        Entries are versioned: a price change closes the current row and opens a new one, so historic spend keeps the rate it was billed at.
         The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change instead of holding on to an earlier one.
         Superseded by POST /v1/marketplace/models, which returns RFC 9457 problem responses on failure.
       requestBody:
@@ -668,6 +755,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/ErrorResponse"
           description: Host and organization do not match
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+          description: Credential lacks the pricing:write scope or admin role
         "500":
           content:
             application/json:
@@ -685,6 +778,13 @@ paths:
       description: |-
         Get pricing for compute instances
         Superseded by POST /v1/pricing/compute, which returns RFC 9457 problem responses on failure.
+      parameters:
+      - description: Save a price computed for a shape the catalogue does not list.
+          Defaults to true.
+        in: query
+        name: persist
+        schema:
+          type: boolean
       requestBody:
         content:
           application/json:
@@ -734,6 +834,13 @@ paths:
       description: |-
         Get pricing for compute instances
         Superseded by POST /v1/pricing/compute, which returns RFC 9457 problem responses on failure.
+      parameters:
+      - description: Save a price computed for a shape the catalogue does not list.
+          Defaults to true.
+        in: query
+        name: persist
+        schema:
+          type: boolean
       requestBody:
         content:
           application/json:
@@ -855,6 +962,13 @@ paths:
       description: |-
         Get the cheapest compute candidate per provider with savings versus the requested instance
         Superseded by POST /v1/recommendations/compute, which returns RFC 9457 problem responses on failure.
+      parameters:
+      - description: Save a price computed for a shape the catalogue does not list.
+          Defaults to true.
+        in: query
+        name: persist
+        schema:
+          type: boolean
       requestBody:
         content:
           application/json:
@@ -906,6 +1020,13 @@ paths:
       description: |-
         Get the cheapest compute candidate per provider with savings versus the requested instance
         Superseded by POST /v1/recommendations/compute, which returns RFC 9457 problem responses on failure.
+      parameters:
+      - description: Save a price computed for a shape the catalogue does not list.
+          Defaults to true.
+        in: query
+        name: persist
+        schema:
+          type: boolean
       requestBody:
         content:
           application/json:
@@ -1094,6 +1215,7 @@ paths:
     post:
       description: |-
         Register your own compute rates so CostGraph can price machines it has no public price for, such as bare metal or a private cloud.
+        Send either `cost_per_hour` or the per-resource rates (`cpu_cores_cost_per_hour`, `ram_gb_cost_per_hour`, `gpu_cost_per_hour`) and the other is derived; send both and they must agree within 0.1%. GPU cost is taken out of `cost_per_hour` before the rest is split across cpu and memory. A `cost_per_hour` of 0, or cpu and memory rates that are both 0, count as not sent. `service`, `region`, `cpu_cores`, `ram_gb` and `period_billing_hours` (1 for an hourly price) are required.
         An entry is upserted on its natural key (provider, service, region, availability zone, usage type, instance type, operating system and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it. Changing any key field mints a new id, because it describes a different SKU.
         The returned id is what you attach to a resource with the `costgraph.ai/pricing-id.compute` label or tag.
       requestBody:
@@ -1151,7 +1273,7 @@ paths:
     delete:
       description: |-
         Delete a compute price you have published, by its id.
-        Usage still pinned to it stops resolving a price, so re-pin before deleting.
+        A price that is still assigned cannot be deleted; the response lists what uses it so you can unassign it first.
       parameters:
       - description: Price id
         in: path
@@ -1181,6 +1303,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/Problem"
           description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Conflict
         "422":
           content:
             application/json:
@@ -1256,6 +1384,7 @@ paths:
     patch:
       description: |-
         Change the rate or the descriptive fields of a compute price you have published. Send only the fields you want to change.
+        Changing `cost_per_hour` re-derives the per-resource rates, changing a rate re-derives `cost_per_hour`, and sending both requires them to agree within 0.1%. Changing only the size keeps `cost_per_hour` and re-splits the rates; changing only the GPU fields keeps the cpu and memory rates and re-derives `cost_per_hour`.
         The fields that identify the price cannot be changed, because they describe a different SKU; delete the price and register a new one instead.
       parameters:
       - description: Price id
@@ -1408,6 +1537,7 @@ paths:
     post:
       description: |-
         Register your own managed database rates so CostGraph can price clusters it has no public price for.
+        Send either `cost_per_hour` or the cpu and memory rates and the other is derived; send both and they must agree within 0.1%. A database without `cpu_cores` or `ram_gb`, such as a serverless one, needs no rates and only at least one price of any kind. `service`, `region`, `engine` and `period_billing_hours` (1 for an hourly price) are required.
         An entry is upserted on its natural key (provider, service, region, engine, edition, instance type and usage type), so re-posting the same entry with a new cost keeps its id and reprices everything already using it.
         The returned id is what you attach to a database with the `costgraph.ai/pricing-id.database` label or tag.
       requestBody:
@@ -1570,6 +1700,8 @@ paths:
     patch:
       description: |-
         Change the rate or the descriptive fields of a database price you have published. Send only the fields you want to change.
+        Changing `cost_per_hour` re-derives the per-resource rates, changing a rate re-derives `cost_per_hour`, and sending both requires them to agree within 0.1%. Changing only the size keeps `cost_per_hour` and re-splits the rates.
+        Sending null clears an optional database price field; a database left with no price at all is rejected.
         The fields that identify the price cannot be changed, because they describe a different SKU; delete the price and register a new one instead.
       parameters:
       - description: Price id
@@ -1713,7 +1845,7 @@ paths:
       description: |-
         Register your own block storage rates so CostGraph can price volumes it has no public price for.
         An entry is upserted on its natural key (provider, service, region, availability zone, usage type, type and period billing hours), so re-posting the same entry with a new cost keeps its id and reprices everything already using it.
-        The returned id is what you attach to a volume with the `costgraph.ai/pricing-id.disk` label or tag.
+        The returned id is what you attach to a volume with the `costgraph.ai/pricing-id.storage` label or tag.
       requestBody:
         content:
           application/json:
@@ -1769,7 +1901,7 @@ paths:
     delete:
       description: |-
         Delete a disk price you have published, by its id.
-        Usage still pinned to it stops resolving a price, so re-pin before deleting.
+        A price that is still assigned cannot be deleted; the response lists what uses it so you can unassign it first.
       parameters:
       - description: Price id
         in: path
@@ -1799,6 +1931,12 @@ paths:
               schema:
                 $ref: "#/components/schemas/Problem"
           description: Not Found
+        "409":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Conflict
         "422":
           content:
             application/json:
@@ -2014,10 +2152,16 @@ paths:
         name: region
         schema:
           type: string
-      - description: Filter by token bucket
+      - description: "Filter by token bucket. Every bucket is priced separately, so\
+          \ a model has one price per bucket"
         in: query
         name: token_bucket
         schema:
+          enum:
+          - input
+          - output
+          - cache_read
+          - cache_write
           type: string
       responses:
         "200":
@@ -2059,6 +2203,8 @@ paths:
     post:
       description: |-
         Register your own token rates for models you host, so CostGraph can price calls it has no public rate for.
+        Every token bucket is priced separately, so publish one price per bucket you charge for - `input`, `output`, `cache_read`, `cache_write` - each with its own `unit_price_per_mtok`. A bucket you do not publish has no rate, and usage in it resolves to no price rather than to zero.
+        `token_bucket` identifies the price alongside the model, host and region, so it cannot be patched later: delete the price and publish a new one to move a rate to another bucket.
         Entries are versioned: a price change closes the current row and opens a new one, so spend already recorded keeps the rate it was billed at.
         The returned id is what you attach with the `costgraph.ai/pricing-id.model` label or tag. Each version carries its own id, so read the live entry back after a price change.
       requestBody:
@@ -2292,6 +2438,14 @@ paths:
       description: |-
         Resolve the hourly rate CostGraph would bill for a machine with the given shape, in the given region and usage type.
         Prices you have published for the machine's provider are preferred over the public catalogue.
+      parameters:
+      - description: "Save a price computed for a shape the catalogue does not list,\
+          \ so later lookups return the same row. Defaults to true; false returns\
+          \ the same price without saving it."
+        in: query
+        name: persist
+        schema:
+          type: boolean
       requestBody:
         content:
           application/json:
@@ -2432,6 +2586,13 @@ paths:
     post:
       description: "Return the cheapest machine per provider that still meets the\
         \ requested shape, with the saving against the machine you asked about."
+      parameters:
+      - description: Save a price computed for a shape the catalogue does not list.
+          Defaults to true; false returns the same recommendations without saving.
+        in: query
+        name: persist
+        schema:
+          type: boolean
       requestBody:
         content:
           application/json:
@@ -2542,8 +2703,82 @@ paths:
       tags:
       - recommendations
       x-codegen-request-body-name: instance
+  /v1/recommendations/runner:
+    post:
+      description: "Prices the given CI jobs on every runner provider that fits the\
+        \ shape, using each provider's own billing granularity (per-minute round-up,\
+        \ per-second, minimums), plus self-hosted compute when self_hosted names a\
+        \ cloud and region. Results are cheapest first. Flags explain caveats such\
+        \ as self-hosted runners on public repositories or savings that need per-job\
+        \ durations to count."
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RunnerRecommendationRequest"
+        description: Jobs to price
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: "#/components/schemas/RunnerRecommendation"
+                type: array
+          description: "One candidate per provider, cheapest first"
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Invalid request body
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Missing or invalid credentials
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: No runner matches the shape
+        "422":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Invalid field
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Problem"
+          description: Internal error
+      security:
+      - ApiKeyAuth: []
+      - BearerAuth: []
+      summary: Find cheaper CI runners
+      tags:
+      - recommendations
+      x-codegen-request-body-name: request
 components:
   schemas:
+    AffectedResource:
+      example:
+        id: id
+        kind: kind
+        name: name
+      properties:
+        id:
+          type: string
+        kind:
+          type: string
+        name:
+          type: string
+      type: object
     ComputePrice:
       example:
         architecture: architecture
@@ -2566,6 +2801,7 @@ components:
         ram_gb_cost_per_hour: 3.616076749251911
         raw_pricing_data: "{}"
         region: region
+        resizable: true
         service: service
         tags: "{}"
         updated_at: updated_at
@@ -2576,6 +2812,9 @@ components:
         availability_zone:
           type: string
         cost_per_hour:
+          description: |-
+            On-demand-equivalent hourly USD; multiply by
+            provider_pricing_rules.month_hours for monthly.
           type: number
         cpu_cores:
           type: number
@@ -2584,7 +2823,11 @@ components:
         created_at:
           type: string
         currency:
+          description: |-
+            Currency the provider published this price in. Cost columns are always
+            normalized USD.
           type: string
+          x-semantic: currencyCode
         gpu_cost_per_hour:
           type: number
         gpu_count:
@@ -2596,10 +2839,17 @@ components:
         instance_type:
           type: string
         native_cost_per_hour:
+          description: |-
+            cost_per_hour as published, before FX normalization. Zero when currency is
+            USD.
           type: number
         operating_system:
           type: string
         period_billing_hours:
+          description: |-
+            Commitment term the raw price covers: 1=hourly on-demand;
+            8640/25920/43200=1mo/3mo/1yr buckets. cost_per_hour is already normalized to
+            hourly.
           type: number
         provider:
           type: string
@@ -2612,6 +2862,13 @@ components:
           type: object
         region:
           type: string
+        resizable:
+          description: |-
+            True when the row carries per-vCPU and per-GB rates for a shape sized at
+            launch; resolution stores and returns a row priced at the requested vCPU and
+            memory. NULL or false is a fixed-size shape.
+          nullable: true
+          type: boolean
         service:
           type: string
         tags:
@@ -2620,6 +2877,9 @@ components:
         updated_at:
           type: string
         usage_type:
+          description: |-
+            Pricing tier token (ONDEMAND, RESERVED, SPOT_*, *_HBP, *_BYOL,
+            Commit1Yr/3Yr). Filter to ONDEMAND for normal pricing.
           type: string
       type: object
     ComputePriceList:
@@ -2645,6 +2905,7 @@ components:
           ram_gb_cost_per_hour: 3.616076749251911
           raw_pricing_data: "{}"
           region: region
+          resizable: true
           service: service
           tags: "{}"
           updated_at: updated_at
@@ -2669,6 +2930,7 @@ components:
           ram_gb_cost_per_hour: 3.616076749251911
           raw_pricing_data: "{}"
           region: region
+          resizable: true
           service: service
           tags: "{}"
           updated_at: updated_at
@@ -2702,6 +2964,7 @@ components:
           ram_gb_cost_per_hour: 3.616076749251911
           raw_pricing_data: "{}"
           region: region
+          resizable: true
           service: service
           tags: "{}"
           updated_at: updated_at
@@ -2726,6 +2989,7 @@ components:
           ram_gb_cost_per_hour: 3.616076749251911
           raw_pricing_data: "{}"
           region: region
+          resizable: true
           service: service
           tags: "{}"
           updated_at: updated_at
@@ -2764,6 +3028,7 @@ components:
           ram_gb_cost_per_hour: 3.616076749251911
           raw_pricing_data: "{}"
           region: region
+          resizable: true
           service: service
           tags: "{}"
           updated_at: updated_at
@@ -2788,6 +3053,7 @@ components:
           ram_gb_cost_per_hour: 3.616076749251911
           raw_pricing_data: "{}"
           region: region
+          resizable: true
           service: service
           tags: "{}"
           updated_at: updated_at
@@ -2803,6 +3069,8 @@ components:
       type: object
     ComputeRecommendation:
       example:
+        cost_per_work_unit: 0.8008281904610115
+        cpu_class: cpu_class
         pricing:
           architecture: architecture
           availability_zone: availability_zone
@@ -2824,20 +3092,28 @@ components:
           ram_gb_cost_per_hour: 3.616076749251911
           raw_pricing_data: "{}"
           region: region
+          resizable: true
           service: service
           tags: "{}"
           updated_at: updated_at
           usage_type: usage_type
         savings:
-          amount_per_hour: 0.8008281904610115
-          amount_per_month: 6.027456183070403
-          amount_per_year: 1.4658129805029452
-          percentage: 5.962133916683182
+          amount_per_hour: 6.027456183070403
+          amount_per_month: 1.4658129805029452
+          amount_per_year: 5.962133916683182
+          percentage: 5.637376656633329
+        work_unit: work_unit
       properties:
+        cost_per_work_unit:
+          type: number
+        cpu_class:
+          type: string
         pricing:
           $ref: "#/components/schemas/ComputePrice"
         savings:
           $ref: "#/components/schemas/types.Savings"
+        work_unit:
+          type: string
       type: object
     ComputeRecommendationRequest:
       example:
@@ -2874,6 +3150,8 @@ components:
           regions:
           - regions
           - regions
+          same_architecture: true
+          same_continent: true
           services:
           - services
           - services
@@ -2883,6 +3161,7 @@ components:
         usage:
           cpu_cores: 0.8008281904610115
           ram_gb: 6.027456183070403
+        workload_class: workload_class
       properties:
         include_metadata:
           type: boolean
@@ -2892,6 +3171,13 @@ components:
           $ref: "#/components/schemas/types.Predicates"
         usage:
           $ref: "#/components/schemas/github_com_baselinehq_golang-shared_types.VM"
+        workload_class:
+          description: |-
+            WorkloadClass selects which accelerator gates a compute recommendation
+            applies: inference_single, inference_multi or training_distributed. Empty
+            means inference_multi, which is what the recommender did before the
+            classes existed. Disk requests do not carry one.
+          type: string
       type: object
     DatabasePrice:
       example:
@@ -2942,29 +3228,43 @@ components:
         billing_config:
           type: string
         capacity_unit:
+          nullable: true
           type: string
         cost_per_capacity_unit:
+          nullable: true
           type: number
         cost_per_hour:
+          nullable: true
           type: number
         cost_per_io_request:
+          nullable: true
           type: number
         cost_per_iops_hour:
+          nullable: true
           type: number
         cost_per_storage_gb_hour:
+          nullable: true
           type: number
         cost_per_throughput_mbps_hour:
+          nullable: true
           type: number
         cost_per_vcpu_license_hour:
+          nullable: true
           type: number
         cpu_cores:
+          nullable: true
           type: number
         cpu_cores_cost_per_hour:
+          nullable: true
           type: number
         created_at:
           type: string
         currency:
+          description: |-
+            Currency the provider published this price in. Cost columns are always
+            normalized USD.
           type: string
+          x-semantic: currencyCode
         deployment_option:
           type: string
         edition:
@@ -2976,16 +3276,22 @@ components:
         instance_type:
           type: string
         max_iops:
+          nullable: true
           type: number
         max_storage_gb:
+          nullable: true
           type: number
         max_throughput_mbps:
+          nullable: true
           type: number
         min_iops:
+          nullable: true
           type: number
         min_storage_gb:
+          nullable: true
           type: number
         min_throughput_mbps:
+          nullable: true
           type: number
         native_cost_per_hour:
           type: number
@@ -2996,8 +3302,10 @@ components:
         provider:
           type: string
         ram_gb:
+          nullable: true
           type: number
         ram_gb_cost_per_hour:
+          nullable: true
           type: number
         raw_pricing_data:
           properties: {}
@@ -3361,16 +3669,26 @@ components:
         created_at:
           type: string
         currency:
+          description: |-
+            Currency the provider published this price in. Cost columns are always
+            normalized USD.
           type: string
+          x-semantic: currencyCode
         id:
           type: string
         max_capacity_gb:
+          description: |-
+            Provisioning upper bound the disk type supports at this price (validation
+            range), not an actual disk size.
           type: number
         max_iops:
           type: number
         max_throughput_mbps:
           type: number
         min_capacity_gb:
+          description: |-
+            Provisioning lower bound the disk type supports at this price (validation
+            range), not an actual disk size.
           type: number
         min_iops:
           type: number
@@ -3617,10 +3935,10 @@ components:
           updated_at: updated_at
           usage_type: usage_type
         savings:
-          amount_per_hour: 0.8008281904610115
-          amount_per_month: 6.027456183070403
-          amount_per_year: 1.4658129805029452
-          percentage: 5.962133916683182
+          amount_per_hour: 6.027456183070403
+          amount_per_month: 1.4658129805029452
+          amount_per_year: 5.962133916683182
+          percentage: 5.637376656633329
       properties:
         pricing:
           $ref: "#/components/schemas/DiskPrice"
@@ -3661,6 +3979,8 @@ components:
           regions:
           - regions
           - regions
+          same_architecture: true
+          same_continent: true
           services:
           - services
           - services
@@ -3679,6 +3999,7 @@ components:
           throughput_mbps: 1.4658129805029452
           type: type
           usage_type: SPOT_PREEMPTIBLE
+        workload_class: workload_class
       properties:
         include_metadata:
           type: boolean
@@ -3688,6 +4009,13 @@ components:
           $ref: "#/components/schemas/types.Predicates"
         usage:
           $ref: "#/components/schemas/types.Disk"
+        workload_class:
+          description: |-
+            WorkloadClass selects which accelerator gates a compute recommendation
+            applies: inference_single, inference_multi or training_distributed. Empty
+            means inference_multi, which is what the recommender did before the
+            classes existed. Disk requests do not carry one.
+          type: string
       type: object
     ErrorResponse:
       example:
@@ -3785,7 +4113,7 @@ components:
         source_url: source_url
         structured_output: true
         tags: "{}"
-        token_bucket: token_bucket
+        token_bucket: input
         tool_call: true
         unit_price_per_mtok: 1.4658129805029452
       properties:
@@ -3840,6 +4168,11 @@ components:
         tags:
           type: object
         token_bucket:
+          enum:
+          - input
+          - output
+          - cache_read
+          - cache_write
           type: string
         tool_call:
           type: boolean
@@ -3876,7 +4209,7 @@ components:
           source_url: source_url
           structured_output: true
           tags: "{}"
-          token_bucket: token_bucket
+          token_bucket: input
           tool_call: true
           unit_price_per_mtok: 1.4658129805029452
         - context_limit: 0
@@ -3906,7 +4239,7 @@ components:
           source_url: source_url
           structured_output: true
           tags: "{}"
-          token_bucket: token_bucket
+          token_bucket: input
           tool_call: true
           unit_price_per_mtok: 1.4658129805029452
       properties:
@@ -3945,7 +4278,7 @@ components:
           source_url: source_url
           structured_output: true
           tags: "{}"
-          token_bucket: token_bucket
+          token_bucket: input
           tool_call: true
           unit_price_per_mtok: 1.4658129805029452
         - context_limit: 0
@@ -3975,7 +4308,7 @@ components:
           source_url: source_url
           structured_output: true
           tags: "{}"
-          token_bucket: token_bucket
+          token_bucket: input
           tool_call: true
           unit_price_per_mtok: 1.4658129805029452
         page:
@@ -4019,7 +4352,7 @@ components:
           source_url: source_url
           structured_output: true
           tags: "{}"
-          token_bucket: token_bucket
+          token_bucket: input
           tool_call: true
           unit_price_per_mtok: 1.4658129805029452
         - context_limit: 0
@@ -4049,7 +4382,7 @@ components:
           source_url: source_url
           structured_output: true
           tags: "{}"
-          token_bucket: token_bucket
+          token_bucket: input
           tool_call: true
           unit_price_per_mtok: 1.4658129805029452
       properties:
@@ -4073,6 +4406,13 @@ components:
       type: object
     Problem:
       example:
+        affected:
+        - id: id
+          kind: kind
+          name: name
+        - id: id
+          kind: kind
+          name: name
         code: code
         detail: detail
         errors:
@@ -4085,6 +4425,10 @@ components:
         title: title
         type: type
       properties:
+        affected:
+          items:
+            $ref: "#/components/schemas/AffectedResource"
+          type: array
         code:
           type: string
         detail:
@@ -4136,6 +4480,7 @@ components:
           ram_gb_cost_per_hour: 3.616076749251911
           raw_pricing_data: "{}"
           region: region
+          resizable: true
           service: service
           tags: "{}"
           updated_at: updated_at
@@ -4160,6 +4505,7 @@ components:
           ram_gb_cost_per_hour: 3.616076749251911
           raw_pricing_data: "{}"
           region: region
+          resizable: true
           service: service
           tags: "{}"
           updated_at: updated_at
@@ -4346,7 +4692,7 @@ components:
           source_url: source_url
           structured_output: true
           tags: "{}"
-          token_bucket: token_bucket
+          token_bucket: input
           tool_call: true
           unit_price_per_mtok: 1.4658129805029452
         - context_limit: 0
@@ -4376,7 +4722,7 @@ components:
           source_url: source_url
           structured_output: true
           tags: "{}"
-          token_bucket: token_bucket
+          token_bucket: input
           tool_call: true
           unit_price_per_mtok: 1.4658129805029452
       properties:
@@ -4408,6 +4754,7 @@ components:
           ram_gb_cost_per_hour: 3.616076749251911
           raw_pricing_data: "{}"
           region: region
+          resizable: true
           service: service
           tags: "{}"
           updated_at: updated_at
@@ -4432,6 +4779,7 @@ components:
           ram_gb_cost_per_hour: 3.616076749251911
           raw_pricing_data: "{}"
           region: region
+          resizable: true
           service: service
           tags: "{}"
           updated_at: updated_at
@@ -4627,7 +4975,7 @@ components:
           source_url: source_url
           structured_output: true
           tags: "{}"
-          token_bucket: token_bucket
+          token_bucket: input
           tool_call: true
           unit_price_per_mtok: 1.4658129805029452
         - context_limit: 0
@@ -4657,7 +5005,7 @@ components:
           source_url: source_url
           structured_output: true
           tags: "{}"
-          token_bucket: token_bucket
+          token_bucket: input
           tool_call: true
           unit_price_per_mtok: 1.4658129805029452
         status: Registered
@@ -4677,6 +5025,109 @@ components:
       x-enum-varnames:
       - Registered
       - Deleted
+    RunnerRecommendation:
+      example:
+        billed_seconds: 0.8008281904610115
+        compute_source: compute_source
+        cost: 6.027456183070403
+        cost_per_month: 1.4658129805029452
+        fetched_on: fetched_on
+        flags:
+        - flags
+        - flags
+        plan_fees:
+        - fee: 5.962133916683182
+          per: per
+          period: period
+          plan: plan
+        - fee: 5.962133916683182
+          per: per
+          period: period
+          plan: plan
+        pricing_model: pricing_model
+        provider: provider
+        runtime_seconds: 5.637376656633329
+        savings_vs_current: 2.3021358869347655
+        sku: sku
+        source_url: source_url
+        vm_instance_type: vm_instance_type
+      properties:
+        billed_seconds:
+          type: number
+        compute_source:
+          type: string
+        cost:
+          type: number
+        cost_per_month:
+          type: number
+        fetched_on:
+          type: string
+        flags:
+          items:
+            type: string
+          type: array
+        plan_fees:
+          items:
+            $ref: "#/components/schemas/types.RunnerPlanFee"
+          type: array
+        pricing_model:
+          type: string
+        provider:
+          type: string
+        runtime_seconds:
+          type: number
+        savings_vs_current:
+          type: number
+        sku:
+          type: string
+        source_url:
+          type: string
+        vm_instance_type:
+          type: string
+      type: object
+    RunnerRecommendationRequest:
+      example:
+        billed_minutes: 0.8008281904610115
+        current:
+          cost: 6.027456183070403
+          provider: provider
+          sku: sku
+        job_count: 1
+        jobs_seconds:
+        - 5.962133916683182
+        - 5.962133916683182
+        monthly_minutes: 5.637376656633329
+        public_repo: true
+        self_hosted:
+          github_self_hosted_fee: true
+          provider: provider
+          region: region
+        shape:
+          arch: arch
+          cpu_cores: 2
+          gpu_count: 7
+          os: os
+          ram_gb: 9.301444243932576
+      properties:
+        billed_minutes:
+          type: number
+        current:
+          $ref: "#/components/schemas/types.RunnerCurrent"
+        job_count:
+          type: integer
+        jobs_seconds:
+          items:
+            type: number
+          type: array
+        monthly_minutes:
+          type: number
+        public_repo:
+          type: boolean
+        self_hosted:
+          $ref: "#/components/schemas/types.RunnerSelfHosted"
+        shape:
+          $ref: "#/components/schemas/types.RunnerShape"
+      type: object
     datatypes.JSON:
       type: object
     github_com_baselinehq_golang-shared_types.Instance:
@@ -4725,8 +5176,50 @@ components:
       - OVHCloud
       - PlanetScale
       - STACKIT
-      - Akamai
+      - Linode
       - Base
+      - Akash
+      - Alibaba
+      - Baseten
+      - Beam
+      - Cerebrium
+      - CIRunners
+      - Civo
+      - Clore
+      - CoreWeave
+      - Crusoe
+      - CUDO
+      - DataCrunch
+      - DeepInfra
+      - Denvr
+      - E2ENetworks
+      - Exoscale
+      - Fal
+      - HotAisle
+      - Hyperbolic
+      - Hyperstack
+      - IBM
+      - Lambda
+      - Latitude
+      - MassedCompute
+      - Modal
+      - Nebius
+      - Northflank
+      - Novita
+      - Oblivus
+      - OCI
+      - OpenTelekom
+      - PrimeIntellect
+      - Replicate
+      - RunPod
+      - Salad
+      - Scaleway
+      - Sesterce
+      - Shadeform
+      - ThunderCompute
+      - UpCloud
+      - Vast
+      - Vultr
       type: string
       x-enum-comments:
         Base: "Base provider for default pricing, no specific cloud provider"
@@ -4741,6 +5234,48 @@ components:
       - ""
       - ""
       - "Base provider for default pricing, no specific cloud provider"
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
       x-enum-varnames:
       - GCP
       - AWS
@@ -4750,8 +5285,50 @@ components:
       - OVHCloud
       - PlanetScale
       - STACKIT
-      - Akamai
+      - Linode
       - Base
+      - Akash
+      - Alibaba
+      - Baseten
+      - Beam
+      - Cerebrium
+      - CIRunners
+      - Civo
+      - Clore
+      - CoreWeave
+      - Crusoe
+      - CUDO
+      - DataCrunch
+      - DeepInfra
+      - Denvr
+      - E2ENetworks
+      - Exoscale
+      - Fal
+      - HotAisle
+      - Hyperbolic
+      - Hyperstack
+      - IBM
+      - Lambda
+      - Latitude
+      - MassedCompute
+      - Modal
+      - Nebius
+      - Northflank
+      - Novita
+      - Oblivus
+      - OCI
+      - OpenTelekom
+      - PrimeIntellect
+      - Replicate
+      - RunPod
+      - Salad
+      - Scaleway
+      - Sesterce
+      - Shadeform
+      - ThunderCompute
+      - UpCloud
+      - Vast
+      - Vultr
     github_com_baselinehq_golang-shared_types.UsageType:
       enum:
       - SPOT_PREEMPTIBLE
@@ -4841,6 +5418,8 @@ components:
         regions:
         - regions
         - regions
+        same_architecture: true
+        same_continent: true
         services:
         - services
         - services
@@ -4872,6 +5451,10 @@ components:
           items:
             type: string
           type: array
+        same_architecture:
+          type: boolean
+        same_continent:
+          type: boolean
         services:
           items:
             type: string
@@ -4881,12 +5464,73 @@ components:
             type: string
           type: array
       type: object
+    types.RunnerCurrent:
+      example:
+        cost: 6.027456183070403
+        provider: provider
+        sku: sku
+      properties:
+        cost:
+          type: number
+        provider:
+          type: string
+        sku:
+          type: string
+      type: object
+    types.RunnerPlanFee:
+      example:
+        fee: 5.962133916683182
+        per: per
+        period: period
+        plan: plan
+      properties:
+        fee:
+          type: number
+        per:
+          type: string
+        period:
+          type: string
+        plan:
+          type: string
+      type: object
+    types.RunnerSelfHosted:
+      example:
+        github_self_hosted_fee: true
+        provider: provider
+        region: region
+      properties:
+        github_self_hosted_fee:
+          type: boolean
+        provider:
+          type: string
+        region:
+          type: string
+      type: object
+    types.RunnerShape:
+      example:
+        arch: arch
+        cpu_cores: 2
+        gpu_count: 7
+        os: os
+        ram_gb: 9.301444243932576
+      properties:
+        arch:
+          type: string
+        cpu_cores:
+          type: integer
+        gpu_count:
+          type: integer
+        os:
+          type: string
+        ram_gb:
+          type: number
+      type: object
     types.Savings:
       example:
-        amount_per_hour: 0.8008281904610115
-        amount_per_month: 6.027456183070403
-        amount_per_year: 1.4658129805029452
-        percentage: 5.962133916683182
+        amount_per_hour: 6.027456183070403
+        amount_per_month: 1.4658129805029452
+        amount_per_year: 5.962133916683182
+        percentage: 5.637376656633329
       properties:
         amount_per_hour:
           type: number
@@ -4926,6 +5570,56 @@ components:
       - AkamaiLinode
       - AkamaiBlockStorage
       - AkamaiDatabase
+      - AkashCompute
+      - AlibabaCompute
+      - AlibabaBlockStorage
+      - BasetenCompute
+      - BeamCompute
+      - CerebriumCompute
+      - CivoCompute
+      - CivoBlockStorage
+      - CloreCompute
+      - CoreWeaveCompute
+      - CrusoeCompute
+      - CUDOCompute
+      - DataCrunchCompute
+      - DeepInfraCompute
+      - DenvrCompute
+      - E2ENetworksCompute
+      - ExoscaleCompute
+      - ExoscaleBlockStorage
+      - FalCompute
+      - HotAisleCompute
+      - HyperbolicCompute
+      - HyperstackCompute
+      - IBMCompute
+      - IBMBlockStorage
+      - LambdaCompute
+      - LatitudeCompute
+      - MassedComputeCompute
+      - ModalCompute
+      - NebiusCompute
+      - NorthflankCompute
+      - NorthflankVolume
+      - NovitaCompute
+      - OblivusCompute
+      - OCICompute
+      - OCIBlockStorage
+      - OpenTelekomCompute
+      - PrimeIntellectCompute
+      - ReplicateCompute
+      - RunPodCompute
+      - SaladCompute
+      - ScalewayCompute
+      - ScalewayBlockStorage
+      - SesterceCompute
+      - ShadeformCompute
+      - ThunderComputeCompute
+      - UpCloudCompute
+      - UpCloudBlockStorage
+      - VastCompute
+      - VultrCompute
+      - VultrBlockStorage
       type: string
       x-enum-varnames:
       - ComputeEngine
@@ -4955,6 +5649,56 @@ components:
       - AkamaiLinode
       - AkamaiBlockStorage
       - AkamaiDatabase
+      - AkashCompute
+      - AlibabaCompute
+      - AlibabaBlockStorage
+      - BasetenCompute
+      - BeamCompute
+      - CerebriumCompute
+      - CivoCompute
+      - CivoBlockStorage
+      - CloreCompute
+      - CoreWeaveCompute
+      - CrusoeCompute
+      - CUDOCompute
+      - DataCrunchCompute
+      - DeepInfraCompute
+      - DenvrCompute
+      - E2ENetworksCompute
+      - ExoscaleCompute
+      - ExoscaleBlockStorage
+      - FalCompute
+      - HotAisleCompute
+      - HyperbolicCompute
+      - HyperstackCompute
+      - IBMCompute
+      - IBMBlockStorage
+      - LambdaCompute
+      - LatitudeCompute
+      - MassedComputeCompute
+      - ModalCompute
+      - NebiusCompute
+      - NorthflankCompute
+      - NorthflankVolume
+      - NovitaCompute
+      - OblivusCompute
+      - OCICompute
+      - OCIBlockStorage
+      - OpenTelekomCompute
+      - PrimeIntellectCompute
+      - ReplicateCompute
+      - RunPodCompute
+      - SaladCompute
+      - ScalewayCompute
+      - ScalewayBlockStorage
+      - SesterceCompute
+      - ShadeformCompute
+      - ThunderComputeCompute
+      - UpCloudCompute
+      - UpCloudBlockStorage
+      - VastCompute
+      - VultrCompute
+      - VultrBlockStorage
   securitySchemes:
     ApiKeyAuth:
       description: API key with "bl_" prefix (e.g. "bl_<api_key>")
@@ -4962,7 +5706,8 @@ components:
       name: X-API-Key
       type: apiKey
     BearerAuth:
-      description: Bearer token for authentication (e.g. "Bearer <token>")
+      description: "OAuth access token issued by CostGraph. Requires pricing:read,\
+        \ or pricing:write for changes."
       in: header
       name: Authorization
       type: apiKey

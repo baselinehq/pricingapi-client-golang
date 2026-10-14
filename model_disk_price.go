@@ -20,16 +20,19 @@ var _ MappedNullable = &DiskPrice{}
 
 // DiskPrice struct for DiskPrice
 type DiskPrice struct {
-	AvailabilityZone                *string                `json:"availability_zone,omitempty"`
-	CostPerGbHour                   *float32               `json:"cost_per_gb_hour,omitempty"`
-	CostPerIopsHour                 *float32               `json:"cost_per_iops_hour,omitempty"`
-	CostPerThroughputMbpsHour       *float32               `json:"cost_per_throughput_mbps_hour,omitempty"`
-	CreatedAt                       *string                `json:"created_at,omitempty"`
-	Currency                        *string                `json:"currency,omitempty"`
-	Id                              *string                `json:"id,omitempty"`
-	MaxCapacityGb                   *float32               `json:"max_capacity_gb,omitempty"`
-	MaxIops                         *float32               `json:"max_iops,omitempty"`
-	MaxThroughputMbps               *float32               `json:"max_throughput_mbps,omitempty"`
+	AvailabilityZone          *string  `json:"availability_zone,omitempty"`
+	CostPerGbHour             *float32 `json:"cost_per_gb_hour,omitempty"`
+	CostPerIopsHour           *float32 `json:"cost_per_iops_hour,omitempty"`
+	CostPerThroughputMbpsHour *float32 `json:"cost_per_throughput_mbps_hour,omitempty"`
+	CreatedAt                 *string  `json:"created_at,omitempty"`
+	// Currency the provider published this price in. Cost columns are always normalized USD.
+	Currency *string `json:"currency,omitempty"`
+	Id       *string `json:"id,omitempty"`
+	// Provisioning upper bound the disk type supports at this price (validation range), not an actual disk size.
+	MaxCapacityGb     *float32 `json:"max_capacity_gb,omitempty"`
+	MaxIops           *float32 `json:"max_iops,omitempty"`
+	MaxThroughputMbps *float32 `json:"max_throughput_mbps,omitempty"`
+	// Provisioning lower bound the disk type supports at this price (validation range), not an actual disk size.
 	MinCapacityGb                   *float32               `json:"min_capacity_gb,omitempty"`
 	MinIops                         *float32               `json:"min_iops,omitempty"`
 	MinThroughputMbps               *float32               `json:"min_throughput_mbps,omitempty"`

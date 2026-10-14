@@ -26,11 +26,18 @@ type ApiV1PricingComputePostRequest struct {
 	ctx        context.Context
 	ApiService *PricingAPIService
 	instance   *Instance
+	persist    *bool
 }
 
 // Machine to price
 func (r ApiV1PricingComputePostRequest) Instance(instance Instance) ApiV1PricingComputePostRequest {
 	r.instance = &instance
+	return r
+}
+
+// Save a price computed for a shape the catalogue does not list, so later lookups return the same row. Defaults to true; false returns the same price without saving it.
+func (r ApiV1PricingComputePostRequest) Persist(persist bool) ApiV1PricingComputePostRequest {
+	r.persist = &persist
 	return r
 }
 
@@ -79,6 +86,9 @@ func (a *PricingAPIService) V1PricingComputePostExecute(r ApiV1PricingComputePos
 		return localVarReturnValue, nil, reportError("instance is required and must be specified")
 	}
 
+	if r.persist != nil {
+		parameterAddToHeaderOrQuery(localVarQueryParams, "persist", r.persist, "", "")
+	}
 	// to determine the Content-Type header
 	localVarHTTPContentTypes := []string{"application/json"}
 
