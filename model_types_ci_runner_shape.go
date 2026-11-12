@@ -15,37 +15,38 @@ import (
 	"encoding/json"
 )
 
-// checks if the TypesRunnerShape type satisfies the MappedNullable interface at compile time
-var _ MappedNullable = &TypesRunnerShape{}
+// checks if the TypesCIRunnerShape type satisfies the MappedNullable interface at compile time
+var _ MappedNullable = &TypesCIRunnerShape{}
 
-// TypesRunnerShape struct for TypesRunnerShape
-type TypesRunnerShape struct {
+// TypesCIRunnerShape struct for TypesCIRunnerShape
+type TypesCIRunnerShape struct {
 	Arch     *string  `json:"arch,omitempty"`
 	CpuCores *int32   `json:"cpu_cores,omitempty"`
+	Docker   *bool    `json:"docker,omitempty"`
 	GpuCount *int32   `json:"gpu_count,omitempty"`
 	Os       *string  `json:"os,omitempty"`
 	RamGb    *float32 `json:"ram_gb,omitempty"`
 }
 
-// NewTypesRunnerShape instantiates a new TypesRunnerShape object
+// NewTypesCIRunnerShape instantiates a new TypesCIRunnerShape object
 // This constructor will assign default values to properties that have it defined,
 // and makes sure properties required by API are set, but the set of arguments
 // will change when the set of required properties is changed
-func NewTypesRunnerShape() *TypesRunnerShape {
-	this := TypesRunnerShape{}
+func NewTypesCIRunnerShape() *TypesCIRunnerShape {
+	this := TypesCIRunnerShape{}
 	return &this
 }
 
-// NewTypesRunnerShapeWithDefaults instantiates a new TypesRunnerShape object
+// NewTypesCIRunnerShapeWithDefaults instantiates a new TypesCIRunnerShape object
 // This constructor will only assign default values to properties that have it defined,
 // but it doesn't guarantee that properties required by API are set
-func NewTypesRunnerShapeWithDefaults() *TypesRunnerShape {
-	this := TypesRunnerShape{}
+func NewTypesCIRunnerShapeWithDefaults() *TypesCIRunnerShape {
+	this := TypesCIRunnerShape{}
 	return &this
 }
 
 // GetArch returns the Arch field value if set, zero value otherwise.
-func (o *TypesRunnerShape) GetArch() string {
+func (o *TypesCIRunnerShape) GetArch() string {
 	if o == nil || IsNil(o.Arch) {
 		var ret string
 		return ret
@@ -55,7 +56,7 @@ func (o *TypesRunnerShape) GetArch() string {
 
 // GetArchOk returns a tuple with the Arch field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *TypesRunnerShape) GetArchOk() (*string, bool) {
+func (o *TypesCIRunnerShape) GetArchOk() (*string, bool) {
 	if o == nil || IsNil(o.Arch) {
 		return nil, false
 	}
@@ -63,7 +64,7 @@ func (o *TypesRunnerShape) GetArchOk() (*string, bool) {
 }
 
 // HasArch returns a boolean if a field has been set.
-func (o *TypesRunnerShape) HasArch() bool {
+func (o *TypesCIRunnerShape) HasArch() bool {
 	if o != nil && !IsNil(o.Arch) {
 		return true
 	}
@@ -72,12 +73,12 @@ func (o *TypesRunnerShape) HasArch() bool {
 }
 
 // SetArch gets a reference to the given string and assigns it to the Arch field.
-func (o *TypesRunnerShape) SetArch(v string) {
+func (o *TypesCIRunnerShape) SetArch(v string) {
 	o.Arch = &v
 }
 
 // GetCpuCores returns the CpuCores field value if set, zero value otherwise.
-func (o *TypesRunnerShape) GetCpuCores() int32 {
+func (o *TypesCIRunnerShape) GetCpuCores() int32 {
 	if o == nil || IsNil(o.CpuCores) {
 		var ret int32
 		return ret
@@ -87,7 +88,7 @@ func (o *TypesRunnerShape) GetCpuCores() int32 {
 
 // GetCpuCoresOk returns a tuple with the CpuCores field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *TypesRunnerShape) GetCpuCoresOk() (*int32, bool) {
+func (o *TypesCIRunnerShape) GetCpuCoresOk() (*int32, bool) {
 	if o == nil || IsNil(o.CpuCores) {
 		return nil, false
 	}
@@ -95,7 +96,7 @@ func (o *TypesRunnerShape) GetCpuCoresOk() (*int32, bool) {
 }
 
 // HasCpuCores returns a boolean if a field has been set.
-func (o *TypesRunnerShape) HasCpuCores() bool {
+func (o *TypesCIRunnerShape) HasCpuCores() bool {
 	if o != nil && !IsNil(o.CpuCores) {
 		return true
 	}
@@ -104,12 +105,44 @@ func (o *TypesRunnerShape) HasCpuCores() bool {
 }
 
 // SetCpuCores gets a reference to the given int32 and assigns it to the CpuCores field.
-func (o *TypesRunnerShape) SetCpuCores(v int32) {
+func (o *TypesCIRunnerShape) SetCpuCores(v int32) {
 	o.CpuCores = &v
 }
 
+// GetDocker returns the Docker field value if set, zero value otherwise.
+func (o *TypesCIRunnerShape) GetDocker() bool {
+	if o == nil || IsNil(o.Docker) {
+		var ret bool
+		return ret
+	}
+	return *o.Docker
+}
+
+// GetDockerOk returns a tuple with the Docker field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *TypesCIRunnerShape) GetDockerOk() (*bool, bool) {
+	if o == nil || IsNil(o.Docker) {
+		return nil, false
+	}
+	return o.Docker, true
+}
+
+// HasDocker returns a boolean if a field has been set.
+func (o *TypesCIRunnerShape) HasDocker() bool {
+	if o != nil && !IsNil(o.Docker) {
+		return true
+	}
+
+	return false
+}
+
+// SetDocker gets a reference to the given bool and assigns it to the Docker field.
+func (o *TypesCIRunnerShape) SetDocker(v bool) {
+	o.Docker = &v
+}
+
 // GetGpuCount returns the GpuCount field value if set, zero value otherwise.
-func (o *TypesRunnerShape) GetGpuCount() int32 {
+func (o *TypesCIRunnerShape) GetGpuCount() int32 {
 	if o == nil || IsNil(o.GpuCount) {
 		var ret int32
 		return ret
@@ -119,7 +152,7 @@ func (o *TypesRunnerShape) GetGpuCount() int32 {
 
 // GetGpuCountOk returns a tuple with the GpuCount field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *TypesRunnerShape) GetGpuCountOk() (*int32, bool) {
+func (o *TypesCIRunnerShape) GetGpuCountOk() (*int32, bool) {
 	if o == nil || IsNil(o.GpuCount) {
 		return nil, false
 	}
@@ -127,7 +160,7 @@ func (o *TypesRunnerShape) GetGpuCountOk() (*int32, bool) {
 }
 
 // HasGpuCount returns a boolean if a field has been set.
-func (o *TypesRunnerShape) HasGpuCount() bool {
+func (o *TypesCIRunnerShape) HasGpuCount() bool {
 	if o != nil && !IsNil(o.GpuCount) {
 		return true
 	}
@@ -136,12 +169,12 @@ func (o *TypesRunnerShape) HasGpuCount() bool {
 }
 
 // SetGpuCount gets a reference to the given int32 and assigns it to the GpuCount field.
-func (o *TypesRunnerShape) SetGpuCount(v int32) {
+func (o *TypesCIRunnerShape) SetGpuCount(v int32) {
 	o.GpuCount = &v
 }
 
 // GetOs returns the Os field value if set, zero value otherwise.
-func (o *TypesRunnerShape) GetOs() string {
+func (o *TypesCIRunnerShape) GetOs() string {
 	if o == nil || IsNil(o.Os) {
 		var ret string
 		return ret
@@ -151,7 +184,7 @@ func (o *TypesRunnerShape) GetOs() string {
 
 // GetOsOk returns a tuple with the Os field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *TypesRunnerShape) GetOsOk() (*string, bool) {
+func (o *TypesCIRunnerShape) GetOsOk() (*string, bool) {
 	if o == nil || IsNil(o.Os) {
 		return nil, false
 	}
@@ -159,7 +192,7 @@ func (o *TypesRunnerShape) GetOsOk() (*string, bool) {
 }
 
 // HasOs returns a boolean if a field has been set.
-func (o *TypesRunnerShape) HasOs() bool {
+func (o *TypesCIRunnerShape) HasOs() bool {
 	if o != nil && !IsNil(o.Os) {
 		return true
 	}
@@ -168,12 +201,12 @@ func (o *TypesRunnerShape) HasOs() bool {
 }
 
 // SetOs gets a reference to the given string and assigns it to the Os field.
-func (o *TypesRunnerShape) SetOs(v string) {
+func (o *TypesCIRunnerShape) SetOs(v string) {
 	o.Os = &v
 }
 
 // GetRamGb returns the RamGb field value if set, zero value otherwise.
-func (o *TypesRunnerShape) GetRamGb() float32 {
+func (o *TypesCIRunnerShape) GetRamGb() float32 {
 	if o == nil || IsNil(o.RamGb) {
 		var ret float32
 		return ret
@@ -183,7 +216,7 @@ func (o *TypesRunnerShape) GetRamGb() float32 {
 
 // GetRamGbOk returns a tuple with the RamGb field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *TypesRunnerShape) GetRamGbOk() (*float32, bool) {
+func (o *TypesCIRunnerShape) GetRamGbOk() (*float32, bool) {
 	if o == nil || IsNil(o.RamGb) {
 		return nil, false
 	}
@@ -191,7 +224,7 @@ func (o *TypesRunnerShape) GetRamGbOk() (*float32, bool) {
 }
 
 // HasRamGb returns a boolean if a field has been set.
-func (o *TypesRunnerShape) HasRamGb() bool {
+func (o *TypesCIRunnerShape) HasRamGb() bool {
 	if o != nil && !IsNil(o.RamGb) {
 		return true
 	}
@@ -200,11 +233,11 @@ func (o *TypesRunnerShape) HasRamGb() bool {
 }
 
 // SetRamGb gets a reference to the given float32 and assigns it to the RamGb field.
-func (o *TypesRunnerShape) SetRamGb(v float32) {
+func (o *TypesCIRunnerShape) SetRamGb(v float32) {
 	o.RamGb = &v
 }
 
-func (o TypesRunnerShape) MarshalJSON() ([]byte, error) {
+func (o TypesCIRunnerShape) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
 		return []byte{}, err
@@ -212,13 +245,16 @@ func (o TypesRunnerShape) MarshalJSON() ([]byte, error) {
 	return json.Marshal(toSerialize)
 }
 
-func (o TypesRunnerShape) ToMap() (map[string]interface{}, error) {
+func (o TypesCIRunnerShape) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
 	if !IsNil(o.Arch) {
 		toSerialize["arch"] = o.Arch
 	}
 	if !IsNil(o.CpuCores) {
 		toSerialize["cpu_cores"] = o.CpuCores
+	}
+	if !IsNil(o.Docker) {
+		toSerialize["docker"] = o.Docker
 	}
 	if !IsNil(o.GpuCount) {
 		toSerialize["gpu_count"] = o.GpuCount
@@ -232,38 +268,38 @@ func (o TypesRunnerShape) ToMap() (map[string]interface{}, error) {
 	return toSerialize, nil
 }
 
-type NullableTypesRunnerShape struct {
-	value *TypesRunnerShape
+type NullableTypesCIRunnerShape struct {
+	value *TypesCIRunnerShape
 	isSet bool
 }
 
-func (v NullableTypesRunnerShape) Get() *TypesRunnerShape {
+func (v NullableTypesCIRunnerShape) Get() *TypesCIRunnerShape {
 	return v.value
 }
 
-func (v *NullableTypesRunnerShape) Set(val *TypesRunnerShape) {
+func (v *NullableTypesCIRunnerShape) Set(val *TypesCIRunnerShape) {
 	v.value = val
 	v.isSet = true
 }
 
-func (v NullableTypesRunnerShape) IsSet() bool {
+func (v NullableTypesCIRunnerShape) IsSet() bool {
 	return v.isSet
 }
 
-func (v *NullableTypesRunnerShape) Unset() {
+func (v *NullableTypesCIRunnerShape) Unset() {
 	v.value = nil
 	v.isSet = false
 }
 
-func NewNullableTypesRunnerShape(val *TypesRunnerShape) *NullableTypesRunnerShape {
-	return &NullableTypesRunnerShape{value: val, isSet: true}
+func NewNullableTypesCIRunnerShape(val *TypesCIRunnerShape) *NullableTypesCIRunnerShape {
+	return &NullableTypesCIRunnerShape{value: val, isSet: true}
 }
 
-func (v NullableTypesRunnerShape) MarshalJSON() ([]byte, error) {
+func (v NullableTypesCIRunnerShape) MarshalJSON() ([]byte, error) {
 	return json.Marshal(v.value)
 }
 
-func (v *NullableTypesRunnerShape) UnmarshalJSON(src []byte) error {
+func (v *NullableTypesCIRunnerShape) UnmarshalJSON(src []byte) error {
 	v.isSet = true
 	return json.Unmarshal(src, &v.value)
 }

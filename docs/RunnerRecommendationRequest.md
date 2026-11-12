@@ -4,14 +4,16 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**BilledMinutes** | Pointer to **float32** |  | [optional] 
-**Current** | Pointer to [**TypesRunnerCurrent**](TypesRunnerCurrent.md) |  | [optional] 
-**JobCount** | Pointer to **int32** |  | [optional] 
-**JobsSeconds** | Pointer to **[]float32** |  | [optional] 
+**Clouds** | Pointer to [**[]TypesRunnerSelfHosted**](TypesRunnerSelfHosted.md) |  | [optional] 
+**Connected** | Pointer to **[]string** |  | [optional] 
+**Current** | Pointer to [**TypesCIQuoteCurrent**](TypesCIQuoteCurrent.md) |  | [optional] 
+**GithubSelfHostedFee** | Pointer to **bool** |  | [optional] 
+**Included** | Pointer to [**map[string]TypesCIIncluded**](TypesCIIncluded.md) |  | [optional] 
+**Jobs** | Pointer to [**[]TypesCIJobBucket**](TypesCIJobBucket.md) |  | [optional] 
 **MonthlyMinutes** | Pointer to **float32** |  | [optional] 
 **PublicRepo** | Pointer to **bool** |  | [optional] 
-**SelfHosted** | Pointer to [**TypesRunnerSelfHosted**](TypesRunnerSelfHosted.md) |  | [optional] 
-**Shape** | Pointer to [**TypesRunnerShape**](TypesRunnerShape.md) |  | [optional] 
+**Shape** | Pointer to [**TypesCIRunnerShape**](TypesCIRunnerShape.md) |  | [optional] 
+**Speed** | Pointer to [**map[string]TypesCISpeed**](TypesCISpeed.md) |  | [optional] 
 
 ## Methods
 
@@ -32,47 +34,72 @@ NewRunnerRecommendationRequestWithDefaults instantiates a new RunnerRecommendati
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
 
-### GetBilledMinutes
+### GetClouds
 
-`func (o *RunnerRecommendationRequest) GetBilledMinutes() float32`
+`func (o *RunnerRecommendationRequest) GetClouds() []TypesRunnerSelfHosted`
 
-GetBilledMinutes returns the BilledMinutes field if non-nil, zero value otherwise.
+GetClouds returns the Clouds field if non-nil, zero value otherwise.
 
-### GetBilledMinutesOk
+### GetCloudsOk
 
-`func (o *RunnerRecommendationRequest) GetBilledMinutesOk() (*float32, bool)`
+`func (o *RunnerRecommendationRequest) GetCloudsOk() (*[]TypesRunnerSelfHosted, bool)`
 
-GetBilledMinutesOk returns a tuple with the BilledMinutes field if it's non-nil, zero value otherwise
+GetCloudsOk returns a tuple with the Clouds field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetBilledMinutes
+### SetClouds
 
-`func (o *RunnerRecommendationRequest) SetBilledMinutes(v float32)`
+`func (o *RunnerRecommendationRequest) SetClouds(v []TypesRunnerSelfHosted)`
 
-SetBilledMinutes sets BilledMinutes field to given value.
+SetClouds sets Clouds field to given value.
 
-### HasBilledMinutes
+### HasClouds
 
-`func (o *RunnerRecommendationRequest) HasBilledMinutes() bool`
+`func (o *RunnerRecommendationRequest) HasClouds() bool`
 
-HasBilledMinutes returns a boolean if a field has been set.
+HasClouds returns a boolean if a field has been set.
+
+### GetConnected
+
+`func (o *RunnerRecommendationRequest) GetConnected() []string`
+
+GetConnected returns the Connected field if non-nil, zero value otherwise.
+
+### GetConnectedOk
+
+`func (o *RunnerRecommendationRequest) GetConnectedOk() (*[]string, bool)`
+
+GetConnectedOk returns a tuple with the Connected field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetConnected
+
+`func (o *RunnerRecommendationRequest) SetConnected(v []string)`
+
+SetConnected sets Connected field to given value.
+
+### HasConnected
+
+`func (o *RunnerRecommendationRequest) HasConnected() bool`
+
+HasConnected returns a boolean if a field has been set.
 
 ### GetCurrent
 
-`func (o *RunnerRecommendationRequest) GetCurrent() TypesRunnerCurrent`
+`func (o *RunnerRecommendationRequest) GetCurrent() TypesCIQuoteCurrent`
 
 GetCurrent returns the Current field if non-nil, zero value otherwise.
 
 ### GetCurrentOk
 
-`func (o *RunnerRecommendationRequest) GetCurrentOk() (*TypesRunnerCurrent, bool)`
+`func (o *RunnerRecommendationRequest) GetCurrentOk() (*TypesCIQuoteCurrent, bool)`
 
 GetCurrentOk returns a tuple with the Current field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetCurrent
 
-`func (o *RunnerRecommendationRequest) SetCurrent(v TypesRunnerCurrent)`
+`func (o *RunnerRecommendationRequest) SetCurrent(v TypesCIQuoteCurrent)`
 
 SetCurrent sets Current field to given value.
 
@@ -82,55 +109,80 @@ SetCurrent sets Current field to given value.
 
 HasCurrent returns a boolean if a field has been set.
 
-### GetJobCount
+### GetGithubSelfHostedFee
 
-`func (o *RunnerRecommendationRequest) GetJobCount() int32`
+`func (o *RunnerRecommendationRequest) GetGithubSelfHostedFee() bool`
 
-GetJobCount returns the JobCount field if non-nil, zero value otherwise.
+GetGithubSelfHostedFee returns the GithubSelfHostedFee field if non-nil, zero value otherwise.
 
-### GetJobCountOk
+### GetGithubSelfHostedFeeOk
 
-`func (o *RunnerRecommendationRequest) GetJobCountOk() (*int32, bool)`
+`func (o *RunnerRecommendationRequest) GetGithubSelfHostedFeeOk() (*bool, bool)`
 
-GetJobCountOk returns a tuple with the JobCount field if it's non-nil, zero value otherwise
+GetGithubSelfHostedFeeOk returns a tuple with the GithubSelfHostedFee field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetJobCount
+### SetGithubSelfHostedFee
 
-`func (o *RunnerRecommendationRequest) SetJobCount(v int32)`
+`func (o *RunnerRecommendationRequest) SetGithubSelfHostedFee(v bool)`
 
-SetJobCount sets JobCount field to given value.
+SetGithubSelfHostedFee sets GithubSelfHostedFee field to given value.
 
-### HasJobCount
+### HasGithubSelfHostedFee
 
-`func (o *RunnerRecommendationRequest) HasJobCount() bool`
+`func (o *RunnerRecommendationRequest) HasGithubSelfHostedFee() bool`
 
-HasJobCount returns a boolean if a field has been set.
+HasGithubSelfHostedFee returns a boolean if a field has been set.
 
-### GetJobsSeconds
+### GetIncluded
 
-`func (o *RunnerRecommendationRequest) GetJobsSeconds() []float32`
+`func (o *RunnerRecommendationRequest) GetIncluded() map[string]TypesCIIncluded`
 
-GetJobsSeconds returns the JobsSeconds field if non-nil, zero value otherwise.
+GetIncluded returns the Included field if non-nil, zero value otherwise.
 
-### GetJobsSecondsOk
+### GetIncludedOk
 
-`func (o *RunnerRecommendationRequest) GetJobsSecondsOk() (*[]float32, bool)`
+`func (o *RunnerRecommendationRequest) GetIncludedOk() (*map[string]TypesCIIncluded, bool)`
 
-GetJobsSecondsOk returns a tuple with the JobsSeconds field if it's non-nil, zero value otherwise
+GetIncludedOk returns a tuple with the Included field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
-### SetJobsSeconds
+### SetIncluded
 
-`func (o *RunnerRecommendationRequest) SetJobsSeconds(v []float32)`
+`func (o *RunnerRecommendationRequest) SetIncluded(v map[string]TypesCIIncluded)`
 
-SetJobsSeconds sets JobsSeconds field to given value.
+SetIncluded sets Included field to given value.
 
-### HasJobsSeconds
+### HasIncluded
 
-`func (o *RunnerRecommendationRequest) HasJobsSeconds() bool`
+`func (o *RunnerRecommendationRequest) HasIncluded() bool`
 
-HasJobsSeconds returns a boolean if a field has been set.
+HasIncluded returns a boolean if a field has been set.
+
+### GetJobs
+
+`func (o *RunnerRecommendationRequest) GetJobs() []TypesCIJobBucket`
+
+GetJobs returns the Jobs field if non-nil, zero value otherwise.
+
+### GetJobsOk
+
+`func (o *RunnerRecommendationRequest) GetJobsOk() (*[]TypesCIJobBucket, bool)`
+
+GetJobsOk returns a tuple with the Jobs field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetJobs
+
+`func (o *RunnerRecommendationRequest) SetJobs(v []TypesCIJobBucket)`
+
+SetJobs sets Jobs field to given value.
+
+### HasJobs
+
+`func (o *RunnerRecommendationRequest) HasJobs() bool`
+
+HasJobs returns a boolean if a field has been set.
 
 ### GetMonthlyMinutes
 
@@ -182,47 +234,22 @@ SetPublicRepo sets PublicRepo field to given value.
 
 HasPublicRepo returns a boolean if a field has been set.
 
-### GetSelfHosted
-
-`func (o *RunnerRecommendationRequest) GetSelfHosted() TypesRunnerSelfHosted`
-
-GetSelfHosted returns the SelfHosted field if non-nil, zero value otherwise.
-
-### GetSelfHostedOk
-
-`func (o *RunnerRecommendationRequest) GetSelfHostedOk() (*TypesRunnerSelfHosted, bool)`
-
-GetSelfHostedOk returns a tuple with the SelfHosted field if it's non-nil, zero value otherwise
-and a boolean to check if the value has been set.
-
-### SetSelfHosted
-
-`func (o *RunnerRecommendationRequest) SetSelfHosted(v TypesRunnerSelfHosted)`
-
-SetSelfHosted sets SelfHosted field to given value.
-
-### HasSelfHosted
-
-`func (o *RunnerRecommendationRequest) HasSelfHosted() bool`
-
-HasSelfHosted returns a boolean if a field has been set.
-
 ### GetShape
 
-`func (o *RunnerRecommendationRequest) GetShape() TypesRunnerShape`
+`func (o *RunnerRecommendationRequest) GetShape() TypesCIRunnerShape`
 
 GetShape returns the Shape field if non-nil, zero value otherwise.
 
 ### GetShapeOk
 
-`func (o *RunnerRecommendationRequest) GetShapeOk() (*TypesRunnerShape, bool)`
+`func (o *RunnerRecommendationRequest) GetShapeOk() (*TypesCIRunnerShape, bool)`
 
 GetShapeOk returns a tuple with the Shape field if it's non-nil, zero value otherwise
 and a boolean to check if the value has been set.
 
 ### SetShape
 
-`func (o *RunnerRecommendationRequest) SetShape(v TypesRunnerShape)`
+`func (o *RunnerRecommendationRequest) SetShape(v TypesCIRunnerShape)`
 
 SetShape sets Shape field to given value.
 
@@ -231,6 +258,31 @@ SetShape sets Shape field to given value.
 `func (o *RunnerRecommendationRequest) HasShape() bool`
 
 HasShape returns a boolean if a field has been set.
+
+### GetSpeed
+
+`func (o *RunnerRecommendationRequest) GetSpeed() map[string]TypesCISpeed`
+
+GetSpeed returns the Speed field if non-nil, zero value otherwise.
+
+### GetSpeedOk
+
+`func (o *RunnerRecommendationRequest) GetSpeedOk() (*map[string]TypesCISpeed, bool)`
+
+GetSpeedOk returns a tuple with the Speed field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSpeed
+
+`func (o *RunnerRecommendationRequest) SetSpeed(v map[string]TypesCISpeed)`
+
+SetSpeed sets Speed field to given value.
+
+### HasSpeed
+
+`func (o *RunnerRecommendationRequest) HasSpeed() bool`
+
+HasSpeed returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

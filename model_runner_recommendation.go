@@ -20,20 +20,38 @@ var _ MappedNullable = &RunnerRecommendation{}
 
 // RunnerRecommendation struct for RunnerRecommendation
 type RunnerRecommendation struct {
-	BilledSeconds    *float32             `json:"billed_seconds,omitempty"`
-	ComputeSource    *string              `json:"compute_source,omitempty"`
-	Cost             *float32             `json:"cost,omitempty"`
-	CostPerMonth     *float32             `json:"cost_per_month,omitempty"`
-	FetchedOn        *string              `json:"fetched_on,omitempty"`
-	Flags            []string             `json:"flags,omitempty"`
-	PlanFees         []TypesRunnerPlanFee `json:"plan_fees,omitempty"`
-	PricingModel     *string              `json:"pricing_model,omitempty"`
-	Provider         *string              `json:"provider,omitempty"`
-	RuntimeSeconds   *float32             `json:"runtime_seconds,omitempty"`
-	SavingsVsCurrent *float32             `json:"savings_vs_current,omitempty"`
-	Sku              *string              `json:"sku,omitempty"`
-	SourceUrl        *string              `json:"source_url,omitempty"`
-	VmInstanceType   *string              `json:"vm_instance_type,omitempty"`
+	Architecture          *string              `json:"architecture,omitempty"`
+	BilledSeconds         *float32             `json:"billed_seconds,omitempty"`
+	CandidateClass        *string              `json:"candidate_class,omitempty"`
+	ComputeSource         *string              `json:"compute_source,omitempty"`
+	Connected             *bool                `json:"connected,omitempty"`
+	Cost                  *float32             `json:"cost,omitempty"`
+	CostPerMonth          *float32             `json:"cost_per_month,omitempty"`
+	CpuCores              *int32               `json:"cpu_cores,omitempty"`
+	CurrentP75JobCost     *float32             `json:"current_p75_job_cost,omitempty"`
+	CurrentP75WallSeconds *float32             `json:"current_p75_wall_seconds,omitempty"`
+	CurrentWallSeconds    *float32             `json:"current_wall_seconds,omitempty"`
+	Docker                *bool                `json:"docker,omitempty"`
+	FetchedOn             *string              `json:"fetched_on,omitempty"`
+	Flags                 []string             `json:"flags,omitempty"`
+	GpuCount              *int32               `json:"gpu_count,omitempty"`
+	IncludedApplied       *float32             `json:"included_applied,omitempty"`
+	NestedVirtualization  *bool                `json:"nested_virtualization,omitempty"`
+	OperatingSystem       *string              `json:"operating_system,omitempty"`
+	P75JobCost            *float32             `json:"p75_job_cost,omitempty"`
+	P75WallSeconds        *float32             `json:"p75_wall_seconds,omitempty"`
+	PlanFees              []TypesRunnerPlanFee `json:"plan_fees,omitempty"`
+	PricingModel          *string              `json:"pricing_model,omitempty"`
+	Provider              *string              `json:"provider,omitempty"`
+	RamGb                 *float32             `json:"ram_gb,omitempty"`
+	Region                *string              `json:"region,omitempty"`
+	RuntimeSeconds        *float32             `json:"runtime_seconds,omitempty"`
+	SavingsVsCurrent      *float32             `json:"savings_vs_current,omitempty"`
+	Sku                   *string              `json:"sku,omitempty"`
+	SourceUrl             *string              `json:"source_url,omitempty"`
+	SpeedMeasured         *bool                `json:"speed_measured,omitempty"`
+	VmInstanceType        *string              `json:"vm_instance_type,omitempty"`
+	WallSeconds           *float32             `json:"wall_seconds,omitempty"`
 }
 
 // NewRunnerRecommendation instantiates a new RunnerRecommendation object
@@ -51,6 +69,38 @@ func NewRunnerRecommendation() *RunnerRecommendation {
 func NewRunnerRecommendationWithDefaults() *RunnerRecommendation {
 	this := RunnerRecommendation{}
 	return &this
+}
+
+// GetArchitecture returns the Architecture field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetArchitecture() string {
+	if o == nil || IsNil(o.Architecture) {
+		var ret string
+		return ret
+	}
+	return *o.Architecture
+}
+
+// GetArchitectureOk returns a tuple with the Architecture field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetArchitectureOk() (*string, bool) {
+	if o == nil || IsNil(o.Architecture) {
+		return nil, false
+	}
+	return o.Architecture, true
+}
+
+// HasArchitecture returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasArchitecture() bool {
+	if o != nil && !IsNil(o.Architecture) {
+		return true
+	}
+
+	return false
+}
+
+// SetArchitecture gets a reference to the given string and assigns it to the Architecture field.
+func (o *RunnerRecommendation) SetArchitecture(v string) {
+	o.Architecture = &v
 }
 
 // GetBilledSeconds returns the BilledSeconds field value if set, zero value otherwise.
@@ -85,6 +135,38 @@ func (o *RunnerRecommendation) SetBilledSeconds(v float32) {
 	o.BilledSeconds = &v
 }
 
+// GetCandidateClass returns the CandidateClass field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetCandidateClass() string {
+	if o == nil || IsNil(o.CandidateClass) {
+		var ret string
+		return ret
+	}
+	return *o.CandidateClass
+}
+
+// GetCandidateClassOk returns a tuple with the CandidateClass field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetCandidateClassOk() (*string, bool) {
+	if o == nil || IsNil(o.CandidateClass) {
+		return nil, false
+	}
+	return o.CandidateClass, true
+}
+
+// HasCandidateClass returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasCandidateClass() bool {
+	if o != nil && !IsNil(o.CandidateClass) {
+		return true
+	}
+
+	return false
+}
+
+// SetCandidateClass gets a reference to the given string and assigns it to the CandidateClass field.
+func (o *RunnerRecommendation) SetCandidateClass(v string) {
+	o.CandidateClass = &v
+}
+
 // GetComputeSource returns the ComputeSource field value if set, zero value otherwise.
 func (o *RunnerRecommendation) GetComputeSource() string {
 	if o == nil || IsNil(o.ComputeSource) {
@@ -115,6 +197,38 @@ func (o *RunnerRecommendation) HasComputeSource() bool {
 // SetComputeSource gets a reference to the given string and assigns it to the ComputeSource field.
 func (o *RunnerRecommendation) SetComputeSource(v string) {
 	o.ComputeSource = &v
+}
+
+// GetConnected returns the Connected field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetConnected() bool {
+	if o == nil || IsNil(o.Connected) {
+		var ret bool
+		return ret
+	}
+	return *o.Connected
+}
+
+// GetConnectedOk returns a tuple with the Connected field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetConnectedOk() (*bool, bool) {
+	if o == nil || IsNil(o.Connected) {
+		return nil, false
+	}
+	return o.Connected, true
+}
+
+// HasConnected returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasConnected() bool {
+	if o != nil && !IsNil(o.Connected) {
+		return true
+	}
+
+	return false
+}
+
+// SetConnected gets a reference to the given bool and assigns it to the Connected field.
+func (o *RunnerRecommendation) SetConnected(v bool) {
+	o.Connected = &v
 }
 
 // GetCost returns the Cost field value if set, zero value otherwise.
@@ -181,6 +295,166 @@ func (o *RunnerRecommendation) SetCostPerMonth(v float32) {
 	o.CostPerMonth = &v
 }
 
+// GetCpuCores returns the CpuCores field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetCpuCores() int32 {
+	if o == nil || IsNil(o.CpuCores) {
+		var ret int32
+		return ret
+	}
+	return *o.CpuCores
+}
+
+// GetCpuCoresOk returns a tuple with the CpuCores field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetCpuCoresOk() (*int32, bool) {
+	if o == nil || IsNil(o.CpuCores) {
+		return nil, false
+	}
+	return o.CpuCores, true
+}
+
+// HasCpuCores returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasCpuCores() bool {
+	if o != nil && !IsNil(o.CpuCores) {
+		return true
+	}
+
+	return false
+}
+
+// SetCpuCores gets a reference to the given int32 and assigns it to the CpuCores field.
+func (o *RunnerRecommendation) SetCpuCores(v int32) {
+	o.CpuCores = &v
+}
+
+// GetCurrentP75JobCost returns the CurrentP75JobCost field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetCurrentP75JobCost() float32 {
+	if o == nil || IsNil(o.CurrentP75JobCost) {
+		var ret float32
+		return ret
+	}
+	return *o.CurrentP75JobCost
+}
+
+// GetCurrentP75JobCostOk returns a tuple with the CurrentP75JobCost field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetCurrentP75JobCostOk() (*float32, bool) {
+	if o == nil || IsNil(o.CurrentP75JobCost) {
+		return nil, false
+	}
+	return o.CurrentP75JobCost, true
+}
+
+// HasCurrentP75JobCost returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasCurrentP75JobCost() bool {
+	if o != nil && !IsNil(o.CurrentP75JobCost) {
+		return true
+	}
+
+	return false
+}
+
+// SetCurrentP75JobCost gets a reference to the given float32 and assigns it to the CurrentP75JobCost field.
+func (o *RunnerRecommendation) SetCurrentP75JobCost(v float32) {
+	o.CurrentP75JobCost = &v
+}
+
+// GetCurrentP75WallSeconds returns the CurrentP75WallSeconds field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetCurrentP75WallSeconds() float32 {
+	if o == nil || IsNil(o.CurrentP75WallSeconds) {
+		var ret float32
+		return ret
+	}
+	return *o.CurrentP75WallSeconds
+}
+
+// GetCurrentP75WallSecondsOk returns a tuple with the CurrentP75WallSeconds field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetCurrentP75WallSecondsOk() (*float32, bool) {
+	if o == nil || IsNil(o.CurrentP75WallSeconds) {
+		return nil, false
+	}
+	return o.CurrentP75WallSeconds, true
+}
+
+// HasCurrentP75WallSeconds returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasCurrentP75WallSeconds() bool {
+	if o != nil && !IsNil(o.CurrentP75WallSeconds) {
+		return true
+	}
+
+	return false
+}
+
+// SetCurrentP75WallSeconds gets a reference to the given float32 and assigns it to the CurrentP75WallSeconds field.
+func (o *RunnerRecommendation) SetCurrentP75WallSeconds(v float32) {
+	o.CurrentP75WallSeconds = &v
+}
+
+// GetCurrentWallSeconds returns the CurrentWallSeconds field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetCurrentWallSeconds() float32 {
+	if o == nil || IsNil(o.CurrentWallSeconds) {
+		var ret float32
+		return ret
+	}
+	return *o.CurrentWallSeconds
+}
+
+// GetCurrentWallSecondsOk returns a tuple with the CurrentWallSeconds field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetCurrentWallSecondsOk() (*float32, bool) {
+	if o == nil || IsNil(o.CurrentWallSeconds) {
+		return nil, false
+	}
+	return o.CurrentWallSeconds, true
+}
+
+// HasCurrentWallSeconds returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasCurrentWallSeconds() bool {
+	if o != nil && !IsNil(o.CurrentWallSeconds) {
+		return true
+	}
+
+	return false
+}
+
+// SetCurrentWallSeconds gets a reference to the given float32 and assigns it to the CurrentWallSeconds field.
+func (o *RunnerRecommendation) SetCurrentWallSeconds(v float32) {
+	o.CurrentWallSeconds = &v
+}
+
+// GetDocker returns the Docker field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetDocker() bool {
+	if o == nil || IsNil(o.Docker) {
+		var ret bool
+		return ret
+	}
+	return *o.Docker
+}
+
+// GetDockerOk returns a tuple with the Docker field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetDockerOk() (*bool, bool) {
+	if o == nil || IsNil(o.Docker) {
+		return nil, false
+	}
+	return o.Docker, true
+}
+
+// HasDocker returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasDocker() bool {
+	if o != nil && !IsNil(o.Docker) {
+		return true
+	}
+
+	return false
+}
+
+// SetDocker gets a reference to the given bool and assigns it to the Docker field.
+func (o *RunnerRecommendation) SetDocker(v bool) {
+	o.Docker = &v
+}
+
 // GetFetchedOn returns the FetchedOn field value if set, zero value otherwise.
 func (o *RunnerRecommendation) GetFetchedOn() string {
 	if o == nil || IsNil(o.FetchedOn) {
@@ -243,6 +517,198 @@ func (o *RunnerRecommendation) HasFlags() bool {
 // SetFlags gets a reference to the given []string and assigns it to the Flags field.
 func (o *RunnerRecommendation) SetFlags(v []string) {
 	o.Flags = v
+}
+
+// GetGpuCount returns the GpuCount field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetGpuCount() int32 {
+	if o == nil || IsNil(o.GpuCount) {
+		var ret int32
+		return ret
+	}
+	return *o.GpuCount
+}
+
+// GetGpuCountOk returns a tuple with the GpuCount field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetGpuCountOk() (*int32, bool) {
+	if o == nil || IsNil(o.GpuCount) {
+		return nil, false
+	}
+	return o.GpuCount, true
+}
+
+// HasGpuCount returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasGpuCount() bool {
+	if o != nil && !IsNil(o.GpuCount) {
+		return true
+	}
+
+	return false
+}
+
+// SetGpuCount gets a reference to the given int32 and assigns it to the GpuCount field.
+func (o *RunnerRecommendation) SetGpuCount(v int32) {
+	o.GpuCount = &v
+}
+
+// GetIncludedApplied returns the IncludedApplied field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetIncludedApplied() float32 {
+	if o == nil || IsNil(o.IncludedApplied) {
+		var ret float32
+		return ret
+	}
+	return *o.IncludedApplied
+}
+
+// GetIncludedAppliedOk returns a tuple with the IncludedApplied field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetIncludedAppliedOk() (*float32, bool) {
+	if o == nil || IsNil(o.IncludedApplied) {
+		return nil, false
+	}
+	return o.IncludedApplied, true
+}
+
+// HasIncludedApplied returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasIncludedApplied() bool {
+	if o != nil && !IsNil(o.IncludedApplied) {
+		return true
+	}
+
+	return false
+}
+
+// SetIncludedApplied gets a reference to the given float32 and assigns it to the IncludedApplied field.
+func (o *RunnerRecommendation) SetIncludedApplied(v float32) {
+	o.IncludedApplied = &v
+}
+
+// GetNestedVirtualization returns the NestedVirtualization field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetNestedVirtualization() bool {
+	if o == nil || IsNil(o.NestedVirtualization) {
+		var ret bool
+		return ret
+	}
+	return *o.NestedVirtualization
+}
+
+// GetNestedVirtualizationOk returns a tuple with the NestedVirtualization field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetNestedVirtualizationOk() (*bool, bool) {
+	if o == nil || IsNil(o.NestedVirtualization) {
+		return nil, false
+	}
+	return o.NestedVirtualization, true
+}
+
+// HasNestedVirtualization returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasNestedVirtualization() bool {
+	if o != nil && !IsNil(o.NestedVirtualization) {
+		return true
+	}
+
+	return false
+}
+
+// SetNestedVirtualization gets a reference to the given bool and assigns it to the NestedVirtualization field.
+func (o *RunnerRecommendation) SetNestedVirtualization(v bool) {
+	o.NestedVirtualization = &v
+}
+
+// GetOperatingSystem returns the OperatingSystem field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetOperatingSystem() string {
+	if o == nil || IsNil(o.OperatingSystem) {
+		var ret string
+		return ret
+	}
+	return *o.OperatingSystem
+}
+
+// GetOperatingSystemOk returns a tuple with the OperatingSystem field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetOperatingSystemOk() (*string, bool) {
+	if o == nil || IsNil(o.OperatingSystem) {
+		return nil, false
+	}
+	return o.OperatingSystem, true
+}
+
+// HasOperatingSystem returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasOperatingSystem() bool {
+	if o != nil && !IsNil(o.OperatingSystem) {
+		return true
+	}
+
+	return false
+}
+
+// SetOperatingSystem gets a reference to the given string and assigns it to the OperatingSystem field.
+func (o *RunnerRecommendation) SetOperatingSystem(v string) {
+	o.OperatingSystem = &v
+}
+
+// GetP75JobCost returns the P75JobCost field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetP75JobCost() float32 {
+	if o == nil || IsNil(o.P75JobCost) {
+		var ret float32
+		return ret
+	}
+	return *o.P75JobCost
+}
+
+// GetP75JobCostOk returns a tuple with the P75JobCost field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetP75JobCostOk() (*float32, bool) {
+	if o == nil || IsNil(o.P75JobCost) {
+		return nil, false
+	}
+	return o.P75JobCost, true
+}
+
+// HasP75JobCost returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasP75JobCost() bool {
+	if o != nil && !IsNil(o.P75JobCost) {
+		return true
+	}
+
+	return false
+}
+
+// SetP75JobCost gets a reference to the given float32 and assigns it to the P75JobCost field.
+func (o *RunnerRecommendation) SetP75JobCost(v float32) {
+	o.P75JobCost = &v
+}
+
+// GetP75WallSeconds returns the P75WallSeconds field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetP75WallSeconds() float32 {
+	if o == nil || IsNil(o.P75WallSeconds) {
+		var ret float32
+		return ret
+	}
+	return *o.P75WallSeconds
+}
+
+// GetP75WallSecondsOk returns a tuple with the P75WallSeconds field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetP75WallSecondsOk() (*float32, bool) {
+	if o == nil || IsNil(o.P75WallSeconds) {
+		return nil, false
+	}
+	return o.P75WallSeconds, true
+}
+
+// HasP75WallSeconds returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasP75WallSeconds() bool {
+	if o != nil && !IsNil(o.P75WallSeconds) {
+		return true
+	}
+
+	return false
+}
+
+// SetP75WallSeconds gets a reference to the given float32 and assigns it to the P75WallSeconds field.
+func (o *RunnerRecommendation) SetP75WallSeconds(v float32) {
+	o.P75WallSeconds = &v
 }
 
 // GetPlanFees returns the PlanFees field value if set, zero value otherwise.
@@ -339,6 +805,70 @@ func (o *RunnerRecommendation) HasProvider() bool {
 // SetProvider gets a reference to the given string and assigns it to the Provider field.
 func (o *RunnerRecommendation) SetProvider(v string) {
 	o.Provider = &v
+}
+
+// GetRamGb returns the RamGb field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetRamGb() float32 {
+	if o == nil || IsNil(o.RamGb) {
+		var ret float32
+		return ret
+	}
+	return *o.RamGb
+}
+
+// GetRamGbOk returns a tuple with the RamGb field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetRamGbOk() (*float32, bool) {
+	if o == nil || IsNil(o.RamGb) {
+		return nil, false
+	}
+	return o.RamGb, true
+}
+
+// HasRamGb returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasRamGb() bool {
+	if o != nil && !IsNil(o.RamGb) {
+		return true
+	}
+
+	return false
+}
+
+// SetRamGb gets a reference to the given float32 and assigns it to the RamGb field.
+func (o *RunnerRecommendation) SetRamGb(v float32) {
+	o.RamGb = &v
+}
+
+// GetRegion returns the Region field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetRegion() string {
+	if o == nil || IsNil(o.Region) {
+		var ret string
+		return ret
+	}
+	return *o.Region
+}
+
+// GetRegionOk returns a tuple with the Region field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetRegionOk() (*string, bool) {
+	if o == nil || IsNil(o.Region) {
+		return nil, false
+	}
+	return o.Region, true
+}
+
+// HasRegion returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasRegion() bool {
+	if o != nil && !IsNil(o.Region) {
+		return true
+	}
+
+	return false
+}
+
+// SetRegion gets a reference to the given string and assigns it to the Region field.
+func (o *RunnerRecommendation) SetRegion(v string) {
+	o.Region = &v
 }
 
 // GetRuntimeSeconds returns the RuntimeSeconds field value if set, zero value otherwise.
@@ -469,6 +999,38 @@ func (o *RunnerRecommendation) SetSourceUrl(v string) {
 	o.SourceUrl = &v
 }
 
+// GetSpeedMeasured returns the SpeedMeasured field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetSpeedMeasured() bool {
+	if o == nil || IsNil(o.SpeedMeasured) {
+		var ret bool
+		return ret
+	}
+	return *o.SpeedMeasured
+}
+
+// GetSpeedMeasuredOk returns a tuple with the SpeedMeasured field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetSpeedMeasuredOk() (*bool, bool) {
+	if o == nil || IsNil(o.SpeedMeasured) {
+		return nil, false
+	}
+	return o.SpeedMeasured, true
+}
+
+// HasSpeedMeasured returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasSpeedMeasured() bool {
+	if o != nil && !IsNil(o.SpeedMeasured) {
+		return true
+	}
+
+	return false
+}
+
+// SetSpeedMeasured gets a reference to the given bool and assigns it to the SpeedMeasured field.
+func (o *RunnerRecommendation) SetSpeedMeasured(v bool) {
+	o.SpeedMeasured = &v
+}
+
 // GetVmInstanceType returns the VmInstanceType field value if set, zero value otherwise.
 func (o *RunnerRecommendation) GetVmInstanceType() string {
 	if o == nil || IsNil(o.VmInstanceType) {
@@ -501,6 +1063,38 @@ func (o *RunnerRecommendation) SetVmInstanceType(v string) {
 	o.VmInstanceType = &v
 }
 
+// GetWallSeconds returns the WallSeconds field value if set, zero value otherwise.
+func (o *RunnerRecommendation) GetWallSeconds() float32 {
+	if o == nil || IsNil(o.WallSeconds) {
+		var ret float32
+		return ret
+	}
+	return *o.WallSeconds
+}
+
+// GetWallSecondsOk returns a tuple with the WallSeconds field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendation) GetWallSecondsOk() (*float32, bool) {
+	if o == nil || IsNil(o.WallSeconds) {
+		return nil, false
+	}
+	return o.WallSeconds, true
+}
+
+// HasWallSeconds returns a boolean if a field has been set.
+func (o *RunnerRecommendation) HasWallSeconds() bool {
+	if o != nil && !IsNil(o.WallSeconds) {
+		return true
+	}
+
+	return false
+}
+
+// SetWallSeconds gets a reference to the given float32 and assigns it to the WallSeconds field.
+func (o *RunnerRecommendation) SetWallSeconds(v float32) {
+	o.WallSeconds = &v
+}
+
 func (o RunnerRecommendation) MarshalJSON() ([]byte, error) {
 	toSerialize, err := o.ToMap()
 	if err != nil {
@@ -511,11 +1105,20 @@ func (o RunnerRecommendation) MarshalJSON() ([]byte, error) {
 
 func (o RunnerRecommendation) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
+	if !IsNil(o.Architecture) {
+		toSerialize["architecture"] = o.Architecture
+	}
 	if !IsNil(o.BilledSeconds) {
 		toSerialize["billed_seconds"] = o.BilledSeconds
 	}
+	if !IsNil(o.CandidateClass) {
+		toSerialize["candidate_class"] = o.CandidateClass
+	}
 	if !IsNil(o.ComputeSource) {
 		toSerialize["compute_source"] = o.ComputeSource
+	}
+	if !IsNil(o.Connected) {
+		toSerialize["connected"] = o.Connected
 	}
 	if !IsNil(o.Cost) {
 		toSerialize["cost"] = o.Cost
@@ -523,11 +1126,44 @@ func (o RunnerRecommendation) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.CostPerMonth) {
 		toSerialize["cost_per_month"] = o.CostPerMonth
 	}
+	if !IsNil(o.CpuCores) {
+		toSerialize["cpu_cores"] = o.CpuCores
+	}
+	if !IsNil(o.CurrentP75JobCost) {
+		toSerialize["current_p75_job_cost"] = o.CurrentP75JobCost
+	}
+	if !IsNil(o.CurrentP75WallSeconds) {
+		toSerialize["current_p75_wall_seconds"] = o.CurrentP75WallSeconds
+	}
+	if !IsNil(o.CurrentWallSeconds) {
+		toSerialize["current_wall_seconds"] = o.CurrentWallSeconds
+	}
+	if !IsNil(o.Docker) {
+		toSerialize["docker"] = o.Docker
+	}
 	if !IsNil(o.FetchedOn) {
 		toSerialize["fetched_on"] = o.FetchedOn
 	}
 	if !IsNil(o.Flags) {
 		toSerialize["flags"] = o.Flags
+	}
+	if !IsNil(o.GpuCount) {
+		toSerialize["gpu_count"] = o.GpuCount
+	}
+	if !IsNil(o.IncludedApplied) {
+		toSerialize["included_applied"] = o.IncludedApplied
+	}
+	if !IsNil(o.NestedVirtualization) {
+		toSerialize["nested_virtualization"] = o.NestedVirtualization
+	}
+	if !IsNil(o.OperatingSystem) {
+		toSerialize["operating_system"] = o.OperatingSystem
+	}
+	if !IsNil(o.P75JobCost) {
+		toSerialize["p75_job_cost"] = o.P75JobCost
+	}
+	if !IsNil(o.P75WallSeconds) {
+		toSerialize["p75_wall_seconds"] = o.P75WallSeconds
 	}
 	if !IsNil(o.PlanFees) {
 		toSerialize["plan_fees"] = o.PlanFees
@@ -537,6 +1173,12 @@ func (o RunnerRecommendation) ToMap() (map[string]interface{}, error) {
 	}
 	if !IsNil(o.Provider) {
 		toSerialize["provider"] = o.Provider
+	}
+	if !IsNil(o.RamGb) {
+		toSerialize["ram_gb"] = o.RamGb
+	}
+	if !IsNil(o.Region) {
+		toSerialize["region"] = o.Region
 	}
 	if !IsNil(o.RuntimeSeconds) {
 		toSerialize["runtime_seconds"] = o.RuntimeSeconds
@@ -550,8 +1192,14 @@ func (o RunnerRecommendation) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.SourceUrl) {
 		toSerialize["source_url"] = o.SourceUrl
 	}
+	if !IsNil(o.SpeedMeasured) {
+		toSerialize["speed_measured"] = o.SpeedMeasured
+	}
 	if !IsNil(o.VmInstanceType) {
 		toSerialize["vm_instance_type"] = o.VmInstanceType
+	}
+	if !IsNil(o.WallSeconds) {
+		toSerialize["wall_seconds"] = o.WallSeconds
 	}
 	return toSerialize, nil
 }

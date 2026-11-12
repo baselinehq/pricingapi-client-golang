@@ -2705,12 +2705,14 @@ paths:
       x-codegen-request-body-name: instance
   /v1/recommendations/runner:
     post:
-      description: "Prices the given CI jobs on every runner provider that fits the\
-        \ shape, using each provider's own billing granularity (per-minute round-up,\
-        \ per-second, minimums), plus self-hosted compute when self_hosted names a\
-        \ cloud and region. Results are cheapest first. Flags explain caveats such\
-        \ as self-hosted runners on public repositories or savings that need per-job\
-        \ durations to count."
+      description: "Prices the given CI jobs, as a histogram of job durations, on\
+        \ every runner provider, cloud VM (on-demand and spot) in the clouds named\
+        \ and sandbox that fits the shape, using each candidate's own billing granularity\
+        \ (per-minute round-up, per-second, minimums, per-job fees). Measured speed\
+        \ factors scale durations per candidate, and remaining included compute is\
+        \ spent first. Results are cheapest first, with time and p75 cost per job\
+        \ so callers can rank them against the current runner. Flags explain caveats\
+        \ such as unmeasured speed, spot interruption or a provider that is not connected."
       requestBody:
         content:
           application/json:
@@ -2726,7 +2728,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/RunnerRecommendation"
                 type: array
-          description: "One candidate per provider, cheapest first"
+          description: "One candidate per provider and kind, cheapest first"
         "400":
           content:
             application/json:
@@ -5027,45 +5029,91 @@ components:
       - Deleted
     RunnerRecommendation:
       example:
+        architecture: architecture
         billed_seconds: 0.8008281904610115
+        candidate_class: candidate_class
         compute_source: compute_source
+        connected: true
         cost: 6.027456183070403
         cost_per_month: 1.4658129805029452
+        cpu_cores: 5
+        current_p75_job_cost: 5.637376656633329
+        current_p75_wall_seconds: 2.3021358869347655
+        current_wall_seconds: 7.061401241503109
+        docker: true
         fetched_on: fetched_on
         flags:
         - flags
         - flags
+        gpu_count: 9
+        included_applied: 3.616076749251911
+        nested_virtualization: true
+        operating_system: operating_system
+        p75_job_cost: 2.027123023002322
+        p75_wall_seconds: 4.145608029883936
         plan_fees:
-        - fee: 5.962133916683182
+        - fee: 7.386281948385884
           per: per
           period: period
           plan: plan
-        - fee: 5.962133916683182
+        - fee: 7.386281948385884
           per: per
           period: period
           plan: plan
         pricing_model: pricing_model
         provider: provider
-        runtime_seconds: 5.637376656633329
-        savings_vs_current: 2.3021358869347655
+        ram_gb: 1.2315135367772556
+        region: region
+        runtime_seconds: 1.0246457001441578
+        savings_vs_current: 1.4894159098541704
         sku: sku
         source_url: source_url
+        speed_measured: true
         vm_instance_type: vm_instance_type
+        wall_seconds: 6.84685269835264
       properties:
+        architecture:
+          type: string
         billed_seconds:
           type: number
+        candidate_class:
+          type: string
         compute_source:
           type: string
+        connected:
+          type: boolean
         cost:
           type: number
         cost_per_month:
           type: number
+        cpu_cores:
+          type: integer
+        current_p75_job_cost:
+          type: number
+        current_p75_wall_seconds:
+          type: number
+        current_wall_seconds:
+          type: number
+        docker:
+          type: boolean
         fetched_on:
           type: string
         flags:
           items:
             type: string
           type: array
+        gpu_count:
+          type: integer
+        included_applied:
+          type: number
+        nested_virtualization:
+          type: boolean
+        operating_system:
+          type: string
+        p75_job_cost:
+          type: number
+        p75_wall_seconds:
+          type: number
         plan_fees:
           items:
             $ref: "#/components/schemas/types.RunnerPlanFee"
@@ -5073,6 +5121,10 @@ components:
         pricing_model:
           type: string
         provider:
+          type: string
+        ram_gb:
+          type: number
+        region:
           type: string
         runtime_seconds:
           type: number
@@ -5082,51 +5134,87 @@ components:
           type: string
         source_url:
           type: string
+        speed_measured:
+          type: boolean
         vm_instance_type:
           type: string
+        wall_seconds:
+          type: number
       type: object
     RunnerRecommendationRequest:
       example:
-        billed_minutes: 0.8008281904610115
-        current:
-          cost: 6.027456183070403
-          provider: provider
-          sku: sku
-        job_count: 1
-        jobs_seconds:
-        - 5.962133916683182
-        - 5.962133916683182
-        monthly_minutes: 5.637376656633329
-        public_repo: true
-        self_hosted:
-          github_self_hosted_fee: true
+        clouds:
+        - github_self_hosted_fee: true
           provider: provider
           region: region
+        - github_self_hosted_fee: true
+          provider: provider
+          region: region
+        connected:
+        - connected
+        - connected
+        current:
+          cost: 0.8008281904610115
+          p75_queue_seconds: 6.027456183070403
+          p75_run_seconds: 1.4658129805029452
+          provider: provider
+          sku: sku
+        github_self_hosted_fee: true
+        included:
+          key:
+            larger_runners: true
+            remaining_usd: 5.962133916683182
+        jobs:
+        - count: 5
+          seconds: 2.3021358869347655
+        - count: 5
+          seconds: 2.3021358869347655
+        monthly_minutes: 7.061401241503109
+        public_repo: true
         shape:
           arch: arch
-          cpu_cores: 2
-          gpu_count: 7
+          cpu_cores: 9
+          docker: true
+          gpu_count: 3
           os: os
-          ram_gb: 9.301444243932576
+          ram_gb: 2.027123023002322
+        speed:
+          key:
+            factor: 4.145608029883936
+            measured: true
+            p75_queue_seconds: 7.386281948385884
+            p75_run_seconds: 1.2315135367772556
       properties:
-        billed_minutes:
-          type: number
-        current:
-          $ref: "#/components/schemas/types.RunnerCurrent"
-        job_count:
-          type: integer
-        jobs_seconds:
+        clouds:
           items:
-            type: number
+            $ref: "#/components/schemas/types.RunnerSelfHosted"
+          type: array
+        connected:
+          items:
+            type: string
+          type: array
+        current:
+          $ref: "#/components/schemas/types.CIQuoteCurrent"
+        github_self_hosted_fee:
+          type: boolean
+        included:
+          additionalProperties:
+            $ref: "#/components/schemas/types.CIIncluded"
+          type: object
+        jobs:
+          items:
+            $ref: "#/components/schemas/types.CIJobBucket"
           type: array
         monthly_minutes:
           type: number
         public_repo:
           type: boolean
-        self_hosted:
-          $ref: "#/components/schemas/types.RunnerSelfHosted"
         shape:
-          $ref: "#/components/schemas/types.RunnerShape"
+          $ref: "#/components/schemas/types.CIRunnerShape"
+        speed:
+          additionalProperties:
+            $ref: "#/components/schemas/types.CISpeed"
+          type: object
       type: object
     datatypes.JSON:
       type: object
@@ -5177,11 +5265,50 @@ components:
       - PlanetScale
       - STACKIT
       - Linode
+      - Apple
       - Base
+      - Agent37
       - Akash
       - Alibaba
+      - Archil
       - Baseten
       - Beam
+      - Blaxel
+      - Boat
+      - BoxCompute
+      - Boxd
+      - Bunny
+      - Cloudflare
+      - Collimate
+      - CreateOS
+      - CodeSandbox
+      - Daytona
+      - Docker
+      - E2B
+      - ExeDev
+      - Fly
+      - GravixLayer
+      - HuggingFace
+      - Inis
+      - Islo
+      - Isorun
+      - Krova
+      - LangSmith
+      - Leap0
+      - Lizard
+      - MIOSA
+      - Mosaic
+      - Promigence
+      - Railway
+      - RemoteHost
+      - Runloop
+      - Runtime
+      - Shellbox
+      - StateSet
+      - Superserve
+      - Tama
+      - Upstash
+      - Vercel
       - Cerebrium
       - CIRunners
       - Civo
@@ -5195,6 +5322,7 @@ components:
       - E2ENetworks
       - Exoscale
       - Fal
+      - Freestyle
       - HotAisle
       - Hyperbolic
       - Hyperstack
@@ -5202,7 +5330,9 @@ components:
       - Lambda
       - Latitude
       - MassedCompute
+      - Microsandbox
       - Modal
+      - Morph
       - Nebius
       - Northflank
       - Novita
@@ -5212,18 +5342,24 @@ components:
       - PrimeIntellect
       - Replicate
       - RunPod
+      - Sail
       - Salad
       - Scaleway
       - Sesterce
       - Shadeform
+      - Sprites
+      - Tenki
+      - Tensorlake
       - ThunderCompute
       - UpCloud
       - Vast
       - Vultr
+      - Zipbox
       type: string
       x-enum-comments:
         Base: "Base provider for default pricing, no specific cloud provider"
       x-enum-descriptions:
+      - ""
       - ""
       - ""
       - ""
@@ -5276,6 +5412,52 @@ components:
       - ""
       - ""
       - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
+      - ""
       x-enum-varnames:
       - GCP
       - AWS
@@ -5286,11 +5468,50 @@ components:
       - PlanetScale
       - STACKIT
       - Linode
+      - Apple
       - Base
+      - Agent37
       - Akash
       - Alibaba
+      - Archil
       - Baseten
       - Beam
+      - Blaxel
+      - Boat
+      - BoxCompute
+      - Boxd
+      - Bunny
+      - Cloudflare
+      - Collimate
+      - CreateOS
+      - CodeSandbox
+      - Daytona
+      - DockerCloud
+      - E2B
+      - ExeDev
+      - Fly
+      - GravixLayer
+      - HuggingFace
+      - Inis
+      - Islo
+      - Isorun
+      - Krova
+      - LangSmith
+      - Leap0
+      - Lizard
+      - MIOSA
+      - Mosaic
+      - Promigence
+      - Railway
+      - RemoteHost
+      - Runloop
+      - Runtime
+      - Shellbox
+      - StateSet
+      - Superserve
+      - Tama
+      - Upstash
+      - Vercel
       - Cerebrium
       - CIRunners
       - Civo
@@ -5304,6 +5525,7 @@ components:
       - E2ENetworks
       - Exoscale
       - Fal
+      - Freestyle
       - HotAisle
       - Hyperbolic
       - Hyperstack
@@ -5311,7 +5533,9 @@ components:
       - Lambda
       - Latitude
       - MassedCompute
+      - Microsandbox
       - Modal
+      - Morph
       - Nebius
       - Northflank
       - Novita
@@ -5321,14 +5545,19 @@ components:
       - PrimeIntellect
       - Replicate
       - RunPod
+      - Sail
       - Salad
       - Scaleway
       - Sesterce
       - Shadeform
+      - Sprites
+      - Tenki
+      - Tensorlake
       - ThunderCompute
       - UpCloud
       - Vast
       - Vultr
+      - Zipbox
     github_com_baselinehq_golang-shared_types.UsageType:
       enum:
       - SPOT_PREEMPTIBLE
@@ -5359,6 +5588,83 @@ components:
         cpu_cores:
           type: number
         ram_gb:
+          type: number
+      type: object
+    types.CIIncluded:
+      example:
+        larger_runners: true
+        remaining_usd: 5.962133916683182
+      properties:
+        larger_runners:
+          type: boolean
+        remaining_usd:
+          type: number
+      type: object
+    types.CIJobBucket:
+      example:
+        count: 5
+        seconds: 2.3021358869347655
+      properties:
+        count:
+          type: integer
+        seconds:
+          type: number
+      type: object
+    types.CIQuoteCurrent:
+      example:
+        cost: 0.8008281904610115
+        p75_queue_seconds: 6.027456183070403
+        p75_run_seconds: 1.4658129805029452
+        provider: provider
+        sku: sku
+      properties:
+        cost:
+          type: number
+        p75_queue_seconds:
+          type: number
+        p75_run_seconds:
+          type: number
+        provider:
+          type: string
+        sku:
+          type: string
+      type: object
+    types.CIRunnerShape:
+      example:
+        arch: arch
+        cpu_cores: 9
+        docker: true
+        gpu_count: 3
+        os: os
+        ram_gb: 2.027123023002322
+      properties:
+        arch:
+          type: string
+        cpu_cores:
+          type: integer
+        docker:
+          type: boolean
+        gpu_count:
+          type: integer
+        os:
+          type: string
+        ram_gb:
+          type: number
+      type: object
+    types.CISpeed:
+      example:
+        factor: 4.145608029883936
+        measured: true
+        p75_queue_seconds: 7.386281948385884
+        p75_run_seconds: 1.2315135367772556
+      properties:
+        factor:
+          type: number
+        measured:
+          type: boolean
+        p75_queue_seconds:
+          type: number
+        p75_run_seconds:
           type: number
       type: object
     types.Disk:
@@ -5464,22 +5770,9 @@ components:
             type: string
           type: array
       type: object
-    types.RunnerCurrent:
-      example:
-        cost: 6.027456183070403
-        provider: provider
-        sku: sku
-      properties:
-        cost:
-          type: number
-        provider:
-          type: string
-        sku:
-          type: string
-      type: object
     types.RunnerPlanFee:
       example:
-        fee: 5.962133916683182
+        fee: 7.386281948385884
         per: per
         period: period
         plan: plan
@@ -5505,25 +5798,6 @@ components:
           type: string
         region:
           type: string
-      type: object
-    types.RunnerShape:
-      example:
-        arch: arch
-        cpu_cores: 2
-        gpu_count: 7
-        os: os
-        ram_gb: 9.301444243932576
-      properties:
-        arch:
-          type: string
-        cpu_cores:
-          type: integer
-        gpu_count:
-          type: integer
-        os:
-          type: string
-        ram_gb:
-          type: number
       type: object
     types.Savings:
       example:
@@ -5570,11 +5844,58 @@ components:
       - AkamaiLinode
       - AkamaiBlockStorage
       - AkamaiDatabase
+      - AppleMac
+      - AmazonAgentCoreCodeInterpreter
+      - AmazonAgentCoreRuntime
+      - AWSLambdaMicroVMs
+      - AzureContainerAppsSandboxes
+      - AgentPlatformSandbox
+      - AlibabaAgentSandbox
+      - DigitalOceanMicroVMs
+      - DigitalOceanHarnessRuntime
+      - Agent37Compute
       - AkashCompute
       - AlibabaCompute
       - AlibabaBlockStorage
+      - ArchilCompute
       - BasetenCompute
       - BeamCompute
+      - BlaxelCompute
+      - BoatCompute
+      - BoxComputeCompute
+      - BoxdCompute
+      - BunnyCompute
+      - CloudflareCompute
+      - CollimateCompute
+      - CreateOSCompute
+      - CodeSandboxCompute
+      - DaytonaCompute
+      - DockerCompute
+      - E2BCompute
+      - ExeDevCompute
+      - FlyCompute
+      - GravixLayerCompute
+      - HuggingFaceCompute
+      - InisCompute
+      - IsloCompute
+      - IsorunCompute
+      - KrovaCompute
+      - LangSmithCompute
+      - Leap0Compute
+      - LizardCompute
+      - MIOSACompute
+      - MosaicCompute
+      - PromigenceCompute
+      - RailwayCompute
+      - RemoteHostCompute
+      - RunloopCompute
+      - RuntimeCompute
+      - ShellboxCompute
+      - StateSetCompute
+      - SuperserveCompute
+      - TamaCompute
+      - UpstashCompute
+      - VercelCompute
       - CerebriumCompute
       - CivoCompute
       - CivoBlockStorage
@@ -5589,6 +5910,7 @@ components:
       - ExoscaleCompute
       - ExoscaleBlockStorage
       - FalCompute
+      - FreestyleCompute
       - HotAisleCompute
       - HyperbolicCompute
       - HyperstackCompute
@@ -5597,7 +5919,9 @@ components:
       - LambdaCompute
       - LatitudeCompute
       - MassedComputeCompute
+      - MicrosandboxCompute
       - ModalCompute
+      - MorphCompute
       - NebiusCompute
       - NorthflankCompute
       - NorthflankVolume
@@ -5609,17 +5933,22 @@ components:
       - PrimeIntellectCompute
       - ReplicateCompute
       - RunPodCompute
+      - SailCompute
       - SaladCompute
       - ScalewayCompute
       - ScalewayBlockStorage
       - SesterceCompute
       - ShadeformCompute
+      - SpritesCompute
+      - TenkiCompute
+      - TensorlakeCompute
       - ThunderComputeCompute
       - UpCloudCompute
       - UpCloudBlockStorage
       - VastCompute
       - VultrCompute
       - VultrBlockStorage
+      - ZipboxCompute
       type: string
       x-enum-varnames:
       - ComputeEngine
@@ -5649,11 +5978,58 @@ components:
       - AkamaiLinode
       - AkamaiBlockStorage
       - AkamaiDatabase
+      - AppleMac
+      - AmazonAgentCoreCodeInterpreter
+      - AmazonAgentCoreRuntime
+      - AWSLambdaMicroVMs
+      - AzureContainerAppsSandboxes
+      - AgentPlatformSandbox
+      - AlibabaAgentSandbox
+      - DigitalOceanMicroVMs
+      - DigitalOceanHarnessRuntime
+      - Agent37Compute
       - AkashCompute
       - AlibabaCompute
       - AlibabaBlockStorage
+      - ArchilCompute
       - BasetenCompute
       - BeamCompute
+      - BlaxelCompute
+      - BoatCompute
+      - BoxComputeCompute
+      - BoxdCompute
+      - BunnyCompute
+      - CloudflareCompute
+      - CollimateCompute
+      - CreateOSCompute
+      - CodeSandboxCompute
+      - DaytonaCompute
+      - DockerCompute
+      - E2BCompute
+      - ExeDevCompute
+      - FlyCompute
+      - GravixLayerCompute
+      - HuggingFaceCompute
+      - InisCompute
+      - IsloCompute
+      - IsorunCompute
+      - KrovaCompute
+      - LangSmithCompute
+      - Leap0Compute
+      - LizardCompute
+      - MIOSACompute
+      - MosaicCompute
+      - PromigenceCompute
+      - RailwayCompute
+      - RemoteHostCompute
+      - RunloopCompute
+      - RuntimeCompute
+      - ShellboxCompute
+      - StateSetCompute
+      - SuperserveCompute
+      - TamaCompute
+      - UpstashCompute
+      - VercelCompute
       - CerebriumCompute
       - CivoCompute
       - CivoBlockStorage
@@ -5668,6 +6044,7 @@ components:
       - ExoscaleCompute
       - ExoscaleBlockStorage
       - FalCompute
+      - FreestyleCompute
       - HotAisleCompute
       - HyperbolicCompute
       - HyperstackCompute
@@ -5676,7 +6053,9 @@ components:
       - LambdaCompute
       - LatitudeCompute
       - MassedComputeCompute
+      - MicrosandboxCompute
       - ModalCompute
+      - MorphCompute
       - NebiusCompute
       - NorthflankCompute
       - NorthflankVolume
@@ -5688,17 +6067,22 @@ components:
       - PrimeIntellectCompute
       - ReplicateCompute
       - RunPodCompute
+      - SailCompute
       - SaladCompute
       - ScalewayCompute
       - ScalewayBlockStorage
       - SesterceCompute
       - ShadeformCompute
+      - SpritesCompute
+      - TenkiCompute
+      - TensorlakeCompute
       - ThunderComputeCompute
       - UpCloudCompute
       - UpCloudBlockStorage
       - VastCompute
       - VultrCompute
       - VultrBlockStorage
+      - ZipboxCompute
   securitySchemes:
     ApiKeyAuth:
       description: API key with "bl_" prefix (e.g. "bl_<api_key>")
