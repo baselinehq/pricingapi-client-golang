@@ -57,15 +57,109 @@
 
 * `AkamaiDatabase` (value: `"AkamaiDatabase"`)
 
+* `AppleMac` (value: `"AppleMac"`)
+
+* `AmazonAgentCoreCodeInterpreter` (value: `"AmazonAgentCoreCodeInterpreter"`)
+
+* `AmazonAgentCoreRuntime` (value: `"AmazonAgentCoreRuntime"`)
+
+* `AWSLambdaMicroVMs` (value: `"AWSLambdaMicroVMs"`)
+
+* `AzureContainerAppsSandboxes` (value: `"AzureContainerAppsSandboxes"`)
+
+* `AgentPlatformSandbox` (value: `"AgentPlatformSandbox"`)
+
+* `AlibabaAgentSandbox` (value: `"AlibabaAgentSandbox"`)
+
+* `DigitalOceanMicroVMs` (value: `"DigitalOceanMicroVMs"`)
+
+* `DigitalOceanHarnessRuntime` (value: `"DigitalOceanHarnessRuntime"`)
+
+* `Agent37Compute` (value: `"Agent37Compute"`)
+
 * `AkashCompute` (value: `"AkashCompute"`)
 
 * `AlibabaCompute` (value: `"AlibabaCompute"`)
 
 * `AlibabaBlockStorage` (value: `"AlibabaBlockStorage"`)
 
+* `ArchilCompute` (value: `"ArchilCompute"`)
+
 * `BasetenCompute` (value: `"BasetenCompute"`)
 
 * `BeamCompute` (value: `"BeamCompute"`)
+
+* `BlaxelCompute` (value: `"BlaxelCompute"`)
+
+* `BoatCompute` (value: `"BoatCompute"`)
+
+* `BoxComputeCompute` (value: `"BoxComputeCompute"`)
+
+* `BoxdCompute` (value: `"BoxdCompute"`)
+
+* `BunnyCompute` (value: `"BunnyCompute"`)
+
+* `CloudflareCompute` (value: `"CloudflareCompute"`)
+
+* `CollimateCompute` (value: `"CollimateCompute"`)
+
+* `CreateOSCompute` (value: `"CreateOSCompute"`)
+
+* `CodeSandboxCompute` (value: `"CodeSandboxCompute"`)
+
+* `DaytonaCompute` (value: `"DaytonaCompute"`)
+
+* `DockerCompute` (value: `"DockerCompute"`)
+
+* `E2BCompute` (value: `"E2BCompute"`)
+
+* `ExeDevCompute` (value: `"ExeDevCompute"`)
+
+* `FlyCompute` (value: `"FlyCompute"`)
+
+* `GravixLayerCompute` (value: `"GravixLayerCompute"`)
+
+* `HuggingFaceCompute` (value: `"HuggingFaceCompute"`)
+
+* `InisCompute` (value: `"InisCompute"`)
+
+* `IsloCompute` (value: `"IsloCompute"`)
+
+* `IsorunCompute` (value: `"IsorunCompute"`)
+
+* `KrovaCompute` (value: `"KrovaCompute"`)
+
+* `LangSmithCompute` (value: `"LangSmithCompute"`)
+
+* `Leap0Compute` (value: `"Leap0Compute"`)
+
+* `LizardCompute` (value: `"LizardCompute"`)
+
+* `MIOSACompute` (value: `"MIOSACompute"`)
+
+* `MosaicCompute` (value: `"MosaicCompute"`)
+
+* `PromigenceCompute` (value: `"PromigenceCompute"`)
+
+* `RailwayCompute` (value: `"RailwayCompute"`)
+
+* `RemoteHostCompute` (value: `"RemoteHostCompute"`)
+
+* `RunloopCompute` (value: `"RunloopCompute"`)
+
+* `RuntimeCompute` (value: `"RuntimeCompute"`)
+
+* `ShellboxCompute` (value: `"ShellboxCompute"`)
+
+* `StateSetCompute` (value: `"StateSetCompute"`)
+
+* `SuperserveCompute` (value: `"SuperserveCompute"`)
+
+* `TamaCompute` (value: `"TamaCompute"`)
+
+* `UpstashCompute` (value: `"UpstashCompute"`)
+
+* `VercelCompute` (value: `"VercelCompute"`)
 
 * `CerebriumCompute` (value: `"CerebriumCompute"`)
 
@@ -95,6 +189,8 @@
 
 * `FalCompute` (value: `"FalCompute"`)
 
+* `FreestyleCompute` (value: `"FreestyleCompute"`)
+
 * `HotAisleCompute` (value: `"HotAisleCompute"`)
 
 * `HyperbolicCompute` (value: `"HyperbolicCompute"`)
@@ -111,7 +207,11 @@
 
 * `MassedComputeCompute` (value: `"MassedComputeCompute"`)
 
+* `MicrosandboxCompute` (value: `"MicrosandboxCompute"`)
+
 * `ModalCompute` (value: `"ModalCompute"`)
+
+* `MorphCompute` (value: `"MorphCompute"`)
 
 * `NebiusCompute` (value: `"NebiusCompute"`)
 
@@ -135,6 +235,8 @@
 
 * `RunPodCompute` (value: `"RunPodCompute"`)
 
+* `SailCompute` (value: `"SailCompute"`)
+
 * `SaladCompute` (value: `"SaladCompute"`)
 
 * `ScalewayCompute` (value: `"ScalewayCompute"`)
@@ -144,6 +246,12 @@
 * `SesterceCompute` (value: `"SesterceCompute"`)
 
 * `ShadeformCompute` (value: `"ShadeformCompute"`)
+
+* `SpritesCompute` (value: `"SpritesCompute"`)
+
+* `TenkiCompute` (value: `"TenkiCompute"`)
+
+* `TensorlakeCompute` (value: `"TensorlakeCompute"`)
 
 * `ThunderComputeCompute` (value: `"ThunderComputeCompute"`)
 
@@ -156,6 +264,8 @@
 * `VultrCompute` (value: `"VultrCompute"`)
 
 * `VultrBlockStorage` (value: `"VultrBlockStorage"`)
+
+* `ZipboxCompute` (value: `"ZipboxCompute"`)
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

@@ -439,7 +439,7 @@ func (r ApiV1RecommendationsRunnerPostRequest) Execute() ([]RunnerRecommendation
 /*
 V1RecommendationsRunnerPost Find cheaper CI runners
 
-Prices the given CI jobs on every runner provider that fits the shape, using each provider's own billing granularity (per-minute round-up, per-second, minimums), plus self-hosted compute when self_hosted names a cloud and region. Results are cheapest first. Flags explain caveats such as self-hosted runners on public repositories or savings that need per-job durations to count.
+Prices the given CI jobs, as a histogram of job durations, on every runner provider, cloud VM (on-demand and spot) in the clouds named and sandbox that fits the shape, using each candidate's own billing granularity (per-minute round-up, per-second, minimums, per-job fees). Measured speed factors scale durations per candidate, and remaining included compute is spent first. Results are cheapest first, with time and p75 cost per job so callers can rank them against the current runner. Flags explain caveats such as unmeasured speed, spot interruption or a provider that is not connected.
 
 	@param ctx context.Context - for authentication, logging, cancellation, deadlines, tracing, etc. Passed from http.Request or context.Background().
 	@return ApiV1RecommendationsRunnerPostRequest

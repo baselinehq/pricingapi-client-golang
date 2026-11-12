@@ -4,20 +4,38 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
+**Architecture** | Pointer to **string** |  | [optional] 
 **BilledSeconds** | Pointer to **float32** |  | [optional] 
+**CandidateClass** | Pointer to **string** |  | [optional] 
 **ComputeSource** | Pointer to **string** |  | [optional] 
+**Connected** | Pointer to **bool** |  | [optional] 
 **Cost** | Pointer to **float32** |  | [optional] 
 **CostPerMonth** | Pointer to **float32** |  | [optional] 
+**CpuCores** | Pointer to **int32** |  | [optional] 
+**CurrentP75JobCost** | Pointer to **float32** |  | [optional] 
+**CurrentP75WallSeconds** | Pointer to **float32** |  | [optional] 
+**CurrentWallSeconds** | Pointer to **float32** |  | [optional] 
+**Docker** | Pointer to **bool** |  | [optional] 
 **FetchedOn** | Pointer to **string** |  | [optional] 
 **Flags** | Pointer to **[]string** |  | [optional] 
+**GpuCount** | Pointer to **int32** |  | [optional] 
+**IncludedApplied** | Pointer to **float32** |  | [optional] 
+**NestedVirtualization** | Pointer to **bool** |  | [optional] 
+**OperatingSystem** | Pointer to **string** |  | [optional] 
+**P75JobCost** | Pointer to **float32** |  | [optional] 
+**P75WallSeconds** | Pointer to **float32** |  | [optional] 
 **PlanFees** | Pointer to [**[]TypesRunnerPlanFee**](TypesRunnerPlanFee.md) |  | [optional] 
 **PricingModel** | Pointer to **string** |  | [optional] 
 **Provider** | Pointer to **string** |  | [optional] 
+**RamGb** | Pointer to **float32** |  | [optional] 
+**Region** | Pointer to **string** |  | [optional] 
 **RuntimeSeconds** | Pointer to **float32** |  | [optional] 
 **SavingsVsCurrent** | Pointer to **float32** |  | [optional] 
 **Sku** | Pointer to **string** |  | [optional] 
 **SourceUrl** | Pointer to **string** |  | [optional] 
+**SpeedMeasured** | Pointer to **bool** |  | [optional] 
 **VmInstanceType** | Pointer to **string** |  | [optional] 
+**WallSeconds** | Pointer to **float32** |  | [optional] 
 
 ## Methods
 
@@ -37,6 +55,31 @@ will change when the set of required properties is changed
 NewRunnerRecommendationWithDefaults instantiates a new RunnerRecommendation object
 This constructor will only assign default values to properties that have it defined,
 but it doesn't guarantee that properties required by API are set
+
+### GetArchitecture
+
+`func (o *RunnerRecommendation) GetArchitecture() string`
+
+GetArchitecture returns the Architecture field if non-nil, zero value otherwise.
+
+### GetArchitectureOk
+
+`func (o *RunnerRecommendation) GetArchitectureOk() (*string, bool)`
+
+GetArchitectureOk returns a tuple with the Architecture field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetArchitecture
+
+`func (o *RunnerRecommendation) SetArchitecture(v string)`
+
+SetArchitecture sets Architecture field to given value.
+
+### HasArchitecture
+
+`func (o *RunnerRecommendation) HasArchitecture() bool`
+
+HasArchitecture returns a boolean if a field has been set.
 
 ### GetBilledSeconds
 
@@ -63,6 +106,31 @@ SetBilledSeconds sets BilledSeconds field to given value.
 
 HasBilledSeconds returns a boolean if a field has been set.
 
+### GetCandidateClass
+
+`func (o *RunnerRecommendation) GetCandidateClass() string`
+
+GetCandidateClass returns the CandidateClass field if non-nil, zero value otherwise.
+
+### GetCandidateClassOk
+
+`func (o *RunnerRecommendation) GetCandidateClassOk() (*string, bool)`
+
+GetCandidateClassOk returns a tuple with the CandidateClass field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCandidateClass
+
+`func (o *RunnerRecommendation) SetCandidateClass(v string)`
+
+SetCandidateClass sets CandidateClass field to given value.
+
+### HasCandidateClass
+
+`func (o *RunnerRecommendation) HasCandidateClass() bool`
+
+HasCandidateClass returns a boolean if a field has been set.
+
 ### GetComputeSource
 
 `func (o *RunnerRecommendation) GetComputeSource() string`
@@ -87,6 +155,31 @@ SetComputeSource sets ComputeSource field to given value.
 `func (o *RunnerRecommendation) HasComputeSource() bool`
 
 HasComputeSource returns a boolean if a field has been set.
+
+### GetConnected
+
+`func (o *RunnerRecommendation) GetConnected() bool`
+
+GetConnected returns the Connected field if non-nil, zero value otherwise.
+
+### GetConnectedOk
+
+`func (o *RunnerRecommendation) GetConnectedOk() (*bool, bool)`
+
+GetConnectedOk returns a tuple with the Connected field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetConnected
+
+`func (o *RunnerRecommendation) SetConnected(v bool)`
+
+SetConnected sets Connected field to given value.
+
+### HasConnected
+
+`func (o *RunnerRecommendation) HasConnected() bool`
+
+HasConnected returns a boolean if a field has been set.
 
 ### GetCost
 
@@ -138,6 +231,131 @@ SetCostPerMonth sets CostPerMonth field to given value.
 
 HasCostPerMonth returns a boolean if a field has been set.
 
+### GetCpuCores
+
+`func (o *RunnerRecommendation) GetCpuCores() int32`
+
+GetCpuCores returns the CpuCores field if non-nil, zero value otherwise.
+
+### GetCpuCoresOk
+
+`func (o *RunnerRecommendation) GetCpuCoresOk() (*int32, bool)`
+
+GetCpuCoresOk returns a tuple with the CpuCores field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCpuCores
+
+`func (o *RunnerRecommendation) SetCpuCores(v int32)`
+
+SetCpuCores sets CpuCores field to given value.
+
+### HasCpuCores
+
+`func (o *RunnerRecommendation) HasCpuCores() bool`
+
+HasCpuCores returns a boolean if a field has been set.
+
+### GetCurrentP75JobCost
+
+`func (o *RunnerRecommendation) GetCurrentP75JobCost() float32`
+
+GetCurrentP75JobCost returns the CurrentP75JobCost field if non-nil, zero value otherwise.
+
+### GetCurrentP75JobCostOk
+
+`func (o *RunnerRecommendation) GetCurrentP75JobCostOk() (*float32, bool)`
+
+GetCurrentP75JobCostOk returns a tuple with the CurrentP75JobCost field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCurrentP75JobCost
+
+`func (o *RunnerRecommendation) SetCurrentP75JobCost(v float32)`
+
+SetCurrentP75JobCost sets CurrentP75JobCost field to given value.
+
+### HasCurrentP75JobCost
+
+`func (o *RunnerRecommendation) HasCurrentP75JobCost() bool`
+
+HasCurrentP75JobCost returns a boolean if a field has been set.
+
+### GetCurrentP75WallSeconds
+
+`func (o *RunnerRecommendation) GetCurrentP75WallSeconds() float32`
+
+GetCurrentP75WallSeconds returns the CurrentP75WallSeconds field if non-nil, zero value otherwise.
+
+### GetCurrentP75WallSecondsOk
+
+`func (o *RunnerRecommendation) GetCurrentP75WallSecondsOk() (*float32, bool)`
+
+GetCurrentP75WallSecondsOk returns a tuple with the CurrentP75WallSeconds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCurrentP75WallSeconds
+
+`func (o *RunnerRecommendation) SetCurrentP75WallSeconds(v float32)`
+
+SetCurrentP75WallSeconds sets CurrentP75WallSeconds field to given value.
+
+### HasCurrentP75WallSeconds
+
+`func (o *RunnerRecommendation) HasCurrentP75WallSeconds() bool`
+
+HasCurrentP75WallSeconds returns a boolean if a field has been set.
+
+### GetCurrentWallSeconds
+
+`func (o *RunnerRecommendation) GetCurrentWallSeconds() float32`
+
+GetCurrentWallSeconds returns the CurrentWallSeconds field if non-nil, zero value otherwise.
+
+### GetCurrentWallSecondsOk
+
+`func (o *RunnerRecommendation) GetCurrentWallSecondsOk() (*float32, bool)`
+
+GetCurrentWallSecondsOk returns a tuple with the CurrentWallSeconds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetCurrentWallSeconds
+
+`func (o *RunnerRecommendation) SetCurrentWallSeconds(v float32)`
+
+SetCurrentWallSeconds sets CurrentWallSeconds field to given value.
+
+### HasCurrentWallSeconds
+
+`func (o *RunnerRecommendation) HasCurrentWallSeconds() bool`
+
+HasCurrentWallSeconds returns a boolean if a field has been set.
+
+### GetDocker
+
+`func (o *RunnerRecommendation) GetDocker() bool`
+
+GetDocker returns the Docker field if non-nil, zero value otherwise.
+
+### GetDockerOk
+
+`func (o *RunnerRecommendation) GetDockerOk() (*bool, bool)`
+
+GetDockerOk returns a tuple with the Docker field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetDocker
+
+`func (o *RunnerRecommendation) SetDocker(v bool)`
+
+SetDocker sets Docker field to given value.
+
+### HasDocker
+
+`func (o *RunnerRecommendation) HasDocker() bool`
+
+HasDocker returns a boolean if a field has been set.
+
 ### GetFetchedOn
 
 `func (o *RunnerRecommendation) GetFetchedOn() string`
@@ -187,6 +405,156 @@ SetFlags sets Flags field to given value.
 `func (o *RunnerRecommendation) HasFlags() bool`
 
 HasFlags returns a boolean if a field has been set.
+
+### GetGpuCount
+
+`func (o *RunnerRecommendation) GetGpuCount() int32`
+
+GetGpuCount returns the GpuCount field if non-nil, zero value otherwise.
+
+### GetGpuCountOk
+
+`func (o *RunnerRecommendation) GetGpuCountOk() (*int32, bool)`
+
+GetGpuCountOk returns a tuple with the GpuCount field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetGpuCount
+
+`func (o *RunnerRecommendation) SetGpuCount(v int32)`
+
+SetGpuCount sets GpuCount field to given value.
+
+### HasGpuCount
+
+`func (o *RunnerRecommendation) HasGpuCount() bool`
+
+HasGpuCount returns a boolean if a field has been set.
+
+### GetIncludedApplied
+
+`func (o *RunnerRecommendation) GetIncludedApplied() float32`
+
+GetIncludedApplied returns the IncludedApplied field if non-nil, zero value otherwise.
+
+### GetIncludedAppliedOk
+
+`func (o *RunnerRecommendation) GetIncludedAppliedOk() (*float32, bool)`
+
+GetIncludedAppliedOk returns a tuple with the IncludedApplied field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetIncludedApplied
+
+`func (o *RunnerRecommendation) SetIncludedApplied(v float32)`
+
+SetIncludedApplied sets IncludedApplied field to given value.
+
+### HasIncludedApplied
+
+`func (o *RunnerRecommendation) HasIncludedApplied() bool`
+
+HasIncludedApplied returns a boolean if a field has been set.
+
+### GetNestedVirtualization
+
+`func (o *RunnerRecommendation) GetNestedVirtualization() bool`
+
+GetNestedVirtualization returns the NestedVirtualization field if non-nil, zero value otherwise.
+
+### GetNestedVirtualizationOk
+
+`func (o *RunnerRecommendation) GetNestedVirtualizationOk() (*bool, bool)`
+
+GetNestedVirtualizationOk returns a tuple with the NestedVirtualization field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetNestedVirtualization
+
+`func (o *RunnerRecommendation) SetNestedVirtualization(v bool)`
+
+SetNestedVirtualization sets NestedVirtualization field to given value.
+
+### HasNestedVirtualization
+
+`func (o *RunnerRecommendation) HasNestedVirtualization() bool`
+
+HasNestedVirtualization returns a boolean if a field has been set.
+
+### GetOperatingSystem
+
+`func (o *RunnerRecommendation) GetOperatingSystem() string`
+
+GetOperatingSystem returns the OperatingSystem field if non-nil, zero value otherwise.
+
+### GetOperatingSystemOk
+
+`func (o *RunnerRecommendation) GetOperatingSystemOk() (*string, bool)`
+
+GetOperatingSystemOk returns a tuple with the OperatingSystem field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetOperatingSystem
+
+`func (o *RunnerRecommendation) SetOperatingSystem(v string)`
+
+SetOperatingSystem sets OperatingSystem field to given value.
+
+### HasOperatingSystem
+
+`func (o *RunnerRecommendation) HasOperatingSystem() bool`
+
+HasOperatingSystem returns a boolean if a field has been set.
+
+### GetP75JobCost
+
+`func (o *RunnerRecommendation) GetP75JobCost() float32`
+
+GetP75JobCost returns the P75JobCost field if non-nil, zero value otherwise.
+
+### GetP75JobCostOk
+
+`func (o *RunnerRecommendation) GetP75JobCostOk() (*float32, bool)`
+
+GetP75JobCostOk returns a tuple with the P75JobCost field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetP75JobCost
+
+`func (o *RunnerRecommendation) SetP75JobCost(v float32)`
+
+SetP75JobCost sets P75JobCost field to given value.
+
+### HasP75JobCost
+
+`func (o *RunnerRecommendation) HasP75JobCost() bool`
+
+HasP75JobCost returns a boolean if a field has been set.
+
+### GetP75WallSeconds
+
+`func (o *RunnerRecommendation) GetP75WallSeconds() float32`
+
+GetP75WallSeconds returns the P75WallSeconds field if non-nil, zero value otherwise.
+
+### GetP75WallSecondsOk
+
+`func (o *RunnerRecommendation) GetP75WallSecondsOk() (*float32, bool)`
+
+GetP75WallSecondsOk returns a tuple with the P75WallSeconds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetP75WallSeconds
+
+`func (o *RunnerRecommendation) SetP75WallSeconds(v float32)`
+
+SetP75WallSeconds sets P75WallSeconds field to given value.
+
+### HasP75WallSeconds
+
+`func (o *RunnerRecommendation) HasP75WallSeconds() bool`
+
+HasP75WallSeconds returns a boolean if a field has been set.
 
 ### GetPlanFees
 
@@ -262,6 +630,56 @@ SetProvider sets Provider field to given value.
 `func (o *RunnerRecommendation) HasProvider() bool`
 
 HasProvider returns a boolean if a field has been set.
+
+### GetRamGb
+
+`func (o *RunnerRecommendation) GetRamGb() float32`
+
+GetRamGb returns the RamGb field if non-nil, zero value otherwise.
+
+### GetRamGbOk
+
+`func (o *RunnerRecommendation) GetRamGbOk() (*float32, bool)`
+
+GetRamGbOk returns a tuple with the RamGb field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRamGb
+
+`func (o *RunnerRecommendation) SetRamGb(v float32)`
+
+SetRamGb sets RamGb field to given value.
+
+### HasRamGb
+
+`func (o *RunnerRecommendation) HasRamGb() bool`
+
+HasRamGb returns a boolean if a field has been set.
+
+### GetRegion
+
+`func (o *RunnerRecommendation) GetRegion() string`
+
+GetRegion returns the Region field if non-nil, zero value otherwise.
+
+### GetRegionOk
+
+`func (o *RunnerRecommendation) GetRegionOk() (*string, bool)`
+
+GetRegionOk returns a tuple with the Region field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetRegion
+
+`func (o *RunnerRecommendation) SetRegion(v string)`
+
+SetRegion sets Region field to given value.
+
+### HasRegion
+
+`func (o *RunnerRecommendation) HasRegion() bool`
+
+HasRegion returns a boolean if a field has been set.
 
 ### GetRuntimeSeconds
 
@@ -363,6 +781,31 @@ SetSourceUrl sets SourceUrl field to given value.
 
 HasSourceUrl returns a boolean if a field has been set.
 
+### GetSpeedMeasured
+
+`func (o *RunnerRecommendation) GetSpeedMeasured() bool`
+
+GetSpeedMeasured returns the SpeedMeasured field if non-nil, zero value otherwise.
+
+### GetSpeedMeasuredOk
+
+`func (o *RunnerRecommendation) GetSpeedMeasuredOk() (*bool, bool)`
+
+GetSpeedMeasuredOk returns a tuple with the SpeedMeasured field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetSpeedMeasured
+
+`func (o *RunnerRecommendation) SetSpeedMeasured(v bool)`
+
+SetSpeedMeasured sets SpeedMeasured field to given value.
+
+### HasSpeedMeasured
+
+`func (o *RunnerRecommendation) HasSpeedMeasured() bool`
+
+HasSpeedMeasured returns a boolean if a field has been set.
+
 ### GetVmInstanceType
 
 `func (o *RunnerRecommendation) GetVmInstanceType() string`
@@ -387,6 +830,31 @@ SetVmInstanceType sets VmInstanceType field to given value.
 `func (o *RunnerRecommendation) HasVmInstanceType() bool`
 
 HasVmInstanceType returns a boolean if a field has been set.
+
+### GetWallSeconds
+
+`func (o *RunnerRecommendation) GetWallSeconds() float32`
+
+GetWallSeconds returns the WallSeconds field if non-nil, zero value otherwise.
+
+### GetWallSecondsOk
+
+`func (o *RunnerRecommendation) GetWallSecondsOk() (*float32, bool)`
+
+GetWallSecondsOk returns a tuple with the WallSeconds field if it's non-nil, zero value otherwise
+and a boolean to check if the value has been set.
+
+### SetWallSeconds
+
+`func (o *RunnerRecommendation) SetWallSeconds(v float32)`
+
+SetWallSeconds sets WallSeconds field to given value.
+
+### HasWallSeconds
+
+`func (o *RunnerRecommendation) HasWallSeconds() bool`
+
+HasWallSeconds returns a boolean if a field has been set.
 
 
 [[Back to Model list]](../README.md#documentation-for-models) [[Back to API list]](../README.md#documentation-for-api-endpoints) [[Back to README]](../README.md)

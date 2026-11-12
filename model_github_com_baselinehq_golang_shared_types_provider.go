@@ -30,11 +30,50 @@ const (
 	PlanetScale    GithubComBaselinehqGolangSharedTypesProvider = "PlanetScale"
 	STACKIT        GithubComBaselinehqGolangSharedTypesProvider = "STACKIT"
 	Linode         GithubComBaselinehqGolangSharedTypesProvider = "Linode"
+	Apple          GithubComBaselinehqGolangSharedTypesProvider = "Apple"
 	Base           GithubComBaselinehqGolangSharedTypesProvider = "Base"
+	Agent37        GithubComBaselinehqGolangSharedTypesProvider = "Agent37"
 	Akash          GithubComBaselinehqGolangSharedTypesProvider = "Akash"
 	Alibaba        GithubComBaselinehqGolangSharedTypesProvider = "Alibaba"
+	Archil         GithubComBaselinehqGolangSharedTypesProvider = "Archil"
 	Baseten        GithubComBaselinehqGolangSharedTypesProvider = "Baseten"
 	Beam           GithubComBaselinehqGolangSharedTypesProvider = "Beam"
+	Blaxel         GithubComBaselinehqGolangSharedTypesProvider = "Blaxel"
+	Boat           GithubComBaselinehqGolangSharedTypesProvider = "Boat"
+	BoxCompute     GithubComBaselinehqGolangSharedTypesProvider = "BoxCompute"
+	Boxd           GithubComBaselinehqGolangSharedTypesProvider = "Boxd"
+	Bunny          GithubComBaselinehqGolangSharedTypesProvider = "Bunny"
+	Cloudflare     GithubComBaselinehqGolangSharedTypesProvider = "Cloudflare"
+	Collimate      GithubComBaselinehqGolangSharedTypesProvider = "Collimate"
+	CreateOS       GithubComBaselinehqGolangSharedTypesProvider = "CreateOS"
+	CodeSandbox    GithubComBaselinehqGolangSharedTypesProvider = "CodeSandbox"
+	Daytona        GithubComBaselinehqGolangSharedTypesProvider = "Daytona"
+	DockerCloud    GithubComBaselinehqGolangSharedTypesProvider = "Docker"
+	E2B            GithubComBaselinehqGolangSharedTypesProvider = "E2B"
+	ExeDev         GithubComBaselinehqGolangSharedTypesProvider = "ExeDev"
+	Fly            GithubComBaselinehqGolangSharedTypesProvider = "Fly"
+	GravixLayer    GithubComBaselinehqGolangSharedTypesProvider = "GravixLayer"
+	HuggingFace    GithubComBaselinehqGolangSharedTypesProvider = "HuggingFace"
+	Inis           GithubComBaselinehqGolangSharedTypesProvider = "Inis"
+	Islo           GithubComBaselinehqGolangSharedTypesProvider = "Islo"
+	Isorun         GithubComBaselinehqGolangSharedTypesProvider = "Isorun"
+	Krova          GithubComBaselinehqGolangSharedTypesProvider = "Krova"
+	LangSmith      GithubComBaselinehqGolangSharedTypesProvider = "LangSmith"
+	Leap0          GithubComBaselinehqGolangSharedTypesProvider = "Leap0"
+	Lizard         GithubComBaselinehqGolangSharedTypesProvider = "Lizard"
+	MIOSA          GithubComBaselinehqGolangSharedTypesProvider = "MIOSA"
+	Mosaic         GithubComBaselinehqGolangSharedTypesProvider = "Mosaic"
+	Promigence     GithubComBaselinehqGolangSharedTypesProvider = "Promigence"
+	Railway        GithubComBaselinehqGolangSharedTypesProvider = "Railway"
+	RemoteHost     GithubComBaselinehqGolangSharedTypesProvider = "RemoteHost"
+	Runloop        GithubComBaselinehqGolangSharedTypesProvider = "Runloop"
+	Runtime        GithubComBaselinehqGolangSharedTypesProvider = "Runtime"
+	Shellbox       GithubComBaselinehqGolangSharedTypesProvider = "Shellbox"
+	StateSet       GithubComBaselinehqGolangSharedTypesProvider = "StateSet"
+	Superserve     GithubComBaselinehqGolangSharedTypesProvider = "Superserve"
+	Tama           GithubComBaselinehqGolangSharedTypesProvider = "Tama"
+	Upstash        GithubComBaselinehqGolangSharedTypesProvider = "Upstash"
+	Vercel         GithubComBaselinehqGolangSharedTypesProvider = "Vercel"
 	Cerebrium      GithubComBaselinehqGolangSharedTypesProvider = "Cerebrium"
 	CIRunners      GithubComBaselinehqGolangSharedTypesProvider = "CIRunners"
 	Civo           GithubComBaselinehqGolangSharedTypesProvider = "Civo"
@@ -48,6 +87,7 @@ const (
 	E2ENetworks    GithubComBaselinehqGolangSharedTypesProvider = "E2ENetworks"
 	Exoscale       GithubComBaselinehqGolangSharedTypesProvider = "Exoscale"
 	Fal            GithubComBaselinehqGolangSharedTypesProvider = "Fal"
+	Freestyle      GithubComBaselinehqGolangSharedTypesProvider = "Freestyle"
 	HotAisle       GithubComBaselinehqGolangSharedTypesProvider = "HotAisle"
 	Hyperbolic     GithubComBaselinehqGolangSharedTypesProvider = "Hyperbolic"
 	Hyperstack     GithubComBaselinehqGolangSharedTypesProvider = "Hyperstack"
@@ -55,7 +95,9 @@ const (
 	Lambda         GithubComBaselinehqGolangSharedTypesProvider = "Lambda"
 	Latitude       GithubComBaselinehqGolangSharedTypesProvider = "Latitude"
 	MassedCompute  GithubComBaselinehqGolangSharedTypesProvider = "MassedCompute"
+	Microsandbox   GithubComBaselinehqGolangSharedTypesProvider = "Microsandbox"
 	Modal          GithubComBaselinehqGolangSharedTypesProvider = "Modal"
+	Morph          GithubComBaselinehqGolangSharedTypesProvider = "Morph"
 	Nebius         GithubComBaselinehqGolangSharedTypesProvider = "Nebius"
 	Northflank     GithubComBaselinehqGolangSharedTypesProvider = "Northflank"
 	Novita         GithubComBaselinehqGolangSharedTypesProvider = "Novita"
@@ -65,14 +107,19 @@ const (
 	PrimeIntellect GithubComBaselinehqGolangSharedTypesProvider = "PrimeIntellect"
 	Replicate      GithubComBaselinehqGolangSharedTypesProvider = "Replicate"
 	RunPod         GithubComBaselinehqGolangSharedTypesProvider = "RunPod"
+	Sail           GithubComBaselinehqGolangSharedTypesProvider = "Sail"
 	Salad          GithubComBaselinehqGolangSharedTypesProvider = "Salad"
 	Scaleway       GithubComBaselinehqGolangSharedTypesProvider = "Scaleway"
 	Sesterce       GithubComBaselinehqGolangSharedTypesProvider = "Sesterce"
 	Shadeform      GithubComBaselinehqGolangSharedTypesProvider = "Shadeform"
+	Sprites        GithubComBaselinehqGolangSharedTypesProvider = "Sprites"
+	Tenki          GithubComBaselinehqGolangSharedTypesProvider = "Tenki"
+	Tensorlake     GithubComBaselinehqGolangSharedTypesProvider = "Tensorlake"
 	ThunderCompute GithubComBaselinehqGolangSharedTypesProvider = "ThunderCompute"
 	UpCloud        GithubComBaselinehqGolangSharedTypesProvider = "UpCloud"
 	Vast           GithubComBaselinehqGolangSharedTypesProvider = "Vast"
 	Vultr          GithubComBaselinehqGolangSharedTypesProvider = "Vultr"
+	Zipbox         GithubComBaselinehqGolangSharedTypesProvider = "Zipbox"
 )
 
 // All allowed values of GithubComBaselinehqGolangSharedTypesProvider enum
@@ -86,11 +133,50 @@ var AllowedGithubComBaselinehqGolangSharedTypesProviderEnumValues = []GithubComB
 	"PlanetScale",
 	"STACKIT",
 	"Linode",
+	"Apple",
 	"Base",
+	"Agent37",
 	"Akash",
 	"Alibaba",
+	"Archil",
 	"Baseten",
 	"Beam",
+	"Blaxel",
+	"Boat",
+	"BoxCompute",
+	"Boxd",
+	"Bunny",
+	"Cloudflare",
+	"Collimate",
+	"CreateOS",
+	"CodeSandbox",
+	"Daytona",
+	"Docker",
+	"E2B",
+	"ExeDev",
+	"Fly",
+	"GravixLayer",
+	"HuggingFace",
+	"Inis",
+	"Islo",
+	"Isorun",
+	"Krova",
+	"LangSmith",
+	"Leap0",
+	"Lizard",
+	"MIOSA",
+	"Mosaic",
+	"Promigence",
+	"Railway",
+	"RemoteHost",
+	"Runloop",
+	"Runtime",
+	"Shellbox",
+	"StateSet",
+	"Superserve",
+	"Tama",
+	"Upstash",
+	"Vercel",
 	"Cerebrium",
 	"CIRunners",
 	"Civo",
@@ -104,6 +190,7 @@ var AllowedGithubComBaselinehqGolangSharedTypesProviderEnumValues = []GithubComB
 	"E2ENetworks",
 	"Exoscale",
 	"Fal",
+	"Freestyle",
 	"HotAisle",
 	"Hyperbolic",
 	"Hyperstack",
@@ -111,7 +198,9 @@ var AllowedGithubComBaselinehqGolangSharedTypesProviderEnumValues = []GithubComB
 	"Lambda",
 	"Latitude",
 	"MassedCompute",
+	"Microsandbox",
 	"Modal",
+	"Morph",
 	"Nebius",
 	"Northflank",
 	"Novita",
@@ -121,14 +210,19 @@ var AllowedGithubComBaselinehqGolangSharedTypesProviderEnumValues = []GithubComB
 	"PrimeIntellect",
 	"Replicate",
 	"RunPod",
+	"Sail",
 	"Salad",
 	"Scaleway",
 	"Sesterce",
 	"Shadeform",
+	"Sprites",
+	"Tenki",
+	"Tensorlake",
 	"ThunderCompute",
 	"UpCloud",
 	"Vast",
 	"Vultr",
+	"Zipbox",
 }
 
 func (v *GithubComBaselinehqGolangSharedTypesProvider) UnmarshalJSON(src []byte) error {

@@ -21,83 +21,138 @@ type TypesService string
 
 // List of types.Service
 const (
-	ComputeEngine               TypesService = "ComputeEngine"
-	AmazonEC2                   TypesService = "AmazonEC2"
-	Droplet                     TypesService = "Droplet"
-	AzureCompute                TypesService = "AzureCompute"
-	AzureManagedDisks           TypesService = "AzureManagedDisks"
-	HetznerCompute              TypesService = "HetznerCompute"
-	OVHPublicCloud              TypesService = "OVHPublicCloud"
-	BaseCompute                 TypesService = "BaseCompute"
-	BaseDisks                   TypesService = "BaseDisks"
-	AmazonEBS                   TypesService = "AmazonEBS"
-	AmazonRDS                   TypesService = "AmazonRDS"
-	AuroraDSQL                  TypesService = "AuroraDSQL"
-	CloudSQL                    TypesService = "CloudSQL"
-	AlloyDB                     TypesService = "AlloyDB"
-	CloudSpanner                TypesService = "CloudSpanner"
-	AzureDatabaseForPostgreSQL  TypesService = "AzureDatabaseForPostgreSQL"
-	AzureDatabaseForMySQL       TypesService = "AzureDatabaseForMySQL"
-	AzureSQLDatabase            TypesService = "AzureSQLDatabase"
-	AzureSQLManagedInstance     TypesService = "AzureSQLManagedInstance"
-	PlanetScaleDB               TypesService = "PlanetScale"
-	ComputeEnginePersistentDisk TypesService = "ComputeEnginePersistentDisk"
-	STACKITCompute              TypesService = "STACKITCompute"
-	STACKITBlockStorage         TypesService = "STACKITBlockStorage"
-	STACKITDatabase             TypesService = "STACKITDatabase"
-	AkamaiLinode                TypesService = "AkamaiLinode"
-	AkamaiBlockStorage          TypesService = "AkamaiBlockStorage"
-	AkamaiDatabase              TypesService = "AkamaiDatabase"
-	AkashCompute                TypesService = "AkashCompute"
-	AlibabaCompute              TypesService = "AlibabaCompute"
-	AlibabaBlockStorage         TypesService = "AlibabaBlockStorage"
-	BasetenCompute              TypesService = "BasetenCompute"
-	BeamCompute                 TypesService = "BeamCompute"
-	CerebriumCompute            TypesService = "CerebriumCompute"
-	CivoCompute                 TypesService = "CivoCompute"
-	CivoBlockStorage            TypesService = "CivoBlockStorage"
-	CloreCompute                TypesService = "CloreCompute"
-	CoreWeaveCompute            TypesService = "CoreWeaveCompute"
-	CrusoeCompute               TypesService = "CrusoeCompute"
-	CUDOCompute                 TypesService = "CUDOCompute"
-	DataCrunchCompute           TypesService = "DataCrunchCompute"
-	DeepInfraCompute            TypesService = "DeepInfraCompute"
-	DenvrCompute                TypesService = "DenvrCompute"
-	E2ENetworksCompute          TypesService = "E2ENetworksCompute"
-	ExoscaleCompute             TypesService = "ExoscaleCompute"
-	ExoscaleBlockStorage        TypesService = "ExoscaleBlockStorage"
-	FalCompute                  TypesService = "FalCompute"
-	HotAisleCompute             TypesService = "HotAisleCompute"
-	HyperbolicCompute           TypesService = "HyperbolicCompute"
-	HyperstackCompute           TypesService = "HyperstackCompute"
-	IBMCompute                  TypesService = "IBMCompute"
-	IBMBlockStorage             TypesService = "IBMBlockStorage"
-	LambdaCompute               TypesService = "LambdaCompute"
-	LatitudeCompute             TypesService = "LatitudeCompute"
-	MassedComputeCompute        TypesService = "MassedComputeCompute"
-	ModalCompute                TypesService = "ModalCompute"
-	NebiusCompute               TypesService = "NebiusCompute"
-	NorthflankCompute           TypesService = "NorthflankCompute"
-	NorthflankVolume            TypesService = "NorthflankVolume"
-	NovitaCompute               TypesService = "NovitaCompute"
-	OblivusCompute              TypesService = "OblivusCompute"
-	OCICompute                  TypesService = "OCICompute"
-	OCIBlockStorage             TypesService = "OCIBlockStorage"
-	OpenTelekomCompute          TypesService = "OpenTelekomCompute"
-	PrimeIntellectCompute       TypesService = "PrimeIntellectCompute"
-	ReplicateCompute            TypesService = "ReplicateCompute"
-	RunPodCompute               TypesService = "RunPodCompute"
-	SaladCompute                TypesService = "SaladCompute"
-	ScalewayCompute             TypesService = "ScalewayCompute"
-	ScalewayBlockStorage        TypesService = "ScalewayBlockStorage"
-	SesterceCompute             TypesService = "SesterceCompute"
-	ShadeformCompute            TypesService = "ShadeformCompute"
-	ThunderComputeCompute       TypesService = "ThunderComputeCompute"
-	UpCloudCompute              TypesService = "UpCloudCompute"
-	UpCloudBlockStorage         TypesService = "UpCloudBlockStorage"
-	VastCompute                 TypesService = "VastCompute"
-	VultrCompute                TypesService = "VultrCompute"
-	VultrBlockStorage           TypesService = "VultrBlockStorage"
+	ComputeEngine                  TypesService = "ComputeEngine"
+	AmazonEC2                      TypesService = "AmazonEC2"
+	Droplet                        TypesService = "Droplet"
+	AzureCompute                   TypesService = "AzureCompute"
+	AzureManagedDisks              TypesService = "AzureManagedDisks"
+	HetznerCompute                 TypesService = "HetznerCompute"
+	OVHPublicCloud                 TypesService = "OVHPublicCloud"
+	BaseCompute                    TypesService = "BaseCompute"
+	BaseDisks                      TypesService = "BaseDisks"
+	AmazonEBS                      TypesService = "AmazonEBS"
+	AmazonRDS                      TypesService = "AmazonRDS"
+	AuroraDSQL                     TypesService = "AuroraDSQL"
+	CloudSQL                       TypesService = "CloudSQL"
+	AlloyDB                        TypesService = "AlloyDB"
+	CloudSpanner                   TypesService = "CloudSpanner"
+	AzureDatabaseForPostgreSQL     TypesService = "AzureDatabaseForPostgreSQL"
+	AzureDatabaseForMySQL          TypesService = "AzureDatabaseForMySQL"
+	AzureSQLDatabase               TypesService = "AzureSQLDatabase"
+	AzureSQLManagedInstance        TypesService = "AzureSQLManagedInstance"
+	PlanetScaleDB                  TypesService = "PlanetScale"
+	ComputeEnginePersistentDisk    TypesService = "ComputeEnginePersistentDisk"
+	STACKITCompute                 TypesService = "STACKITCompute"
+	STACKITBlockStorage            TypesService = "STACKITBlockStorage"
+	STACKITDatabase                TypesService = "STACKITDatabase"
+	AkamaiLinode                   TypesService = "AkamaiLinode"
+	AkamaiBlockStorage             TypesService = "AkamaiBlockStorage"
+	AkamaiDatabase                 TypesService = "AkamaiDatabase"
+	AppleMac                       TypesService = "AppleMac"
+	AmazonAgentCoreCodeInterpreter TypesService = "AmazonAgentCoreCodeInterpreter"
+	AmazonAgentCoreRuntime         TypesService = "AmazonAgentCoreRuntime"
+	AWSLambdaMicroVMs              TypesService = "AWSLambdaMicroVMs"
+	AzureContainerAppsSandboxes    TypesService = "AzureContainerAppsSandboxes"
+	AgentPlatformSandbox           TypesService = "AgentPlatformSandbox"
+	AlibabaAgentSandbox            TypesService = "AlibabaAgentSandbox"
+	DigitalOceanMicroVMs           TypesService = "DigitalOceanMicroVMs"
+	DigitalOceanHarnessRuntime     TypesService = "DigitalOceanHarnessRuntime"
+	Agent37Compute                 TypesService = "Agent37Compute"
+	AkashCompute                   TypesService = "AkashCompute"
+	AlibabaCompute                 TypesService = "AlibabaCompute"
+	AlibabaBlockStorage            TypesService = "AlibabaBlockStorage"
+	ArchilCompute                  TypesService = "ArchilCompute"
+	BasetenCompute                 TypesService = "BasetenCompute"
+	BeamCompute                    TypesService = "BeamCompute"
+	BlaxelCompute                  TypesService = "BlaxelCompute"
+	BoatCompute                    TypesService = "BoatCompute"
+	BoxComputeCompute              TypesService = "BoxComputeCompute"
+	BoxdCompute                    TypesService = "BoxdCompute"
+	BunnyCompute                   TypesService = "BunnyCompute"
+	CloudflareCompute              TypesService = "CloudflareCompute"
+	CollimateCompute               TypesService = "CollimateCompute"
+	CreateOSCompute                TypesService = "CreateOSCompute"
+	CodeSandboxCompute             TypesService = "CodeSandboxCompute"
+	DaytonaCompute                 TypesService = "DaytonaCompute"
+	DockerCompute                  TypesService = "DockerCompute"
+	E2BCompute                     TypesService = "E2BCompute"
+	ExeDevCompute                  TypesService = "ExeDevCompute"
+	FlyCompute                     TypesService = "FlyCompute"
+	GravixLayerCompute             TypesService = "GravixLayerCompute"
+	HuggingFaceCompute             TypesService = "HuggingFaceCompute"
+	InisCompute                    TypesService = "InisCompute"
+	IsloCompute                    TypesService = "IsloCompute"
+	IsorunCompute                  TypesService = "IsorunCompute"
+	KrovaCompute                   TypesService = "KrovaCompute"
+	LangSmithCompute               TypesService = "LangSmithCompute"
+	Leap0Compute                   TypesService = "Leap0Compute"
+	LizardCompute                  TypesService = "LizardCompute"
+	MIOSACompute                   TypesService = "MIOSACompute"
+	MosaicCompute                  TypesService = "MosaicCompute"
+	PromigenceCompute              TypesService = "PromigenceCompute"
+	RailwayCompute                 TypesService = "RailwayCompute"
+	RemoteHostCompute              TypesService = "RemoteHostCompute"
+	RunloopCompute                 TypesService = "RunloopCompute"
+	RuntimeCompute                 TypesService = "RuntimeCompute"
+	ShellboxCompute                TypesService = "ShellboxCompute"
+	StateSetCompute                TypesService = "StateSetCompute"
+	SuperserveCompute              TypesService = "SuperserveCompute"
+	TamaCompute                    TypesService = "TamaCompute"
+	UpstashCompute                 TypesService = "UpstashCompute"
+	VercelCompute                  TypesService = "VercelCompute"
+	CerebriumCompute               TypesService = "CerebriumCompute"
+	CivoCompute                    TypesService = "CivoCompute"
+	CivoBlockStorage               TypesService = "CivoBlockStorage"
+	CloreCompute                   TypesService = "CloreCompute"
+	CoreWeaveCompute               TypesService = "CoreWeaveCompute"
+	CrusoeCompute                  TypesService = "CrusoeCompute"
+	CUDOCompute                    TypesService = "CUDOCompute"
+	DataCrunchCompute              TypesService = "DataCrunchCompute"
+	DeepInfraCompute               TypesService = "DeepInfraCompute"
+	DenvrCompute                   TypesService = "DenvrCompute"
+	E2ENetworksCompute             TypesService = "E2ENetworksCompute"
+	ExoscaleCompute                TypesService = "ExoscaleCompute"
+	ExoscaleBlockStorage           TypesService = "ExoscaleBlockStorage"
+	FalCompute                     TypesService = "FalCompute"
+	FreestyleCompute               TypesService = "FreestyleCompute"
+	HotAisleCompute                TypesService = "HotAisleCompute"
+	HyperbolicCompute              TypesService = "HyperbolicCompute"
+	HyperstackCompute              TypesService = "HyperstackCompute"
+	IBMCompute                     TypesService = "IBMCompute"
+	IBMBlockStorage                TypesService = "IBMBlockStorage"
+	LambdaCompute                  TypesService = "LambdaCompute"
+	LatitudeCompute                TypesService = "LatitudeCompute"
+	MassedComputeCompute           TypesService = "MassedComputeCompute"
+	MicrosandboxCompute            TypesService = "MicrosandboxCompute"
+	ModalCompute                   TypesService = "ModalCompute"
+	MorphCompute                   TypesService = "MorphCompute"
+	NebiusCompute                  TypesService = "NebiusCompute"
+	NorthflankCompute              TypesService = "NorthflankCompute"
+	NorthflankVolume               TypesService = "NorthflankVolume"
+	NovitaCompute                  TypesService = "NovitaCompute"
+	OblivusCompute                 TypesService = "OblivusCompute"
+	OCICompute                     TypesService = "OCICompute"
+	OCIBlockStorage                TypesService = "OCIBlockStorage"
+	OpenTelekomCompute             TypesService = "OpenTelekomCompute"
+	PrimeIntellectCompute          TypesService = "PrimeIntellectCompute"
+	ReplicateCompute               TypesService = "ReplicateCompute"
+	RunPodCompute                  TypesService = "RunPodCompute"
+	SailCompute                    TypesService = "SailCompute"
+	SaladCompute                   TypesService = "SaladCompute"
+	ScalewayCompute                TypesService = "ScalewayCompute"
+	ScalewayBlockStorage           TypesService = "ScalewayBlockStorage"
+	SesterceCompute                TypesService = "SesterceCompute"
+	ShadeformCompute               TypesService = "ShadeformCompute"
+	SpritesCompute                 TypesService = "SpritesCompute"
+	TenkiCompute                   TypesService = "TenkiCompute"
+	TensorlakeCompute              TypesService = "TensorlakeCompute"
+	ThunderComputeCompute          TypesService = "ThunderComputeCompute"
+	UpCloudCompute                 TypesService = "UpCloudCompute"
+	UpCloudBlockStorage            TypesService = "UpCloudBlockStorage"
+	VastCompute                    TypesService = "VastCompute"
+	VultrCompute                   TypesService = "VultrCompute"
+	VultrBlockStorage              TypesService = "VultrBlockStorage"
+	ZipboxCompute                  TypesService = "ZipboxCompute"
 )
 
 // All allowed values of TypesService enum
@@ -129,11 +184,58 @@ var AllowedTypesServiceEnumValues = []TypesService{
 	"AkamaiLinode",
 	"AkamaiBlockStorage",
 	"AkamaiDatabase",
+	"AppleMac",
+	"AmazonAgentCoreCodeInterpreter",
+	"AmazonAgentCoreRuntime",
+	"AWSLambdaMicroVMs",
+	"AzureContainerAppsSandboxes",
+	"AgentPlatformSandbox",
+	"AlibabaAgentSandbox",
+	"DigitalOceanMicroVMs",
+	"DigitalOceanHarnessRuntime",
+	"Agent37Compute",
 	"AkashCompute",
 	"AlibabaCompute",
 	"AlibabaBlockStorage",
+	"ArchilCompute",
 	"BasetenCompute",
 	"BeamCompute",
+	"BlaxelCompute",
+	"BoatCompute",
+	"BoxComputeCompute",
+	"BoxdCompute",
+	"BunnyCompute",
+	"CloudflareCompute",
+	"CollimateCompute",
+	"CreateOSCompute",
+	"CodeSandboxCompute",
+	"DaytonaCompute",
+	"DockerCompute",
+	"E2BCompute",
+	"ExeDevCompute",
+	"FlyCompute",
+	"GravixLayerCompute",
+	"HuggingFaceCompute",
+	"InisCompute",
+	"IsloCompute",
+	"IsorunCompute",
+	"KrovaCompute",
+	"LangSmithCompute",
+	"Leap0Compute",
+	"LizardCompute",
+	"MIOSACompute",
+	"MosaicCompute",
+	"PromigenceCompute",
+	"RailwayCompute",
+	"RemoteHostCompute",
+	"RunloopCompute",
+	"RuntimeCompute",
+	"ShellboxCompute",
+	"StateSetCompute",
+	"SuperserveCompute",
+	"TamaCompute",
+	"UpstashCompute",
+	"VercelCompute",
 	"CerebriumCompute",
 	"CivoCompute",
 	"CivoBlockStorage",
@@ -148,6 +250,7 @@ var AllowedTypesServiceEnumValues = []TypesService{
 	"ExoscaleCompute",
 	"ExoscaleBlockStorage",
 	"FalCompute",
+	"FreestyleCompute",
 	"HotAisleCompute",
 	"HyperbolicCompute",
 	"HyperstackCompute",
@@ -156,7 +259,9 @@ var AllowedTypesServiceEnumValues = []TypesService{
 	"LambdaCompute",
 	"LatitudeCompute",
 	"MassedComputeCompute",
+	"MicrosandboxCompute",
 	"ModalCompute",
+	"MorphCompute",
 	"NebiusCompute",
 	"NorthflankCompute",
 	"NorthflankVolume",
@@ -168,17 +273,22 @@ var AllowedTypesServiceEnumValues = []TypesService{
 	"PrimeIntellectCompute",
 	"ReplicateCompute",
 	"RunPodCompute",
+	"SailCompute",
 	"SaladCompute",
 	"ScalewayCompute",
 	"ScalewayBlockStorage",
 	"SesterceCompute",
 	"ShadeformCompute",
+	"SpritesCompute",
+	"TenkiCompute",
+	"TensorlakeCompute",
 	"ThunderComputeCompute",
 	"UpCloudCompute",
 	"UpCloudBlockStorage",
 	"VastCompute",
 	"VultrCompute",
 	"VultrBlockStorage",
+	"ZipboxCompute",
 }
 
 func (v *TypesService) UnmarshalJSON(src []byte) error {

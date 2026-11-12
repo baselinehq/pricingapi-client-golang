@@ -20,14 +20,16 @@ var _ MappedNullable = &RunnerRecommendationRequest{}
 
 // RunnerRecommendationRequest struct for RunnerRecommendationRequest
 type RunnerRecommendationRequest struct {
-	BilledMinutes  *float32               `json:"billed_minutes,omitempty"`
-	Current        *TypesRunnerCurrent    `json:"current,omitempty"`
-	JobCount       *int32                 `json:"job_count,omitempty"`
-	JobsSeconds    []float32              `json:"jobs_seconds,omitempty"`
-	MonthlyMinutes *float32               `json:"monthly_minutes,omitempty"`
-	PublicRepo     *bool                  `json:"public_repo,omitempty"`
-	SelfHosted     *TypesRunnerSelfHosted `json:"self_hosted,omitempty"`
-	Shape          *TypesRunnerShape      `json:"shape,omitempty"`
+	Clouds              []TypesRunnerSelfHosted     `json:"clouds,omitempty"`
+	Connected           []string                    `json:"connected,omitempty"`
+	Current             *TypesCIQuoteCurrent        `json:"current,omitempty"`
+	GithubSelfHostedFee *bool                       `json:"github_self_hosted_fee,omitempty"`
+	Included            *map[string]TypesCIIncluded `json:"included,omitempty"`
+	Jobs                []TypesCIJobBucket          `json:"jobs,omitempty"`
+	MonthlyMinutes      *float32                    `json:"monthly_minutes,omitempty"`
+	PublicRepo          *bool                       `json:"public_repo,omitempty"`
+	Shape               *TypesCIRunnerShape         `json:"shape,omitempty"`
+	Speed               *map[string]TypesCISpeed    `json:"speed,omitempty"`
 }
 
 // NewRunnerRecommendationRequest instantiates a new RunnerRecommendationRequest object
@@ -47,42 +49,74 @@ func NewRunnerRecommendationRequestWithDefaults() *RunnerRecommendationRequest {
 	return &this
 }
 
-// GetBilledMinutes returns the BilledMinutes field value if set, zero value otherwise.
-func (o *RunnerRecommendationRequest) GetBilledMinutes() float32 {
-	if o == nil || IsNil(o.BilledMinutes) {
-		var ret float32
+// GetClouds returns the Clouds field value if set, zero value otherwise.
+func (o *RunnerRecommendationRequest) GetClouds() []TypesRunnerSelfHosted {
+	if o == nil || IsNil(o.Clouds) {
+		var ret []TypesRunnerSelfHosted
 		return ret
 	}
-	return *o.BilledMinutes
+	return o.Clouds
 }
 
-// GetBilledMinutesOk returns a tuple with the BilledMinutes field value if set, nil otherwise
+// GetCloudsOk returns a tuple with the Clouds field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RunnerRecommendationRequest) GetBilledMinutesOk() (*float32, bool) {
-	if o == nil || IsNil(o.BilledMinutes) {
+func (o *RunnerRecommendationRequest) GetCloudsOk() ([]TypesRunnerSelfHosted, bool) {
+	if o == nil || IsNil(o.Clouds) {
 		return nil, false
 	}
-	return o.BilledMinutes, true
+	return o.Clouds, true
 }
 
-// HasBilledMinutes returns a boolean if a field has been set.
-func (o *RunnerRecommendationRequest) HasBilledMinutes() bool {
-	if o != nil && !IsNil(o.BilledMinutes) {
+// HasClouds returns a boolean if a field has been set.
+func (o *RunnerRecommendationRequest) HasClouds() bool {
+	if o != nil && !IsNil(o.Clouds) {
 		return true
 	}
 
 	return false
 }
 
-// SetBilledMinutes gets a reference to the given float32 and assigns it to the BilledMinutes field.
-func (o *RunnerRecommendationRequest) SetBilledMinutes(v float32) {
-	o.BilledMinutes = &v
+// SetClouds gets a reference to the given []TypesRunnerSelfHosted and assigns it to the Clouds field.
+func (o *RunnerRecommendationRequest) SetClouds(v []TypesRunnerSelfHosted) {
+	o.Clouds = v
+}
+
+// GetConnected returns the Connected field value if set, zero value otherwise.
+func (o *RunnerRecommendationRequest) GetConnected() []string {
+	if o == nil || IsNil(o.Connected) {
+		var ret []string
+		return ret
+	}
+	return o.Connected
+}
+
+// GetConnectedOk returns a tuple with the Connected field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendationRequest) GetConnectedOk() ([]string, bool) {
+	if o == nil || IsNil(o.Connected) {
+		return nil, false
+	}
+	return o.Connected, true
+}
+
+// HasConnected returns a boolean if a field has been set.
+func (o *RunnerRecommendationRequest) HasConnected() bool {
+	if o != nil && !IsNil(o.Connected) {
+		return true
+	}
+
+	return false
+}
+
+// SetConnected gets a reference to the given []string and assigns it to the Connected field.
+func (o *RunnerRecommendationRequest) SetConnected(v []string) {
+	o.Connected = v
 }
 
 // GetCurrent returns the Current field value if set, zero value otherwise.
-func (o *RunnerRecommendationRequest) GetCurrent() TypesRunnerCurrent {
+func (o *RunnerRecommendationRequest) GetCurrent() TypesCIQuoteCurrent {
 	if o == nil || IsNil(o.Current) {
-		var ret TypesRunnerCurrent
+		var ret TypesCIQuoteCurrent
 		return ret
 	}
 	return *o.Current
@@ -90,7 +124,7 @@ func (o *RunnerRecommendationRequest) GetCurrent() TypesRunnerCurrent {
 
 // GetCurrentOk returns a tuple with the Current field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RunnerRecommendationRequest) GetCurrentOk() (*TypesRunnerCurrent, bool) {
+func (o *RunnerRecommendationRequest) GetCurrentOk() (*TypesCIQuoteCurrent, bool) {
 	if o == nil || IsNil(o.Current) {
 		return nil, false
 	}
@@ -106,73 +140,105 @@ func (o *RunnerRecommendationRequest) HasCurrent() bool {
 	return false
 }
 
-// SetCurrent gets a reference to the given TypesRunnerCurrent and assigns it to the Current field.
-func (o *RunnerRecommendationRequest) SetCurrent(v TypesRunnerCurrent) {
+// SetCurrent gets a reference to the given TypesCIQuoteCurrent and assigns it to the Current field.
+func (o *RunnerRecommendationRequest) SetCurrent(v TypesCIQuoteCurrent) {
 	o.Current = &v
 }
 
-// GetJobCount returns the JobCount field value if set, zero value otherwise.
-func (o *RunnerRecommendationRequest) GetJobCount() int32 {
-	if o == nil || IsNil(o.JobCount) {
-		var ret int32
+// GetGithubSelfHostedFee returns the GithubSelfHostedFee field value if set, zero value otherwise.
+func (o *RunnerRecommendationRequest) GetGithubSelfHostedFee() bool {
+	if o == nil || IsNil(o.GithubSelfHostedFee) {
+		var ret bool
 		return ret
 	}
-	return *o.JobCount
+	return *o.GithubSelfHostedFee
 }
 
-// GetJobCountOk returns a tuple with the JobCount field value if set, nil otherwise
+// GetGithubSelfHostedFeeOk returns a tuple with the GithubSelfHostedFee field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RunnerRecommendationRequest) GetJobCountOk() (*int32, bool) {
-	if o == nil || IsNil(o.JobCount) {
+func (o *RunnerRecommendationRequest) GetGithubSelfHostedFeeOk() (*bool, bool) {
+	if o == nil || IsNil(o.GithubSelfHostedFee) {
 		return nil, false
 	}
-	return o.JobCount, true
+	return o.GithubSelfHostedFee, true
 }
 
-// HasJobCount returns a boolean if a field has been set.
-func (o *RunnerRecommendationRequest) HasJobCount() bool {
-	if o != nil && !IsNil(o.JobCount) {
+// HasGithubSelfHostedFee returns a boolean if a field has been set.
+func (o *RunnerRecommendationRequest) HasGithubSelfHostedFee() bool {
+	if o != nil && !IsNil(o.GithubSelfHostedFee) {
 		return true
 	}
 
 	return false
 }
 
-// SetJobCount gets a reference to the given int32 and assigns it to the JobCount field.
-func (o *RunnerRecommendationRequest) SetJobCount(v int32) {
-	o.JobCount = &v
+// SetGithubSelfHostedFee gets a reference to the given bool and assigns it to the GithubSelfHostedFee field.
+func (o *RunnerRecommendationRequest) SetGithubSelfHostedFee(v bool) {
+	o.GithubSelfHostedFee = &v
 }
 
-// GetJobsSeconds returns the JobsSeconds field value if set, zero value otherwise.
-func (o *RunnerRecommendationRequest) GetJobsSeconds() []float32 {
-	if o == nil || IsNil(o.JobsSeconds) {
-		var ret []float32
+// GetIncluded returns the Included field value if set, zero value otherwise.
+func (o *RunnerRecommendationRequest) GetIncluded() map[string]TypesCIIncluded {
+	if o == nil || IsNil(o.Included) {
+		var ret map[string]TypesCIIncluded
 		return ret
 	}
-	return o.JobsSeconds
+	return *o.Included
 }
 
-// GetJobsSecondsOk returns a tuple with the JobsSeconds field value if set, nil otherwise
+// GetIncludedOk returns a tuple with the Included field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RunnerRecommendationRequest) GetJobsSecondsOk() ([]float32, bool) {
-	if o == nil || IsNil(o.JobsSeconds) {
+func (o *RunnerRecommendationRequest) GetIncludedOk() (*map[string]TypesCIIncluded, bool) {
+	if o == nil || IsNil(o.Included) {
 		return nil, false
 	}
-	return o.JobsSeconds, true
+	return o.Included, true
 }
 
-// HasJobsSeconds returns a boolean if a field has been set.
-func (o *RunnerRecommendationRequest) HasJobsSeconds() bool {
-	if o != nil && !IsNil(o.JobsSeconds) {
+// HasIncluded returns a boolean if a field has been set.
+func (o *RunnerRecommendationRequest) HasIncluded() bool {
+	if o != nil && !IsNil(o.Included) {
 		return true
 	}
 
 	return false
 }
 
-// SetJobsSeconds gets a reference to the given []float32 and assigns it to the JobsSeconds field.
-func (o *RunnerRecommendationRequest) SetJobsSeconds(v []float32) {
-	o.JobsSeconds = v
+// SetIncluded gets a reference to the given map[string]TypesCIIncluded and assigns it to the Included field.
+func (o *RunnerRecommendationRequest) SetIncluded(v map[string]TypesCIIncluded) {
+	o.Included = &v
+}
+
+// GetJobs returns the Jobs field value if set, zero value otherwise.
+func (o *RunnerRecommendationRequest) GetJobs() []TypesCIJobBucket {
+	if o == nil || IsNil(o.Jobs) {
+		var ret []TypesCIJobBucket
+		return ret
+	}
+	return o.Jobs
+}
+
+// GetJobsOk returns a tuple with the Jobs field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendationRequest) GetJobsOk() ([]TypesCIJobBucket, bool) {
+	if o == nil || IsNil(o.Jobs) {
+		return nil, false
+	}
+	return o.Jobs, true
+}
+
+// HasJobs returns a boolean if a field has been set.
+func (o *RunnerRecommendationRequest) HasJobs() bool {
+	if o != nil && !IsNil(o.Jobs) {
+		return true
+	}
+
+	return false
+}
+
+// SetJobs gets a reference to the given []TypesCIJobBucket and assigns it to the Jobs field.
+func (o *RunnerRecommendationRequest) SetJobs(v []TypesCIJobBucket) {
+	o.Jobs = v
 }
 
 // GetMonthlyMinutes returns the MonthlyMinutes field value if set, zero value otherwise.
@@ -239,42 +305,10 @@ func (o *RunnerRecommendationRequest) SetPublicRepo(v bool) {
 	o.PublicRepo = &v
 }
 
-// GetSelfHosted returns the SelfHosted field value if set, zero value otherwise.
-func (o *RunnerRecommendationRequest) GetSelfHosted() TypesRunnerSelfHosted {
-	if o == nil || IsNil(o.SelfHosted) {
-		var ret TypesRunnerSelfHosted
-		return ret
-	}
-	return *o.SelfHosted
-}
-
-// GetSelfHostedOk returns a tuple with the SelfHosted field value if set, nil otherwise
-// and a boolean to check if the value has been set.
-func (o *RunnerRecommendationRequest) GetSelfHostedOk() (*TypesRunnerSelfHosted, bool) {
-	if o == nil || IsNil(o.SelfHosted) {
-		return nil, false
-	}
-	return o.SelfHosted, true
-}
-
-// HasSelfHosted returns a boolean if a field has been set.
-func (o *RunnerRecommendationRequest) HasSelfHosted() bool {
-	if o != nil && !IsNil(o.SelfHosted) {
-		return true
-	}
-
-	return false
-}
-
-// SetSelfHosted gets a reference to the given TypesRunnerSelfHosted and assigns it to the SelfHosted field.
-func (o *RunnerRecommendationRequest) SetSelfHosted(v TypesRunnerSelfHosted) {
-	o.SelfHosted = &v
-}
-
 // GetShape returns the Shape field value if set, zero value otherwise.
-func (o *RunnerRecommendationRequest) GetShape() TypesRunnerShape {
+func (o *RunnerRecommendationRequest) GetShape() TypesCIRunnerShape {
 	if o == nil || IsNil(o.Shape) {
-		var ret TypesRunnerShape
+		var ret TypesCIRunnerShape
 		return ret
 	}
 	return *o.Shape
@@ -282,7 +316,7 @@ func (o *RunnerRecommendationRequest) GetShape() TypesRunnerShape {
 
 // GetShapeOk returns a tuple with the Shape field value if set, nil otherwise
 // and a boolean to check if the value has been set.
-func (o *RunnerRecommendationRequest) GetShapeOk() (*TypesRunnerShape, bool) {
+func (o *RunnerRecommendationRequest) GetShapeOk() (*TypesCIRunnerShape, bool) {
 	if o == nil || IsNil(o.Shape) {
 		return nil, false
 	}
@@ -298,9 +332,41 @@ func (o *RunnerRecommendationRequest) HasShape() bool {
 	return false
 }
 
-// SetShape gets a reference to the given TypesRunnerShape and assigns it to the Shape field.
-func (o *RunnerRecommendationRequest) SetShape(v TypesRunnerShape) {
+// SetShape gets a reference to the given TypesCIRunnerShape and assigns it to the Shape field.
+func (o *RunnerRecommendationRequest) SetShape(v TypesCIRunnerShape) {
 	o.Shape = &v
+}
+
+// GetSpeed returns the Speed field value if set, zero value otherwise.
+func (o *RunnerRecommendationRequest) GetSpeed() map[string]TypesCISpeed {
+	if o == nil || IsNil(o.Speed) {
+		var ret map[string]TypesCISpeed
+		return ret
+	}
+	return *o.Speed
+}
+
+// GetSpeedOk returns a tuple with the Speed field value if set, nil otherwise
+// and a boolean to check if the value has been set.
+func (o *RunnerRecommendationRequest) GetSpeedOk() (*map[string]TypesCISpeed, bool) {
+	if o == nil || IsNil(o.Speed) {
+		return nil, false
+	}
+	return o.Speed, true
+}
+
+// HasSpeed returns a boolean if a field has been set.
+func (o *RunnerRecommendationRequest) HasSpeed() bool {
+	if o != nil && !IsNil(o.Speed) {
+		return true
+	}
+
+	return false
+}
+
+// SetSpeed gets a reference to the given map[string]TypesCISpeed and assigns it to the Speed field.
+func (o *RunnerRecommendationRequest) SetSpeed(v map[string]TypesCISpeed) {
+	o.Speed = &v
 }
 
 func (o RunnerRecommendationRequest) MarshalJSON() ([]byte, error) {
@@ -313,17 +379,23 @@ func (o RunnerRecommendationRequest) MarshalJSON() ([]byte, error) {
 
 func (o RunnerRecommendationRequest) ToMap() (map[string]interface{}, error) {
 	toSerialize := map[string]interface{}{}
-	if !IsNil(o.BilledMinutes) {
-		toSerialize["billed_minutes"] = o.BilledMinutes
+	if !IsNil(o.Clouds) {
+		toSerialize["clouds"] = o.Clouds
+	}
+	if !IsNil(o.Connected) {
+		toSerialize["connected"] = o.Connected
 	}
 	if !IsNil(o.Current) {
 		toSerialize["current"] = o.Current
 	}
-	if !IsNil(o.JobCount) {
-		toSerialize["job_count"] = o.JobCount
+	if !IsNil(o.GithubSelfHostedFee) {
+		toSerialize["github_self_hosted_fee"] = o.GithubSelfHostedFee
 	}
-	if !IsNil(o.JobsSeconds) {
-		toSerialize["jobs_seconds"] = o.JobsSeconds
+	if !IsNil(o.Included) {
+		toSerialize["included"] = o.Included
+	}
+	if !IsNil(o.Jobs) {
+		toSerialize["jobs"] = o.Jobs
 	}
 	if !IsNil(o.MonthlyMinutes) {
 		toSerialize["monthly_minutes"] = o.MonthlyMinutes
@@ -331,11 +403,11 @@ func (o RunnerRecommendationRequest) ToMap() (map[string]interface{}, error) {
 	if !IsNil(o.PublicRepo) {
 		toSerialize["public_repo"] = o.PublicRepo
 	}
-	if !IsNil(o.SelfHosted) {
-		toSerialize["self_hosted"] = o.SelfHosted
-	}
 	if !IsNil(o.Shape) {
 		toSerialize["shape"] = o.Shape
+	}
+	if !IsNil(o.Speed) {
+		toSerialize["speed"] = o.Speed
 	}
 	return toSerialize, nil
 }
